@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material'
 import { Banner } from '../banner/Banner'
 import { Layaout } from '../layout/Layaout'
 

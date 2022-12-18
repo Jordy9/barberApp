@@ -9,6 +9,8 @@ import "swiper/css/navigation";
 // import required modules
 import { Pagination, Navigation } from "swiper";
 
+import { useResponsive } from '../../hooks/useResponsive'
+
 export const Banner = () => {
 
     const images = [
@@ -18,6 +20,8 @@ export const Banner = () => {
         'https://cdn.pixabay.com/photo/2018/02/22/17/08/barber-3173419__340.jpg',
         'https://cdn.pixabay.com/photo/2018/10/22/13/43/scissors-3765408__340.jpg'
     ]
+
+    const [ respWidth ] = useResponsive()
     
   return (
     <>
@@ -28,6 +32,9 @@ export const Banner = () => {
             navigation={ true }
             modules={[ Pagination, Navigation ]}
             className="mySwiper"
+            style={{
+                height: ( respWidth > 700 ) ? '91vh' : '83.3vh'
+            }}
         >
             {
                 images.map(img => (

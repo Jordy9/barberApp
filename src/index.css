@@ -22,7 +22,6 @@ body {
 
 .swiper {
   width: 100%;
-  height: 91vh;
   user-select: none;
 }
 
@@ -48,6 +47,11 @@ div .swiper-button-next, .swiper-button-prev {
 }
 
 div .swiper-button-next:hover, .swiper-button-prev:hover {
+  width: 60px;
+  height: 60px;
+}
+
+div .swiper-button-next:focus, .swiper-button-prev:focus {
   width: 60px;
   height: 60px;
 }
