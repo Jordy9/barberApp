@@ -7,7 +7,7 @@ import { BottomNavigation, BottomNavigationAction } from '@mui/material';
 export const NavbBottom = () => {
 
     const StyledFab = {
-        position: 'absolute',
+        position: 'fixed',
         zIndex: 1,
         bottom: 30,
         left: 0,
@@ -17,6 +17,7 @@ export const NavbBottom = () => {
 
   return (
     <BottomNavigation
+        sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
         showLabels
         // value={value}
         // onChange={(event, newValue) => {
@@ -28,7 +29,6 @@ export const NavbBottom = () => {
         <Fab sx={ StyledFab } size="large" color="inherit" aria-label="add">
             <AddIcon />
         </Fab>
-        {/* <BottomNavigationAction label="Nearby" icon={<HeartBroken />} /> */}
     </BottomNavigation>
   )
 }

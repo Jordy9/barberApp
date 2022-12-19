@@ -1,4 +1,4 @@
-import { darkTheme } from "./theme/darkTheme"
+import { darkTheme } from "./theme"
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { AppRouter } from "./router/AppRouter"
 

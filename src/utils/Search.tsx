@@ -4,9 +4,9 @@ import { styled, alpha } from '@mui/material/styles';
 export const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: '10px',
-    backgroundColor: alpha(theme.palette.common.white, 1),
+    backgroundColor: '#222426',
     '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.white, 0.06),
     },
     marginLeft: 0,
     width: '100%',

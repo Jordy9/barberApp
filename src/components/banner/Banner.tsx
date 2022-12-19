@@ -14,11 +14,11 @@ import { useResponsive } from '../../hooks/useResponsive'
 export const Banner = () => {
 
     const images = [
-        'https://cdn.pixabay.com/photo/2020/05/24/02/00/barber-shop-5212059__340.jpg', 
-        'https://cdn.pixabay.com/photo/2021/11/15/11/00/barber-shop-6797761__340.jpg',
-        'https://cdn.pixabay.com/photo/2021/11/15/12/06/barber-shop-6797941__340.jpg',
-        'https://cdn.pixabay.com/photo/2018/02/22/17/08/barber-3173419__340.jpg',
-        'https://cdn.pixabay.com/photo/2018/10/22/13/43/scissors-3765408__340.jpg'
+        'https://cdn.pixabay.com/photo/2020/05/24/02/00/barber-shop-5212059_960_720.jpg', 
+        'https://cdn.pixabay.com/photo/2021/11/15/11/00/barber-shop-6797761_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2018/10/22/13/43/scissors-3765408_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2020/05/24/01/51/barber-5212044_960_720.jpg',
+        'https://cdn.pixabay.com/photo/2021/11/23/13/47/barber-6818719_960_720.jpg'
     ]
 
     const [ respWidth ] = useResponsive()
