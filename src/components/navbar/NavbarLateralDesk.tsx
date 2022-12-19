@@ -7,16 +7,16 @@ import { Search, SearchIconWrapper, StyledInputBase } from '../../utils/Search';
 export const NavbarLateralDesk = () => {
   return (
     <Box display={ 'flex' } justifyContent = { 'space-between' }>
-        <Search>
+      <Search>
         <SearchIconWrapper>
-        <SearchIcon />
+          <SearchIcon />
         </SearchIconWrapper>
         <StyledInputBase
-            placeholder="Search…"
-            inputProps={{ 'aria-label': 'search' }}
+          placeholder="Buscador"
+          inputProps={{ 'aria-label': 'search' }}
         />
-        </Search>
-        <Button sx={{ ml: 2 }} color="inherit" variant='contained'>Iniciar sesión</Button>
+      </Search>
+      <Button sx={{ ml: 2 }} color="inherit" variant='contained'>Iniciar sesión</Button>
     </Box>
   )
 }

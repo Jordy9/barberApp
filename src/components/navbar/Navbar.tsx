@@ -18,6 +18,10 @@ export const Navbar = ({ respWidth }: RespWidthProps) => {
       label: 'Galería',
       route: '/Galeria',
     },
+    {
+      label: 'Nuestros barberos',
+      route: '/Barberos',
+    },
   ]
 
   let activeStyle = {

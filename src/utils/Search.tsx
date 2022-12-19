@@ -42,3 +42,42 @@ export const StyledInputBase = styled(InputBase)(({ theme }) => ({
       },
     },
 }));
+
+export const SearchFilter = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: '10px',
+    backgroundColor: '#222426',
+    '&:hover': {
+      backgroundColor: alpha(theme.palette.common.white, 0.06),
+    },
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(1),
+      width: '300px',
+    },
+  }));
+  
+export const SearchIconWrapperFilter = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
+  
+export const StyledInputBaseFilter = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      transition: theme.transitions.create('width'),
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        width: '30ch'
+      },
+    },
+}));

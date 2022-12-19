@@ -1,3 +1,7 @@
 export interface RespWidthProps {
-    respWidth: number
-  }
+  respWidth: number
+}
+
+export interface CardInterface {
+  condicion: Boolean
+}
