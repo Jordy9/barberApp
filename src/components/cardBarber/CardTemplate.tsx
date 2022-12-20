@@ -1,7 +1,8 @@
 import { useState } from "react";
 
-import { Card, CardActions, CardContent, Collapse, IconButton, Typography } from "@mui/material"
+import { Card, CardActionArea, CardActions, CardContent, Collapse, IconButton, Typography } from "@mui/material"
 import { CardCollapse, CardHeaderTemplate, CardIcons, CardMediaTemplate, CardTextElipsis } from "./"
+import { useNavigate } from "react-router-dom";
 
 export const CardTemplate = () => {
 
@@ -18,15 +19,22 @@ export const CardTemplate = () => {
     setIsTransitionEnd(false)
   }
 
+  const navigate = useNavigate()
+
   return (
-    <Card sx={{ height: ( isTransitionEnd ) ? 'auto' : '550px', width: '100%', borderRadius: '12px' }}>
+    <Card title=" Ir al perfil " sx={{ height: ( isTransitionEnd ) ? 'auto' : '550px', width: '100%', borderRadius: '12px' }}>
       
-      <CardMediaTemplate />
+
+      <CardActionArea onClick={ () => navigate('/Perfil/name/:id') }>
+
+        <CardMediaTemplate />
+
+        <CardHeaderTemplate />
+        
+        <CardTextElipsis />
+
+      </CardActionArea>
       
-      <CardHeaderTemplate />
-
-      <CardTextElipsis />
-
       <CardIcons expanded = { expanded } handleExpandClick = { handleExpandClick } />
 
       <CardCollapse expanded = { expanded } transitionEnd = { transitionEnd } />

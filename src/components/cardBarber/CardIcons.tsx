@@ -28,24 +28,28 @@ interface ExpandProps {
 export const CardIcons = ({ expanded, handleExpandClick }: ExpandProps) => {
   return (
     <CardActions disableSpacing>
+
         <IconButton title="Agregar a favoritos" aria-label="add to favorites">
-        <FavoriteIcon />
+          <FavoriteIcon />
         </IconButton>
+
         <IconButton title="Compartir" aria-label="share">
-        <ShareIcon />
+          <ShareIcon />
         </IconButton>
 
         <IconButton title="Crear cita" aria-label="library add">
-        <LibraryAdd />
+          <LibraryAdd />
         </IconButton>
+
         <ExpandMore
             expand={ expanded }
             onClick={ handleExpandClick }
             aria-expanded={ expanded }
             aria-label="show more"
         >
-        <ExpandMoreIcon />
+          <ExpandMoreIcon />
         </ExpandMore>
+
     </CardActions>
   )
 }

@@ -17,17 +17,17 @@ export const Layaout = ({ children }: Props) => {
   return (
     <Box sx={{ flexFlow: 1 }}>
 
-        <Navbar respWidth = { respWidth } />
+      <Navbar respWidth = { respWidth } />
 
-        <Box sx={{ padding: ( pathname !== '/Inicio' ) ? '10px 20px' : '' }}>
-          { children }
-        </Box>
+      <Box sx={{ padding: ( pathname !== '/Inicio' ) ? '10px 20px' : '' }}>
+        { children }
+      </Box>
 
-        {
-          ( respWidth <= 991 )
-            &&
-          <NavbBottom pathname = { pathname } />
-        }
+      {
+        ( respWidth <= 991 && pathname !== '/Perfil/name/:id' )
+          &&
+        <NavbBottom pathname = { pathname } />
+      }
         
     </Box>
   )
