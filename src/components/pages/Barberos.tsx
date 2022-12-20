@@ -11,7 +11,7 @@ export const Barberos = () => {
     <Layaout>
       <>
         {
-          (respWidth > 700)
+          (respWidth > 991)
             &&
           <FilterOptionsBarber />
         }

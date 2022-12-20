@@ -1,14 +1,26 @@
-import { useState } from 'react';
-
 import { ContentCut, Home, PhotoLibrary } from '@mui/icons-material';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
-import { BottomNavigation, BottomNavigationAction } from '@mui/material';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import { Link } from 'react-router-dom';
 
 interface navigationProp {
     pathname: string;
+}
+
+const getPageIndex = ( pathname: string ) => {
+    switch ( pathname ) {
+        case '/Inicio': 
+            return 0;
+        case '/Galeria': 
+            return 1;
+        case '/Barberos': 
+            return 2;
+        default: 
+            return 0;
+    }
 }
 
 export const NavbBottom = ({ pathname }: navigationProp) => {
@@ -22,27 +34,17 @@ export const NavbBottom = ({ pathname }: navigationProp) => {
         margin: '0 auto',
     };
 
-    const [ value, setValue ] = useState<number>(0);
-
-    const navigate = useNavigate()
-
-    // const navigation = ({ route, newValue }: navigationProp ) => {
-    //     setValue( newValue );
-    //     navigate( route )
-    // }
+    const value = getPageIndex( pathname );
 
   return (
     <BottomNavigation
-        sx={{ position: (pathname === '/Inicio') ? 'absolute' : 'fixed', bottom: 0, left: 0, right: 0 }}
+        sx={{ position: ( pathname === '/Inicio' ) ? 'absolute' : 'fixed', bottom: 0, left: 0, right: 0 }}
         showLabels
         value={ value }
-        onChange={( event, newValue ) => {
-            setValue(newValue)
-        }}
     >
-        <BottomNavigationAction label="Inicio" icon={ <Home /> } />
-        <BottomNavigationAction label="Galería" icon={ <PhotoLibrary /> } />
-        <BottomNavigationAction label="Barberos" icon={ <ContentCut /> } />
+        <BottomNavigationAction component={ Link } to="/Inicio" label="Inicio" icon={ <Home /> } />
+        <BottomNavigationAction component={ Link } to="/Galeria" label="Galería" icon={ <PhotoLibrary /> } />
+        <BottomNavigationAction component={ Link } to="/Barberos" label="Barberos" icon={ <ContentCut /> } />
         <BottomNavigationAction label="Buscar" icon={ <SearchIcon /> } />
         <Fab sx={ StyledFab } size="large" color="inherit" aria-label="add">
             <AddIcon />

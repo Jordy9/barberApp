@@ -47,17 +47,17 @@ export const Navbar = ({ respWidth }: RespWidthProps) => {
           >
             <Menu />
           </IconButton> */}
-          <Typography variant="h6" component="div" sx={{ flexGrow: (respWidth > 700) ? 0.1 : 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: (respWidth > 991) ? 0.1 : 1 }}>
             BarberApp
           </Typography>
 
           {
-            ( respWidth > 700 )
+            ( respWidth > 991 )
               &&
             <Box sx={{ flexGrow: 1 }}>
               {
                 appBarMenu.map(({ label, route }, index) => (
-                  <NavLink to={ route } style={({ isActive }) =>
+                  <NavLink key={ route } to={ route } style={({ isActive }) =>
                     isActive ? activeStyle : isNotActiveStyle}
                   >
                     <Button sx = {{ mx: ( index === 1 ) ? 1 : 0 }} color="inherit" variant='contained'>{ label }</Button>
@@ -68,7 +68,7 @@ export const Navbar = ({ respWidth }: RespWidthProps) => {
           }
 
           {
-            ( respWidth > 700 )
+            ( respWidth > 991 )
               ?
             <NavbarLateralDesk />
               :
@@ -77,7 +77,6 @@ export const Navbar = ({ respWidth }: RespWidthProps) => {
             </Box>
 
           }
-
 
         </Toolbar>
       </AppBar>

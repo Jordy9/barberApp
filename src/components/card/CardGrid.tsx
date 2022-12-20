@@ -9,10 +9,10 @@ export const CardGrid = () => {
     const [ respWidth ] = useResponsive()
 
   return (
-    <Grid item container mb={ ( respWidth < 700 ) ? 10 : 0 }>
+    <Grid item container mb={ ( respWidth < 991 ) ? 10 : 0 }>
         {
             arreglo.map(e => (
-                <Grid p = { 1 } xs = { 12 } sm = { 6 } md = { 4 } lg = { 3 }>
+                <Grid item key={ e } p = { 1 } xs = { 12 } sm = { 6 } md = { 4 } lg = { 3 }>
                     <CardTemplate />
                 </Grid>
             ))

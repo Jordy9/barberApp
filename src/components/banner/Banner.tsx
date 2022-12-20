@@ -33,12 +33,12 @@ export const Banner = () => {
             modules={[ Pagination, Navigation ]}
             className="mySwiper"
             style={{
-                height: ( respWidth > 700 ) ? '91vh' : '83.3vh'
+                height: ( respWidth > 991 ) ? '91vh' : '83.3vh'
             }}
         >
             {
                 images.map(img => (
-                    <SwiperSlide>
+                    <SwiperSlide key={ img }>
                         <img key={ img } src={ img } alt="Imagen de barbería" />
                     </SwiperSlide>
                 ))

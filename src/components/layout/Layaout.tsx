@@ -24,7 +24,7 @@ export const Layaout = ({ children }: Props) => {
         </Box>
 
         {
-          ( respWidth <= 700 )
+          ( respWidth <= 991 )
             &&
           <NavbBottom pathname = { pathname } />
         }
