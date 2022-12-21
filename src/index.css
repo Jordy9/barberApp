@@ -20,6 +20,24 @@ body {
   min-height: 100vh;
 }
 
+/* Login class */
+
+.navLink {
+  color: rgb(214, 203, 203);
+  transition: color .4s;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navLink:hover {
+  color: rgb(143, 135, 135);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+/* Swipe class */
+
 .swiper {
   width: 100%;
   user-select: none;

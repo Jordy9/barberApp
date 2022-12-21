@@ -1,5 +1,6 @@
 import InputBase from '@mui/material/InputBase';
 import { styled, alpha } from '@mui/material/styles';
+import { TextFieldProps } from '../interfaces/interfaces';
 
 export const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -81,3 +82,68 @@ export const StyledInputBaseFilter = styled(InputBase)(({ theme }) => ({
       },
     },
 }));
+
+export const inputPropsRegister: TextFieldProps[] = [
+  {
+    mb: 1.5,
+    label: "Nombre",
+    Adornment: false,
+    required: true ,
+    type: 'text',
+},
+{
+    mb: 1.5,
+    label: "Apellido",
+    Adornment: false,
+    required: true ,
+    type: 'text',
+},
+{
+    mb: 1.5,
+    label: "Correo electrónico",
+    Adornment: true,
+    required: true ,
+    type: 'email',
+    helperText: 'Nunca compartas tu correo',
+    Icon: 'Arroba'
+},
+  {
+    mt: 1.5,
+    label: "Contraseña",
+    Adornment: true,
+    required: true ,
+    type: 'password',
+    helperText: 'Nunca compartas tu contraseña',
+    Icon: "Eye"
+  },
+  {
+    mt: 1.5,
+    label: "Confirmar contraseña",
+    Adornment: true,
+    required: true ,
+    type: 'password',
+    helperText: 'Nunca compartas tu contraseña',
+    Icon: "Eye"
+  },
+]
+
+export const inputPropsLogin: TextFieldProps[] = [
+  {
+      mb: 1.5,
+      label: "Correo electrónico",
+      Adornment: true,
+      required: true ,
+      type: 'email',
+      helperText: 'Nunca compartas tu correo',
+      Icon: 'Arroba'
+  },
+  {
+    mt: 1.5,
+    label: "Contraseña",
+    Adornment: true,
+    required: true ,
+    type: 'password',
+    helperText: 'Nunca compartas tu contraseña',
+    Icon: "Eye"
+  },
+]

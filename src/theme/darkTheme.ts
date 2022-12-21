@@ -40,6 +40,17 @@ export const darkTheme = createTheme({
                     }
                 }
             }
+        },
+
+        MuiTextField: {
+            defaultProps: {},
+            styleOverrides: {
+                root: {
+                    '& fieldset': {
+                        borderRadius: '12px',
+                    },
+                }
+            }
         }
     }
 })

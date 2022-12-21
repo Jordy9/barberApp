@@ -1,13 +1,16 @@
 import { AppBar, Button, IconButton, TextField, Toolbar, Typography } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search';
 import { Menu } from '@mui/icons-material'
 import { Box } from '@mui/system'
 
 import { RespWidthProps } from '../../interfaces/interfaces';
 import { NavLink } from 'react-router-dom';
 import { NavbarLateralDesk } from './NavbarLateralDesk';
+import { useState } from 'react';
+import { Login } from '../formSesion';
 
 export const Navbar = ({ respWidth }: RespWidthProps) => {
+
+  const [showDialog, setShowDialog] = useState(false)
 
   const appBarMenu = [
     {
@@ -70,16 +73,17 @@ export const Navbar = ({ respWidth }: RespWidthProps) => {
           {
             ( respWidth > 991 )
               ?
-            <NavbarLateralDesk />
+            <NavbarLateralDesk setShowDialog = { setShowDialog } />
               :
             <Box display={ 'flex' } justifyContent = { 'space-between' }>
-              <Button sx={{ ml: 2 }} color="inherit" variant='contained'>Iniciar sesión</Button>
+              <Button onClick={ () => setShowDialog(true) } sx={{ ml: 2 }} color="inherit" variant='contained'>Iniciar sesión</Button>
             </Box>
 
           }
 
         </Toolbar>
       </AppBar>
+      <Login showDialog = { showDialog } setShowDialog = { setShowDialog } />
     </Box>
   )
 }
