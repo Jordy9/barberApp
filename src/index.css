@@ -77,7 +77,7 @@ div .swiper-button-next:focus, .swiper-button-prev:focus {
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: #fff;
+  background: rgba(0, 0, 0, 0.1);
 
   /* Center slide text vertically */
   display: -webkit-box;

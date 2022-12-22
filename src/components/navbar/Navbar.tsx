@@ -1,14 +1,21 @@
+import { Dispatch, SetStateAction, useState } from 'react';
+
 import { AppBar, Button, IconButton, TextField, Toolbar, Typography } from '@mui/material'
-import { Menu } from '@mui/icons-material'
 import { Box } from '@mui/system'
 
-import { RespWidthProps } from '../../interfaces/interfaces';
+import { Menu } from '@mui/icons-material'
+
 import { NavLink } from 'react-router-dom';
+
 import { NavbarLateralDesk } from './NavbarLateralDesk';
-import { useState } from 'react';
 import { Login } from '../formSesion';
 
-export const Navbar = ({ respWidth }: RespWidthProps) => {
+interface RespWidthProps {
+  respWidth: number
+  setShow: Dispatch<SetStateAction<boolean>>
+}
+
+export const Navbar = ({ respWidth, setShow }: RespWidthProps) => {
 
   const [showDialog, setShowDialog] = useState(false)
 
@@ -39,17 +46,18 @@ export const Navbar = ({ respWidth }: RespWidthProps) => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" elevation={ 0 }>
+      <AppBar position="fixed" elevation={ 0 }>
         <Toolbar>
-          {/* <IconButton
+          <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
+            onClick = { () => setShow(true) }
           >
             <Menu />
-          </IconButton> */}
+          </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: (respWidth > 991) ? 0.1 : 1 }}>
             BarberApp
           </Typography>
