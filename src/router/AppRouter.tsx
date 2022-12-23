@@ -1,11 +1,12 @@
 import { Routes, Navigate, Route } from "react-router-dom"
 import { Barberos, Galeria, Inicio, NuevaContrasena, ProfileBarber, RecuperarContrasena } from "../components/pages"
-import { DashBoard } from "../components/pagesAccount"
+import { DashBoard, CrearCita } from "../components/pagesAccount"
 
 export const AppRouter = () => {
   return (
     <Routes>
       <Route path="/DashBoard" element = { <DashBoard /> } />
+      <Route path="/CrearCita" element = { <CrearCita /> } />
       <Route path="/Inicio" element = { <Inicio /> } />
       <Route path="/Galeria" element = { <Galeria /> } />
       <Route path="/Barberos" element = { <Barberos /> } />

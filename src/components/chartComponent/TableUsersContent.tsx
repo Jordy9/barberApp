@@ -17,7 +17,7 @@ export const TableUsersContent = ( props: UsuariosProps ) => {
     <TableRow
         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
-        <TableCell size='small' style = {{display: 'flex', justifyContent: 'center'}} component="th" scope="row">
+        <TableCell size='small' component="th" scope="row">
             <Avatar src={ foto } alt="" />
         </TableCell>
 

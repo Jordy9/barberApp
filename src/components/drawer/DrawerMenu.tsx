@@ -23,7 +23,7 @@ export const DrawerMenu = ({ show, setShow }: DrawerProps) => {
 
         {
             label: 'Crear cita',
-            route: '/usuarios',
+            route: '/CrearCita',
             Icon: () => <LibraryAdd />
         },
 

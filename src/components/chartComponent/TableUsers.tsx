@@ -24,7 +24,7 @@ export const TableUsers = () => {
 
   return (
     <Box>
-        <TableContainer elevation = { 10 } component={ Paper } sx={{ width: 'auto', height: '350px', borderTopLeftRadius: '20px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
+        <TableContainer elevation = { 10 } component={ Paper } sx={{ width: 'auto', height: ( respWidth < 991 ) ? '350px' : '296px', borderTopLeftRadius: '20px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
           <Table aria-label="simple table" stickyHeader = {true}>
             <TableHead>
               <TableRow>
@@ -46,6 +46,7 @@ export const TableUsers = () => {
           labelRowsPerPage = { ( respWidth > 991 ) ? 'Filas por página' : 'Filas'}
           labelDisplayedRows = {({ from, to, count }) => `${from}-${to} de ${count}`}
           rowsPerPageOptions={[10, 25, 100]}
+          elevation = { 10 }
           component={ Paper }
           count={ 10 }
           rowsPerPage={ rowsPerPage }
