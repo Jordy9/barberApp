@@ -1,10 +1,10 @@
-import { BarChart } from "../chartComponent"
+import { ContainerContent } from "../chartComponent"
 import { Layaout } from "../layout/Layaout"
 
 export const DashBoard = () => {
   return (
     <Layaout>
-      <BarChart />
+      <ContainerContent />
     </Layaout>
   )
 }

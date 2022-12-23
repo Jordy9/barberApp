@@ -1,6 +1,21 @@
+import { SvgIconTypeMap } from '@mui/material';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
+
 export interface CardInterface {
   condicion: Boolean
 }
+
+export interface CardInfoProps {
+  title: CardInfoTitle;
+  actual: number;
+  total: number;
+  backgroundImage: string
+  Icon: OverridableComponent<SvgIconTypeMap<{}, "svg">>
+  image?: string;
+  name?: string;
+}
+
+type CardInfoTitle = 'Citas completas' | 'Citas en espera' | 'Citas canceladas' | 'Servicio del día'
 
 export interface TextFieldProps {
   mb?: number;
