@@ -22,12 +22,6 @@ export const DrawerMenu = ({ show, setShow }: DrawerProps) => {
         },
 
         {
-            label: 'Crear cita',
-            route: '/CrearCita',
-            Icon: () => <LibraryAdd />
-        },
-
-        {
             label: 'Listado de citas',
             route: '/crearPregunta',
             Icon: () => <LibraryBooks />
@@ -54,6 +48,11 @@ export const DrawerMenu = ({ show, setShow }: DrawerProps) => {
 
     const navigate = useNavigate()
 
+    const handleNavigate = ( route: string ) => {
+        setShow(false)
+        navigate(route)
+    }
+
   return (
     <Drawer
       anchor={'left'}
@@ -67,7 +66,7 @@ export const DrawerMenu = ({ show, setShow }: DrawerProps) => {
             {
                 listRoute.map(({ label, route, Icon }) => (
                     <ListItem  key={ route } disablePadding>
-                        <ListItemButton onClick={ () => navigate(route) }>
+                        <ListItemButton onClick={ () => handleNavigate(route) }>
                             <ListItemIcon>
                                 <IconButton>
                                     <Icon />

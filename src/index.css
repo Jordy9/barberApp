@@ -18,6 +18,7 @@ body {
   place-items: center; */
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Login class */
@@ -60,8 +61,19 @@ div .swiper-button-next, .swiper-button-prev {
   width: 50px;
   height: 50px;
   box-shadow: 0px 24px 38px 3px rgba(0, 0, 0, 0.1);
-  transition: all 1s ease 0s;
+  transition: all 1s ease;
 }
+
+/* .mySwiperBarber .swiper-button-next, .mySwiperBarber .swiper-button-prev {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  left: -50;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0px 24px 38px 3px rgba(0, 0, 0, 0.1);
+  transition: all 1s ease 0s;
+} */
 
 div .swiper-button-next:hover, .swiper-button-prev:hover {
   width: 60px;

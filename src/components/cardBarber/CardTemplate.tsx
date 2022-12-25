@@ -24,7 +24,6 @@ export const CardTemplate = () => {
   return (
     <Card title=" Ir al perfil " sx={{ height: ( isTransitionEnd ) ? 'auto' : '550px', width: '100%', borderRadius: '12px' }}>
       
-
       <CardActionArea onClick={ () => navigate('/Perfil/name/:id') }>
 
         <CardMediaTemplate />

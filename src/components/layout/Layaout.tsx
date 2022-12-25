@@ -6,6 +6,7 @@ import { useResponsive } from '../../hooks/useResponsive';
 import { DrawerMenu } from "../drawer/DrawerMenu";
 import { useState } from "react";
 import { Toolbar } from "@mui/material";
+import { motion, useIsPresent } from 'framer-motion'
 
 interface Props {
   children: JSX.Element
@@ -19,6 +20,8 @@ export const Layaout = ({ children }: Props) => {
 
   const [show, setShow] = useState(false)
 
+  const isPresent = useIsPresent();
+
   return (
     <Box sx={{ flexFlow: 1 }}>
 
@@ -28,7 +31,14 @@ export const Layaout = ({ children }: Props) => {
 
       <Box sx={{ padding: ( pathname !== '/Inicio' ) ? '10px 20px' : '' }}>
         <Toolbar />
-        { children }
+        <motion.div
+          initial={{ width: '100%', opacity: 0 }}
+          animate={{ width: '100%', scaleX: 1, opacity: 1, transition: { duration: 0.5, ease: "linear" } }}
+          exit={{ scaleX: 0.5, transition: { duration: 0.3, ease: "linear" } }}
+          style={{ originX: isPresent ? 0 : 2 }}
+        >
+          { children }
+        </motion.div>
       </Box>
 
       {

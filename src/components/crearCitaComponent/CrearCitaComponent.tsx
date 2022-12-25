@@ -1,6 +1,11 @@
+import { FormContainer, SlideImage } from "./";
 
 export const CrearCitaComponent = () => {
+
   return (
-    <div>CrearCitaComponent</div>
+    <>
+      <SlideImage />
+      <FormContainer />
+    </>
   )
 }

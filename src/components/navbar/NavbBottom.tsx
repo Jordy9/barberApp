@@ -1,6 +1,5 @@
-import { ContentCut, Home, PhotoLibrary } from '@mui/icons-material';
+import { ContentCut, Home, PhotoLibrary, LibraryAdd } from '@mui/icons-material';
 import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -47,7 +46,7 @@ export const NavbBottom = ({ pathname }: navigationProp) => {
         <BottomNavigationAction component={ Link } to="/Barberos" label="Barberos" icon={ <ContentCut /> } />
         <BottomNavigationAction label="Buscar" icon={ <SearchIcon /> } />
         <Fab sx={ StyledFab } size="large" color="inherit" aria-label="add">
-            <AddIcon />
+            <LibraryAdd />
         </Fab>
     </BottomNavigation>
   )

@@ -3,12 +3,15 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { AppBar, Button, IconButton, TextField, Toolbar, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 
-import { Menu } from '@mui/icons-material'
+import { LibraryAdd, Menu } from '@mui/icons-material'
 
 import { NavLink } from 'react-router-dom';
 
 import { NavbarLateralDesk } from './NavbarLateralDesk';
 import { Login } from '../formSesion';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import { DialogCita } from '../crearCitaComponent';
 
 interface RespWidthProps {
   respWidth: number
@@ -43,6 +46,8 @@ export const Navbar = ({ respWidth, setShow }: RespWidthProps) => {
     textDecoration: "none",
     color: 'hsla(0,0%,100%,.55)'
   };
+
+  const [showDialog2, setshowDialog2] = useState(false)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -92,6 +97,26 @@ export const Navbar = ({ respWidth, setShow }: RespWidthProps) => {
         </Toolbar>
       </AppBar>
       <Login showDialog = { showDialog } setShowDialog = { setShowDialog } />
+      <Fab 
+        sx={{ 
+          position: 'fixed',
+          zIndex: 1046,
+          bottom: 30,
+          left: 0,
+          right: 0,
+          margin: '0 auto',
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          '&:hover, &:focus': { backgroundColor: 'rgba(0, 0, 0, 1)' }
+         }} 
+        size="large" 
+        color="inherit" 
+        aria-label="add"
+        onClick={ () => setshowDialog2(true) }
+      >
+        <LibraryAdd />
+      </Fab>
+
+      <DialogCita showDialog2 = { showDialog2 } setShowDialog2 = { setshowDialog2 } />
     </Box>
   )
 }
