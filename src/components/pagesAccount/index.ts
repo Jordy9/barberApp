@@ -1,2 +1,2 @@
 export * from './DashBoard'
-export * from './CrearCita'
+export * from './ListadoDeCitas'

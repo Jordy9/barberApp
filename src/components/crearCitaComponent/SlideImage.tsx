@@ -21,8 +21,8 @@ export const SlideImage = () => {
         slidesPerView={ 'auto' }
         spaceBetween={30}
         centerInsufficientSlides
-        freeMode={true}
-        modules={[FreeMode]}
+        freeMode={ true }
+        modules={ [ FreeMode ] }
         className="mySwiperBarber"
       >
         {
