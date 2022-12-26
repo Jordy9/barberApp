@@ -1,4 +1,5 @@
 import { Autocomplete, FormControlLabel, Grid, MenuItem, TextField } from "@mui/material"
+import { useResponsive } from "../../hooks/useResponsive"
 import { Android12Switch, hoursSelect, top100Films } from "../../utils/Search"
 import { SlideImage } from "./"
 
@@ -7,6 +8,9 @@ interface FormBarberProps {
 }
 
 export const FormBarber = ({ count }: FormBarberProps) => {
+
+    const [ respWidth ] = useResponsive()
+
   return (
     <>
         <SlideImage />
@@ -19,7 +23,7 @@ export const FormBarber = ({ count }: FormBarberProps) => {
                 select
                 label="Hora"
                 defaultValue="3:00"
-                helperText="Hora aproximada a la que será atendido"
+                helperText={ ( respWidth < 700 ) ? 'Aproximada' : "Hora aproximada a la que será atendido"}
             >
             {hoursSelect.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -71,7 +75,7 @@ export const FormBarber = ({ count }: FormBarberProps) => {
                 <FormControlLabel
                     sx={{ my: 2, px: 1 }}
                     control={<Android12Switch defaultChecked />}
-                    label="¿LLevas un niño a ser atendido?"
+                    label="¿LLevas niños a ser atendido?"
                 />
 
                 <Grid px={ 1 } xs = { 12 }>

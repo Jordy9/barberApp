@@ -1,11 +1,12 @@
 import { forwardRef, Dispatch, SetStateAction } from 'react';
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Grid } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 
 import { CustomDateRange } from "./";
 import IconButton from '@mui/material/IconButton';
 import { ArrowBackIos } from '@mui/icons-material';
+import { useResponsive } from '../../hooks/useResponsive';
 
 interface loginProps {
   showDialog: boolean;
@@ -23,6 +24,8 @@ const Transition = forwardRef(function Transition(
   
 export const DialogDateRange = ({ showDialog, setShowDialog }: loginProps) => { 
 
+  const [ respWidth ] = useResponsive()
+
   const handleClose = () => {
     setShowDialog(false)
   }
@@ -31,6 +34,7 @@ export const DialogDateRange = ({ showDialog, setShowDialog }: loginProps) => {
     <Dialog
       open={ showDialog }
       fullWidth
+      fullScreen = { ( respWidth < 400 ) }
       TransitionComponent={ Transition }
       maxWidth = 'xs'
       onClose={ handleClose }
@@ -38,21 +42,25 @@ export const DialogDateRange = ({ showDialog, setShowDialog }: loginProps) => {
       aria-describedby="alert-dialog-description"
       scroll={ 'paper' }
       PaperProps = {{
-          style: { borderRadius: '11px' }
+        style: { borderRadius: '11px' }
       }}
     >
-        <DialogTitle>
-          <IconButton>
-            <ArrowBackIos />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
+      <DialogTitle>
+        <IconButton>
+          <ArrowBackIos />
+        </IconButton>
+      </DialogTitle>
+
+      <DialogContent>
+        <Grid display={ ( respWidth > 991 ) ? 'block' : 'flex' } justifyContent={ 'center' } alignItems = { 'center' }>
           <CustomDateRange />
-        </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Cerrar</Button>
-          <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Continuar</Button>
-        </DialogActions>
+        </Grid>
+      </DialogContent>
+      
+      <DialogActions sx={{ p: 2 }}>
+        <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Cerrar</Button>
+        <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Continuar</Button>
+      </DialogActions>
     </Dialog>
   )
 }

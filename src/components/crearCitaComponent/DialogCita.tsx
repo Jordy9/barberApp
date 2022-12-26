@@ -7,9 +7,10 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { Android12Switch, hoursSelect, top100Films } from '../../utils/Search';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
-import { Search } from '@mui/icons-material';
+import { ArrowBackIos, Search } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { motion, useIsPresent } from 'framer-motion';
+import IconButton from '@mui/material/IconButton/IconButton';
 
 interface CitaProps {
   showDialog2: boolean;
@@ -60,6 +61,9 @@ export const DialogCita = ({ showDialog2, setShowDialog2 }: CitaProps) => {
       }}
     >
       <DialogTitle align="center">
+        <IconButton onClick={ handleClose } sx={{ position: 'absolute', left: 30, top: 12.10 }}>
+          <ArrowBackIos />
+        </IconButton>
         Crear cita
       </DialogTitle>
 
@@ -69,7 +73,7 @@ export const DialogCita = ({ showDialog2, setShowDialog2 }: CitaProps) => {
             <Typography variant='h5' p={ 2 }>Mis barberos</Typography>
           </Grid>
           <Grid display={ 'flex' } alignItems = { 'center' }>
-            <Button size='large' onClick={ handleBarber } variant='contained' color='inherit' endIcon = { <Search /> }>Buscar más barberos</Button>
+            <Button size='large' onClick={ handleBarber } variant='contained' color='inherit' endIcon = { <Search /> }>Barberos</Button>
           </Grid>
         </Grid>
 
