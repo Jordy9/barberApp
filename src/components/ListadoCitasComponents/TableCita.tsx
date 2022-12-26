@@ -1,9 +1,9 @@
 import { ChangeEvent, useState } from 'react';
 
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Paper } from '@mui/material';
+import { Box, Table, TableBody, TableContainer, TableHead, TablePagination, TableRow, Paper } from '@mui/material';
 
 import { useResponsive } from '../../hooks/useResponsive';
-import { TableCitaSpreed } from './';
+import { TableCells, TableCitaSpreed } from './';
 
 export const TableCita = () => {
 
@@ -25,14 +25,10 @@ export const TableCita = () => {
   return (
     <Box>
         <TableContainer elevation = { 10 } component={ Paper } sx={{ width: 'auto', height: ( respWidth < 991 ) ? '60vh' : '400px', borderTopLeftRadius: '20px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
-          <Table aria-label="simple table" stickyHeader = {true}>
+          <Table aria-label="collapsible table" stickyHeader = {true}>
             <TableHead>
               <TableRow>
-                <TableCell align="center">Barbero</TableCell>
-                <TableCell align="center">Servicio</TableCell>
-                <TableCell align="center">Hora</TableCell>
-                <TableCell align="center">Fecha</TableCell>
-                <TableCell align="center">Ver</TableCell>
+                <TableCells respWidth={ respWidth } />
               </TableRow>
             </TableHead>
             <TableBody>

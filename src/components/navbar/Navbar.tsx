@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
-import { AppBar, Button, IconButton, TextField, Toolbar, Typography } from '@mui/material'
+import { AppBar, Button, IconButton, Toolbar, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 
 import { LibraryAdd, Menu } from '@mui/icons-material'
@@ -10,8 +10,8 @@ import { NavLink } from 'react-router-dom';
 import { NavbarLateralDesk } from './NavbarLateralDesk';
 import { Login } from '../formSesion';
 import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
 import { DialogCita } from '../crearCitaComponent';
+import { NavbarSesion } from './NavbarSesion';
 
 interface RespWidthProps {
   respWidth: number
@@ -88,10 +88,7 @@ export const Navbar = ({ respWidth, setShow }: RespWidthProps) => {
               ?
             <NavbarLateralDesk setShowDialog = { setShowDialog } />
               :
-            <Box display={ 'flex' } justifyContent = { 'space-between' }>
-              <Button onClick={ () => setShowDialog(true) } sx={{ ml: 2 }} color="inherit" variant='contained'>Iniciar sesión</Button>
-            </Box>
-
+            <NavbarSesion setShowDialog={ setShowDialog } respWidth = { respWidth } />
           }
 
         </Toolbar>

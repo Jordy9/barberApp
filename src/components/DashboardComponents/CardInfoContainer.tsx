@@ -23,7 +23,7 @@ const arregloCardInfo: CardInfoProps[] = [
     actual: 70,
     total: 100,
     backgroundImage: Image2,
-    Icon: () => <Timer />,
+    Icon: () => <ContentCut />,
     image: 'https://mui.com/static/images/avatar/5.jpg',
     name: 'Fulano'
   },

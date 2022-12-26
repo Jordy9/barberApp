@@ -15,7 +15,15 @@ export const SearchComponent = () => {
 
   return (
     <Grid display={ 'flex' } justifyContent = { ( respWidth < 991 ) ? 'space-between' : 'inherit' } alignItems = { 'center' } pb = { 2 }>
-        <Button variant='contained' color='inherit' onClick={ () => setShowDialog(true) }>Filtrar por fecha</Button>
+        <Button variant='contained' color='inherit' onClick={ () => setShowDialog(true) }>
+            {
+                (  respWidth < 400 )
+                    ?
+                'Filtrar'
+                    :
+                'Filtrar por fecha'
+            }
+        </Button>
 
         {
             ( respWidth > 400 )

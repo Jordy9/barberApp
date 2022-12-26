@@ -1,9 +1,10 @@
 import { ChangeEvent, useState } from 'react';
 
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Paper } from '@mui/material';
+import { Box, Table, TableBody, TableContainer, TableHead, TablePagination, TableRow, Paper } from '@mui/material';
 
 import { useResponsive } from '../../hooks/useResponsive';
 import { TableUserSpreed } from './TableUserSpreed';
+import { TableCells } from './';
 
 export const TableUsers = () => {
 
@@ -28,12 +29,7 @@ export const TableUsers = () => {
           <Table aria-label="simple table" stickyHeader = {true}>
             <TableHead>
               <TableRow>
-                <TableCell align="center">Foto</TableCell>
-                <TableCell align="center">Nombre</TableCell>
-                <TableCell align="center">Servicio</TableCell>
-                <TableCell align="center">Hora</TableCell>
-                <TableCell align="center">Fecha</TableCell>
-                <TableCell align="center">Acción</TableCell>
+                <TableCells respWidth={ respWidth } />
               </TableRow>
             </TableHead>
             <TableBody>

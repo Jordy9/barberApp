@@ -15,14 +15,14 @@ export const TableUserSpreed = () => {
             foto: 'https://mui.com/static/images/avatar/5.jpg',
             name: 'Fulano',
             Servicio: 'Recortada',
-            Hora: 3,
+            Hora: 1,
             fecha: new Date().getTime()
         },
         {
             foto: 'https://mui.com/static/images/avatar/2.jpg',
             name: 'Fulano',
             Servicio: 'Recortada',
-            Hora: 3,
+            Hora: 2,
             fecha: new Date().getTime()
         },
         {
@@ -36,14 +36,14 @@ export const TableUserSpreed = () => {
             foto: 'https://mui.com/static/images/avatar/3.jpg',
             name: 'Fulano',
             Servicio: 'Recortada',
-            Hora: 3,
+            Hora: 4,
             fecha: new Date().getTime()
         },
         {
             foto: 'https://mui.com/static/images/avatar/1.jpg',
             name: 'Fulano',
             Servicio: 'Recortada',
-            Hora: 3,
+            Hora: 5,
             fecha: new Date().getTime()
         }
     ]
