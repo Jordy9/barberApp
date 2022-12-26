@@ -1,18 +1,19 @@
-import { Button, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { useState } from 'react';
 
-import { BarChartContainer, CardInfoContainer, DialogDateRange, PieChartContainer, SelectComponents, TableUsers } from "./"
+import { BarChartContainer, CardInfoContainer, DialogDateRange, DialogFilter, PieChartContainer, SelectComponents, TableUsers } from "."
 
 export const ChartComponent = () => {
 
   const [showDialog, setShowDialog] = useState(false)
 
+  const [showDialogFilter, setShowDialogFilter] = useState(false)
+
   return (
     <Grid container display={ 'flex' }>
 
-      <Grid container display={ 'flex' }>
-        <SelectComponents />
-        <Button onClick={ () => setShowDialog(true) }>Abrir</Button>
+      <Grid px={ 1 } container display={ 'flex' }>
+        <SelectComponents setShowDialogFilter = { setShowDialogFilter } setShowDialog = { setShowDialog } />
       </Grid>
       
       <CardInfoContainer />
@@ -30,6 +31,8 @@ export const ChartComponent = () => {
       </Grid>
       
       <DialogDateRange showDialog = { showDialog } setShowDialog = { setShowDialog } />
+
+      <DialogFilter showDialog = { showDialogFilter } setShowDialog = { setShowDialogFilter } />
     </Grid>
   )
 }

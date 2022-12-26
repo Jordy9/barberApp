@@ -1,5 +1,5 @@
 import { Box } from "@mui/material"
-import { ChartComponent } from "./"
+import { ChartComponent } from "."
 import { useResponsive } from '../../hooks/useResponsive';
 
 export const ContainerContent = () => {

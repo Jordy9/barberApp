@@ -8,7 +8,7 @@ import Image4 from '../../assets/Image4.jpg'
 
 import { CardInfoProps } from '../../interfaces/interfaces';
 
-import { CardInfo } from './';
+import { CardInfo } from '.';
 
 const arregloCardInfo: CardInfoProps[] = [
   {

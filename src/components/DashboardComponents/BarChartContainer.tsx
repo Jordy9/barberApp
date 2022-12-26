@@ -1,5 +1,5 @@
 import { Paper } from "@mui/material"
-import { BarChart } from "./"
+import { BarChart } from "."
 
 export const BarChartContainer = () => {
   return (

@@ -1,9 +1,11 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Search, SearchIconWrapper, StyledInputBase } from '../../utils/Search';
+import { Search, SearchIconWrapper, StyledInputBase, top100Films } from '../../utils/Search';
 import { Button, Grid, IconButton } from '@mui/material';
 import { useState } from 'react';
-import { DialogDateRange } from '../chartComponent';
 import { useResponsive } from '../../hooks/useResponsive';
+import { DialogListadoCita } from './';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 export const SearchComponent = () => {
 
@@ -13,26 +15,30 @@ export const SearchComponent = () => {
 
   return (
     <Grid display={ 'flex' } justifyContent = { ( respWidth < 991 ) ? 'space-between' : 'inherit' } alignItems = { 'center' } pb = { 2 }>
-        <Button onClick={ () => setShowDialog(true) }>Filtrar por fecha</Button>
+        <Button variant='contained' color='inherit' onClick={ () => setShowDialog(true) }>Filtrar por fecha</Button>
 
         {
-            ( respWidth > 991 )
-                ?
-            <Search>
-                <SearchIconWrapper>
-                    <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                    placeholder="Barbero"
-                    inputProps={{ 'aria-label': 'search' }}
+            ( respWidth > 400 )
+                &&
+            <Grid container width={ 230 } mx = { 1 }>
+                <Autocomplete
+                    size='small'
+                    id="tags-outlined"
+                    options={top100Films}
+                    getOptionLabel={(option) => option.title}
+                    fullWidth
+                    filterSelectedOptions
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="Barbero"
+                            placeholder="Favorites"
+                        />
+                    )}
                 />
-            </Search>
-                :
-            <IconButton>
-                <SearchIcon />
-            </IconButton>
+            </Grid>
         }
-        <DialogDateRange showDialog = { showDialog } setShowDialog = { setShowDialog } />
+        <DialogListadoCita showDialog = { showDialog } setShowDialog = { setShowDialog } />
     </Grid>
   )
 }

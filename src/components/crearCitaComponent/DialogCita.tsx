@@ -11,6 +11,7 @@ import { ArrowBackIos, Search } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { motion, useIsPresent } from 'framer-motion';
 import IconButton from '@mui/material/IconButton/IconButton';
+import { useResponsive } from '../../hooks/useResponsive';
 
 interface CitaProps {
   showDialog2: boolean;
@@ -46,10 +47,13 @@ export const DialogCita = ({ showDialog2, setShowDialog2 }: CitaProps) => {
 
   const [count, setCont] = useState(0)
 
+  const [ respWidth ] = useResponsive()
+
   return (
     <Dialog
       open={ showDialog2 }
       fullWidth
+      fullScreen = { ( respWidth <= 600 ) }
       TransitionComponent={ Transition }
       maxWidth = 'sm'
       onClose={ handleClose }
@@ -73,7 +77,15 @@ export const DialogCita = ({ showDialog2, setShowDialog2 }: CitaProps) => {
             <Typography variant='h5' p={ 2 }>Mis barberos</Typography>
           </Grid>
           <Grid display={ 'flex' } alignItems = { 'center' }>
-            <Button size='large' onClick={ handleBarber } variant='contained' color='inherit' endIcon = { <Search /> }>Barberos</Button>
+            <Button size='large' onClick={ handleBarber } variant='contained' color='inherit' endIcon = { <Search /> }>
+              {
+                ( respWidth > 991 )
+                  ?
+                'Buscar más Barberos'
+                  :
+                'Barberos'  
+              }
+            </Button>
           </Grid>
         </Grid>
 

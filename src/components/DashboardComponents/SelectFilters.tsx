@@ -21,6 +21,7 @@ export const SelectFilters = ({ title, Filtro, width }: SelectProps) => {
     <FormControl sx={{ m: 1, width: width }} size="small">
       <InputLabel id="demo-select-small">{ title }</InputLabel>
       <Select
+        sx={{ borderRadius: '12px' }}
         labelId="demo-select-small"
         id="demo-select-small"
         value={ filter }
@@ -28,7 +29,7 @@ export const SelectFilters = ({ title, Filtro, width }: SelectProps) => {
         onChange={ handleChange }
       >
         <MenuItem value="">
-          <em>None</em>
+          <em>Ninguna</em>
         </MenuItem>
         {
           arregloFiltro?.map( e => (

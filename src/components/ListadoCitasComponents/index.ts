@@ -1,4 +1,5 @@
 export * from './ListadoComponent'
+export * from './DialogListadoCita'
 export * from './SearchComponent'
 export * from './TableCita'
 export * from './TableCitaSpreed'

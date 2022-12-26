@@ -1,6 +1,6 @@
 import { Box, Paper, Stack, Typography } from "@mui/material"
 
-import { PieChartt } from "./"
+import { PieChartt } from "."
 
 import { useResponsive } from "../../hooks/useResponsive"
 

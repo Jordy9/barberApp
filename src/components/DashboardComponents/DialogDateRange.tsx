@@ -3,7 +3,7 @@ import { forwardRef, Dispatch, SetStateAction } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Grid } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 
-import { CustomDateRange } from "./";
+import { CustomDateRange } from ".";
 import IconButton from '@mui/material/IconButton';
 import { ArrowBackIos } from '@mui/icons-material';
 import { useResponsive } from '../../hooks/useResponsive';
