@@ -9,6 +9,7 @@ import { styled } from '@mui/material/styles';
 import moment from "moment";
 
 import { useResponsive } from '../../hooks/useResponsive';
+import { DialogListCita } from './';
 
 interface UsuariosProps {
     Barbero: string;
@@ -43,6 +44,8 @@ export const TableCitaContent = ( props: UsuariosProps ) => {
     };
     
     const [ respWidth ] = useResponsive()
+
+    const [showDialog, setShowDialog] = useState(false)
 
   return (
     <>
@@ -84,7 +87,7 @@ export const TableCitaContent = ( props: UsuariosProps ) => {
             }
 
             <TableCell size='small' sx={{ display: 'flex', justifyContent: 'center' }}>
-                <IconButton color = 'info'>
+                <IconButton onClick={ () => setShowDialog(true) } color = 'info'>
                     <VisibilityOutlined />
                 </IconButton> 
             </TableCell>
@@ -125,6 +128,13 @@ export const TableCitaContent = ( props: UsuariosProps ) => {
                 </Collapse>
             </TableCell>
         }
+
+        <DialogListCita
+            showDialog = { showDialog }
+            setShowDialog = { setShowDialog }
+            respWidth = { respWidth }
+            { ...props }
+        />
     </>
   )
 }

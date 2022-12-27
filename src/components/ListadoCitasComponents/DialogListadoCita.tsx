@@ -5,8 +5,7 @@ import { TransitionProps } from "@mui/material/transitions";
 
 import IconButton from '@mui/material/IconButton';
 import { ArrowBackIos } from '@mui/icons-material';
-import SearchIcon from '@mui/icons-material/Search';
-import { Search, SearchIconWrapper, StyledInputBase, top100Films } from '../../utils/Search';
+import { top100Films } from '../../utils/Search';
 import { useResponsive } from '../../hooks/useResponsive';
 import { CustomDateRange } from '../DashboardComponents';
 import Autocomplete from '@mui/material/Autocomplete';

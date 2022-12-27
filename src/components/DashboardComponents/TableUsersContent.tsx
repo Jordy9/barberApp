@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Cancel, VisibilityOutlined, Timer, CheckCircle } from "@mui/icons-material"
+import { Cancel, VisibilityOutlined, CheckCircle } from "@mui/icons-material"
 
 import { Avatar, IconButton, TableCell, TableRow, IconButtonProps, Collapse, Box, Table, TableHead, TableBody } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles';
 import moment from 'moment';
 
 import { useResponsive } from "../../hooks/useResponsive";
-import { IconCondicionBarber } from './';
+import { DialogUserCita, IconCondicionBarber } from './';
 
 interface UsuariosProps {
     foto: string,
@@ -45,6 +45,8 @@ export const TableUsersContent = ( props: UsuariosProps ) => {
     };
     
     const [ respWidth ] = useResponsive()
+
+    const [showDialog, setShowDialog] = useState(false)
 
   return (
     <>
@@ -89,7 +91,7 @@ export const TableUsersContent = ( props: UsuariosProps ) => {
             }
 
             <TableCell size='small' align="center" sx={{ display: 'flex', justifyContent: 'center' }}>
-                <IconButton color = 'info'>
+                <IconButton onClick={ () => setShowDialog(true) } color = 'info'>
                     <VisibilityOutlined />
                 </IconButton>
 
@@ -153,6 +155,13 @@ export const TableUsersContent = ( props: UsuariosProps ) => {
                 </Collapse>
             </TableCell>
         }
+        
+        <DialogUserCita 
+            showDialog = { showDialog } 
+            setShowDialog = { setShowDialog } 
+            respWidth = { respWidth } 
+            { ...props }
+        />
     </>
   )
 }

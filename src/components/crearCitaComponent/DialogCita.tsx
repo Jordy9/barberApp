@@ -1,12 +1,9 @@
 import { Dispatch, forwardRef, SetStateAction, useState } from 'react';
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, TextField, Typography } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography } from "@mui/material"
 import { TransitionProps } from "@mui/material/transitions";
-import { FormBarber, SlideImage } from "./";
-import Autocomplete from '@mui/material/Autocomplete';
-import { Android12Switch, hoursSelect, top100Films } from '../../utils/Search';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import MenuItem from '@mui/material/MenuItem';
+import { FormBarber } from "./";
+
 import { ArrowBackIos, Search } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { motion, useIsPresent } from 'framer-motion';
