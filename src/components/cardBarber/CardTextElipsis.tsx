@@ -4,10 +4,10 @@ export const CardTextElipsis = () => {
   return (
     <CardContent>
         <Typography sx={{
-            display: '-webkit-box',
-            overflow: 'hidden',
-            WebkitBoxOrient: 'vertical',
-            WebkitLineClamp: 3,
+          display: '-webkit-box',
+          overflow: 'hidden',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
         }} 
         variant="body2" color="text.secondary"
         >

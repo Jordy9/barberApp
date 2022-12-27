@@ -63,17 +63,17 @@ export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, foto, fec
 
       <DialogContent>
 
-        <Grid mb={ 1 } textAlign={ 'end' }> 
-            { moment(fecha).format('MMMM Do YYYY') }
+        <Grid my={ 1 } textAlign={ 'end' }> 
+          { moment(fecha).format('MMMM Do YYYY') }
         </Grid>
 
-        <Grid item container>
-            <Grid display={ 'flex' } sx={{ mx: 'auto' }}> 
-                <Avatar sx={{ width: 'auto', height: 'auto' }} src={ foto } />
-            </Grid>
+        <Grid item container mt = { ( respWidth < 400 ) ? 5 : 3 }>
+          <Grid display={ 'flex' } sx={{ mx: 'auto' }}> 
+            <Avatar sx={{ width: 'auto', height: 'auto' }} src={ foto } />
+          </Grid>
         </Grid>
 
-        <Grid item container p={ 2 }>
+        <Grid item container p={ 2 } mt = { 3 }>
 
             <Grid px={ 1 } xs = { 6 }>
                 <TextField

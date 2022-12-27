@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Card, CardActionArea, CardActions, CardContent, Collapse, IconButton, Typography } from "@mui/material"
+import { Card, CardActionArea } from "@mui/material"
 import { CardCollapse, CardHeaderTemplate, CardIcons, CardMediaTemplate, CardTextElipsis } from "./"
 import { useNavigate } from "react-router-dom";
 

@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { useNavigate } from 'react-router-dom'
 
-import { Dashboard, LibraryAdd, Favorite, DriveFolderUpload, Collections, LibraryBooks } from '@mui/icons-material'
+import { Dashboard, Favorite, CloudUpload, Collections, LibraryBooks } from '@mui/icons-material'
 import { Box } from '@mui/system'
 
 import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Drawer, Typography } from '@mui/material';
@@ -29,14 +29,14 @@ export const DrawerMenu = ({ show, setShow }: DrawerProps) => {
 
         {
             label: 'Barberos favoritos',
-            route: '/listadoPreguntas',
+            route: '/BarberosFavoritos',
             Icon: () => <Favorite />
         },
 
         {
             label: 'Subir imagen a galería',
-            route: '/listadoPreguntas',
-            Icon: () => <DriveFolderUpload />
+            route: '/ImagenAGaleria',
+            Icon: () => <CloudUpload />
         },
 
         {

@@ -2,6 +2,7 @@ import { Layaout } from "../layout/Layaout"
 import { CardBarber } from "../cardBarber";
 import { FilterOptionsBarber } from "../filterOptionsBarber/FilterOptionsBarber";
 import { useResponsive } from '../../hooks/useResponsive';
+import { ButtonFilter } from "../filterOptionsBarber/ButtonFilter";
 
 export const Barberos = () => {
 
@@ -12,8 +13,10 @@ export const Barberos = () => {
       <>
         {
           (respWidth > 991)
-            &&
+            ?
           <FilterOptionsBarber />
+            :
+          <ButtonFilter />
         }
         <CardBarber />
       </>
