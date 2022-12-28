@@ -69,57 +69,57 @@ export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, foto, fec
 
         <Grid item container mt = { ( respWidth < 400 ) ? 5 : 3 }>
           <Grid display={ 'flex' } sx={{ mx: 'auto' }}> 
-            <Avatar sx={{ width: 'auto', height: 'auto' }} src={ foto } />
+            <Avatar sx={{ width: '182px', height: '182px' }} src={ foto } />
           </Grid>
         </Grid>
 
         <Grid item container p={ 2 } mt = { 3 }>
 
-            <Grid px={ 1 } xs = { 6 }>
-                <TextField
-                    id="outlined-select-currency"
-                    label="Hora"
-                    defaultValue="3:00"
-                    inputProps={
-                        { readOnly: true, }
-                    }
-                >
-                </TextField>
-            </Grid>
+          <Grid px={ 1 } xs = { 6 }>
+            <TextField
+              id="outlined-select-currency"
+              label="Hora"
+              defaultValue="3:00"
+              inputProps={
+                { readOnly: true, }
+              }
+            >
+            </TextField>
+          </Grid>
 
-            <Grid px={ 1 } xs = { 6 }>
-                <TextField
-                    fullWidth
-                    id="outlined-select-currency"
-                    label="Barbero"
-                    defaultValue="Fulano"
-                    inputProps={
-                        { readOnly: true, }
-                    }
-                >
-                </TextField>
-            </Grid>
+          <Grid px={ 1 } xs = { 6 }>
+            <TextField
+              fullWidth
+              id="outlined-select-currency"
+              label="Barbero"
+              defaultValue="Fulano"
+              inputProps={
+                { readOnly: true, }
+              }
+            >
+            </TextField>
+          </Grid>
             
-            <Grid px={ 1 } mt={ 3 } xs = { 12 }>
-                <Autocomplete
-                    multiple
-                    id="tags-outlined"
-                    options={top100Films}
-                    getOptionLabel={(option) => option.title}
-                    defaultValue={[top100Films[13], top100Films[11]]}
-                    fullWidth
-                    filterSelectedOptions
-                    popupIcon = { false }
-                    readOnly
-                    renderInput={(params) => (
-                        <TextField
-                        {...params}
-                        label="Servicios"
-                        placeholder="..."
-                        />
-                    )}
+          <Grid px={ 1 } mt={ 3 } xs = { 12 }>
+            <Autocomplete
+              multiple
+              id="tags-outlined"
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              defaultValue={[top100Films[13], top100Films[11]]}
+              fullWidth
+              filterSelectedOptions
+              popupIcon = { false }
+              readOnly
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Servicios"
+                  placeholder="..."
                 />
-            </Grid>
+              )}
+            />
+          </Grid>
         </Grid>
         
       </DialogContent>

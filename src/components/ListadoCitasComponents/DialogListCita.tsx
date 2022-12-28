@@ -68,7 +68,7 @@ export const DialogListCita = ({ showDialog, setShowDialog, respWidth, fecha, Ho
 
         <Grid item container>
           <Grid display={ 'flex' } sx={{ mx: 'auto' }}> 
-            <Avatar sx={{ width: 'auto', height: 'auto' }} src={ 'https://mui.com/static/images/avatar/5.jpg' } />
+            <Avatar sx={{ width: '182px', height: '182px' }} src={ 'https://mui.com/static/images/avatar/5.jpg' } />
           </Grid>
         </Grid>
 
