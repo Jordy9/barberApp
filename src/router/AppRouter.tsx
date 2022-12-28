@@ -1,6 +1,6 @@
 import { Routes, Navigate, Route, useLocation } from 'react-router-dom';
 import { Barberos, Galeria, Inicio, NuevaContrasena, ProfileBarber, RecuperarContrasena } from "../components/pages"
-import { DashBoard, ListadoDeCitas, BarberosFavoritos, SubirImagenGaleria, ListadoMiGaleria } from "../components/pagesAccount"
+import { DashBoard, ListadoDeCitas, BarberosFavoritos, SubirImagenGaleria, ListadoMiGaleria, Anuncio } from "../components/pagesAccount"
 import { AnimatePresence } from "framer-motion"
 
 export const AppRouter = () => {
@@ -15,6 +15,7 @@ export const AppRouter = () => {
         <Route path="/BarberosFavoritos" element = { <BarberosFavoritos /> } />
         <Route path="/ImagenAGaleria" element = { <SubirImagenGaleria /> } />
         <Route path="/ListadoDeMiGaleria" element = { <ListadoMiGaleria /> } />
+        <Route path="/Anuncio" element = { <Anuncio /> } />
         <Route path="/Inicio" element = { <Inicio /> } />
         <Route path="/Galeria" element = { <Galeria /> } />
         <Route path="/Barberos" element = { <Barberos /> } />

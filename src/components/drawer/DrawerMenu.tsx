@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { useNavigate } from 'react-router-dom'
 
-import { Dashboard, Favorite, CloudUpload, Collections, LibraryBooks } from '@mui/icons-material'
+import { Dashboard, Favorite, CloudUpload, Collections, LibraryBooks, Announcement } from '@mui/icons-material'
 import { Box } from '@mui/system'
 
 import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Drawer, Typography } from '@mui/material';
@@ -43,6 +43,12 @@ export const DrawerMenu = ({ show, setShow }: DrawerProps) => {
             label: 'Listado de mi galería',
             route: '/ListadoDeMiGaleria',
             Icon: () => <Collections />
+        },
+
+        {
+            label: 'Hacer un anuncio',
+            route: '/Anuncio',
+            Icon: () => <Announcement />
         },
     ]
 
