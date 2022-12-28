@@ -16,9 +16,10 @@ import { NavbarSesion } from './NavbarSesion';
 interface RespWidthProps {
   respWidth: number
   setShow: Dispatch<SetStateAction<boolean>>
+  pathname: string;
 }
 
-export const Navbar = ({ respWidth, setShow }: RespWidthProps) => {
+export const Navbar = ({ respWidth, setShow, pathname }: RespWidthProps) => {
 
   const [showDialog, setShowDialog] = useState(false)
 
@@ -94,24 +95,29 @@ export const Navbar = ({ respWidth, setShow }: RespWidthProps) => {
         </Toolbar>
       </AppBar>
       <Login showDialog = { showDialog } setShowDialog = { setShowDialog } />
-      <Fab 
-        sx={{ 
-          position: 'fixed',
-          zIndex: 1046,
-          bottom: 30,
-          left: 0,
-          right: 0,
-          margin: '0 auto',
-          backgroundColor: 'rgba(0, 0, 0, 0.6)',
-          '&:hover, &:focus': { backgroundColor: 'rgba(0, 0, 0, 1)' }
-         }} 
-        size="large" 
-        color="inherit" 
-        aria-label="add"
-        onClick={ () => setshowDialog2(true) }
-      >
-        <LibraryAdd />
-      </Fab>
+
+      {
+        ( pathname !== '/Perfil/name/:id' )
+          &&
+        <Fab 
+          sx={{ 
+            position: 'fixed',
+            zIndex: 1046,
+            bottom: 30,
+            left: 0,
+            right: 0,
+            margin: '0 auto',
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            '&:hover, &:focus': { backgroundColor: 'rgba(0, 0, 0, 1)' }
+          }} 
+          size="large" 
+          color="inherit" 
+          aria-label="add"
+          onClick={ () => setshowDialog2(true) }
+        >
+          <LibraryAdd />
+        </Fab>
+      }
 
       <DialogCita showDialog2 = { showDialog2 } setShowDialog2 = { setshowDialog2 } />
     </Box>

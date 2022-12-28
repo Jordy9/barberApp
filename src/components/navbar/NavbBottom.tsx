@@ -1,5 +1,4 @@
-import { ContentCut, Home, PhotoLibrary, LibraryAdd } from '@mui/icons-material';
-import Fab from '@mui/material/Fab';
+import { ContentCut, Home, PhotoLibrary } from '@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -18,7 +17,7 @@ const getPageIndex = ( pathname: string ) => {
         case '/Barberos': 
             return 2;
         default: 
-            return 0;
+            return -1;
     }
 }
 
@@ -45,9 +44,6 @@ export const NavbBottom = ({ pathname }: navigationProp) => {
         <BottomNavigationAction component={ Link } to="/Galeria" label="Galería" icon={ <PhotoLibrary /> } />
         <BottomNavigationAction component={ Link } to="/Barberos" label="Barberos" icon={ <ContentCut /> } />
         <BottomNavigationAction label="Buscar" icon={ <SearchIcon /> } />
-        <Fab sx={ StyledFab } size="large" color="inherit" aria-label="add">
-            <LibraryAdd />
-        </Fab>
     </BottomNavigation>
   )
 }

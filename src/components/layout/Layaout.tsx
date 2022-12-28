@@ -25,7 +25,7 @@ export const Layaout = ({ children }: Props) => {
   return (
     <Box sx={{ flexFlow: 1 }}>
 
-      <Navbar respWidth = { respWidth } setShow = { setShow } />
+      <Navbar respWidth = { respWidth } setShow = { setShow } pathname = { pathname } />
 
       <DrawerMenu show = { show } setShow = { setShow } />
 
