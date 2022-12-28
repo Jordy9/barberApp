@@ -5,18 +5,18 @@ import { DragAndDropImage, UploadList } from './';
 export const SubirImagenContainer = () => {
   return (
     <Grid item container>
-        <Grid xs = { 6 }>
-          <DragAndDropImage />
+      <Grid xs = { 12 } sm = { 4 } px = { 2 }>
+        <DragAndDropImage />
 
-          <Grid sx={{ width: '90%' }} mt={ 3 } display = { 'flex' } justifyContent = { 'center' }>
-            <Button color='inherit'>Seleccionar imagen</Button>
-          </Grid>
+        <Grid sx={{ width: '100%' }} mt={ 3 } display = { 'flex' } justifyContent = { 'center' }>
+          <Button variant='contained' color='inherit'>Seleccionar imagen</Button>
         </Grid>
+      </Grid>
 
-        <Grid xs = { 6 }>
-          <Typography variant='h6'>Subiendo</Typography>
-          <UploadList />
-        </Grid>
+      <Grid xs = { 12 } sm = { 8 }>
+        <Typography variant='h6'>Subiendo</Typography>
+        <UploadList />
+      </Grid>
     </Grid>
   )
 }

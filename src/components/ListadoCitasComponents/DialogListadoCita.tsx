@@ -37,7 +37,7 @@ export const DialogListadoCita = ({ showDialog, setShowDialog }: loginProps) => 
     <Dialog
       open={ showDialog }
       fullWidth
-      fullScreen = { ( respWidth < 400 ) }
+      fullScreen = { ( respWidth < 600 ) }
       TransitionComponent={ Transition }
       maxWidth = 'xs'
       onClose={ handleClose }
@@ -56,7 +56,7 @@ export const DialogListadoCita = ({ showDialog, setShowDialog }: loginProps) => 
 
       <DialogContent>
         {
-          ( respWidth < 400 )
+          ( respWidth < 600 )
             &&
           <Grid mb={ 3 } mt = { 2 }>
             <Autocomplete

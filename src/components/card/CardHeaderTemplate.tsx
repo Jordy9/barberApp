@@ -4,13 +4,13 @@ import { red } from '@mui/material/colors'
 export const CardHeaderTemplate = () => {
   return (
     <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+      avatar={
+        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          R
+        </Avatar>
+      }
+      title="Shrimp and Chorizo Paella"
+      subheader="September 14, 2016"
     />
   )
 }

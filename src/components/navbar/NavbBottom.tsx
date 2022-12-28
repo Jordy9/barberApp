@@ -23,20 +23,20 @@ const getPageIndex = ( pathname: string ) => {
 
 export const NavbBottom = ({ pathname }: navigationProp) => {
 
-    const StyledFab = {
-        position: 'fixed',
-        zIndex: 1046,
-        bottom: 30,
-        left: 0,
-        right: 0,
-        margin: '0 auto',
-    };
+    // const StyledFab = {
+    //     position: 'fixed',
+    //     zIndex: 1046,
+    //     bottom: 30,
+    //     left: 0,
+    //     right: 0,
+    //     margin: '0 auto',
+    // };
 
     const value = getPageIndex( pathname );
 
   return (
     <BottomNavigation
-        sx={{ position: ( pathname === '/Inicio' ) ? 'absolute' : 'fixed', bottom: 0, left: 0, right: 0 }}
+        sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
         showLabels
         value={ value }
     >

@@ -10,6 +10,7 @@ import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper";
 
 import { useResponsive } from '../../hooks/useResponsive'
+import { Box } from '@mui/material';
 
 export const Banner = () => {
 
@@ -24,7 +25,7 @@ export const Banner = () => {
     const [ respWidth ] = useResponsive()
     
   return (
-    <>
+    <Box sx={{ height: ( respWidth > 991 ) ? '91vh' : '86.3vh' }}>
         <Swiper
             pagination={{
                 type: "progressbar",
@@ -33,7 +34,7 @@ export const Banner = () => {
             modules={[ Pagination, Navigation ]}
             className="mySwiper"
             style={{
-                height: ( respWidth > 991 ) ? '91vh' : '83.3vh'
+                height: ( respWidth < 335 ) ? '100vh' : '100%'
             }}
         >
             {
@@ -45,6 +46,6 @@ export const Banner = () => {
             }
 
         </Swiper>
-    </>
+    </Box>
   )
 }

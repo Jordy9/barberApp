@@ -36,7 +36,7 @@ const Transition = forwardRef(function Transition(
 export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, foto, fecha, name }: DialogProps) => {
 
     const handleClose = () => {
-        setShowDialog(false)
+      setShowDialog(false)
     }
 
   return (

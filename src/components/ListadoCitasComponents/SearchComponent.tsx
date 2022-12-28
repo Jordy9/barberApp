@@ -17,7 +17,7 @@ export const SearchComponent = () => {
     <Grid display={ 'flex' } justifyContent = { ( respWidth < 991 ) ? 'space-between' : 'inherit' } alignItems = { 'center' } pb = { 2 }>
         <Button variant='contained' color='inherit' onClick={ () => setShowDialog(true) }>
             {
-                (  respWidth < 400 )
+                (  respWidth < 600 )
                     ?
                 'Filtrar'
                     :
@@ -26,7 +26,7 @@ export const SearchComponent = () => {
         </Button>
 
         {
-            ( respWidth > 400 )
+            ( respWidth > 600 )
                 &&
             <Grid container width={ 230 } mx = { 1 }>
                 <Autocomplete

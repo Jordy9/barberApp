@@ -34,7 +34,6 @@ export const DialogDateRange = ({ showDialog, setShowDialog }: loginProps) => {
     <Dialog
       open={ showDialog }
       fullWidth
-      fullScreen = { ( respWidth < 400 ) }
       TransitionComponent={ Transition }
       maxWidth = 'xs'
       onClose={ handleClose }

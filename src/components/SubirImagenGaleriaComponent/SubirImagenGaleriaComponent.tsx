@@ -3,7 +3,7 @@ import { SubirImagenContainer } from './';
 
 export const SubirImagenGaleriaComponent = () => {
   return (
-    <Box p={ 5 } elevation = { 10 } sx = {{ height: 'auto' }} component={ Paper }>
+    <Box p={ 5 } mb = { 10 } elevation = { 10 } sx = {{ height: 'auto' }} component={ Paper }>
       <SubirImagenContainer />
     </Box>
   )

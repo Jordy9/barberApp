@@ -41,7 +41,7 @@ export const DrawerMenu = ({ show, setShow }: DrawerProps) => {
 
         {
             label: 'Listado de mi galería',
-            route: '/listadoPreguntas',
+            route: '/ListadoDeMiGaleria',
             Icon: () => <Collections />
         },
     ]

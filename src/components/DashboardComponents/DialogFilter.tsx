@@ -9,6 +9,7 @@ import { ArrowBackIos } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { CustomDateRange } from './';
+import { useResponsive } from '../../hooks/useResponsive';
 
 interface loginProps {
     showDialog: boolean;
@@ -57,11 +58,13 @@ export const DialogFilter = ({ showDialog, setShowDialog }: loginProps) => {
     setExpanded(!expanded);
   };
 
+  const [ respWidth ] = useResponsive()
+
   return (
     <Dialog
       open={ showDialog }
       fullWidth
-      fullScreen
+      fullScreen = { ( respWidth < 600 ) }
       TransitionComponent={ Transition }
       maxWidth = 'xs'
       onClose={ handleClose }

@@ -1,14 +1,20 @@
 import { Card } from "@mui/material"
-import { CardHeaderTemplate, CardMediaTemplate } from "./"
+import { CardHeaderTemplate, CardHeaderTemplateUser, CardMediaTemplate } from "./"
 
-export const CardTemplate = () => {
+export const CardTemplate = ({ isUser = false }) => {
   return (
     <Card sx={{ height: '400px', width: '100%', borderRadius: '12px' }}>
       
       <CardMediaTemplate />
-      
-      <CardHeaderTemplate />
 
+      {
+        ( !isUser )
+          ?
+        <CardHeaderTemplate />
+          :
+        <CardHeaderTemplateUser />
+      }
+      
     </Card>
   )
 }
