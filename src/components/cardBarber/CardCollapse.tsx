@@ -11,8 +11,8 @@ export const CardCollapse = ({ expanded, transitionEnd }: collapseProps ) => {
       <CardContent>
       <Typography paragraph>Method:</Typography>
       <Typography paragraph>
-          Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-          aside for 10 minutes.
+        Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
+        aside for 10 minutes.
       </Typography>
       </CardContent>
     </Collapse>
