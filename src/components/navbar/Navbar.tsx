@@ -97,7 +97,7 @@ export const Navbar = ({ respWidth, setShow, pathname }: RespWidthProps) => {
       <Login showDialog = { showDialog } setShowDialog = { setShowDialog } />
 
       {
-        ( pathname !== '/Perfil/name/:id' )
+        ( !pathname.includes('/Perfil'))
           &&
         <Fab 
           sx={{ 

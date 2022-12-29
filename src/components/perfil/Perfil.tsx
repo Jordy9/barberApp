@@ -1,14 +1,18 @@
-import { Box, Grid, IconButton, Typography } from '@mui/material';
-import { ButtonsSpace, Descripcion, FotoPerfil, NegocioContainer, Portada } from "./"
+import { Box, Grid, IconButton, Typography, Button } from '@mui/material';
+import { ButtonsSpace, Descripcion, DialogEditPerfil, FotoPerfil, NegocioContainer, Portada } from "./"
 import { useResponsive } from '../../hooks/useResponsive';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate } from 'react-router-dom';
+import { Edit } from '@mui/icons-material';
+import { useState } from 'react';
 
-export const Perfil = () => {
+export const Perfil = ({ isUser = false }) => {
 
   const [ respWidth ] = useResponsive()
 
   const navigate = useNavigate()
+
+  const [showDialog, setShowDialog] = useState(false)
 
   return (
     <>
@@ -19,6 +23,14 @@ export const Perfil = () => {
       <Box px={ ( respWidth ) > 991 ? 10 : 0 } pb = { ( respWidth ) > 991 ? 5 : 10 }>
 
         <Portada />
+
+        {
+          ( isUser )
+            &&
+          <Grid mb={ 1 } px={ ( respWidth ) > 991 ? 4 : 0 } display={ 'flex' } justifyContent = { 'end' }>
+            <Button onClick={ () => setShowDialog(true) } endIcon = { <Edit /> } variant='contained' color='inherit'>Editar perfil</Button>
+          </Grid>
+        }
 
         <Grid display={ 'flex' } alignItems = { 'center' } container sx = {{ height: '25vh' }}>
 
@@ -41,6 +53,7 @@ export const Perfil = () => {
           <NegocioContainer />
         </Grid>
 
+        <DialogEditPerfil showDialog = { showDialog } setShowDialog = { setShowDialog } />
       </Box>
     </>
   )

@@ -1,5 +1,4 @@
-import { AddCircleOutline, LibraryAdd } from '@mui/icons-material';
-import CommentIcon from '@mui/icons-material/Comment';
+import { LibraryAdd, Comment, Favorite } from '@mui/icons-material';
 import { Button, Grid, IconButton } from '@mui/material';
 import { useResponsive } from '../../hooks/useResponsive';
 
@@ -13,7 +12,7 @@ export const ButtonsSpace = () => {
         {
           ( respWidth > 410 )
             ?
-          <Button color='inherit' endIcon = { <CommentIcon /> } variant='contained'>
+          <Button color='inherit' endIcon = { <Comment /> } variant='contained'>
             {
               ( respWidth > 991 )
                 ?
@@ -24,13 +23,13 @@ export const ButtonsSpace = () => {
           </Button>
             :
           <IconButton>
-            <CommentIcon />
+            <Comment />
           </IconButton>
         }
       </Grid>
 
       <Grid display={ 'flex' } justifyContent = { 'end' }>
-          <Button color='inherit' sx = {{ mx: ( respWidth > 991 ) ? 2 : 1 }} endIcon = { <AddCircleOutline /> } variant='contained'>
+          <Button color='inherit' sx = {{ mx: ( respWidth > 991 ) ? 2 : 1 }} endIcon = { <Favorite /> } variant='contained'>
             {
               ( respWidth > 991 )
                 ?

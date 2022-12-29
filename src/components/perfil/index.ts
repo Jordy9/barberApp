@@ -6,3 +6,5 @@ export * from "./ButtonsSpace";
 export * from "./NegocioContainer";
 export * from "./Negocio";
 export * from "./NegocioResponsive";
+export * from "./DialogEditPerfil";
+export * from "./PerfilUser";

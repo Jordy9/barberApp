@@ -1,5 +1,5 @@
+import { Directions } from "@mui/icons-material";
 import { Chip, Grid, Typography } from "@mui/material"
-import { Box } from "@mui/system";
 
 interface Props {
     title: string,
@@ -22,7 +22,13 @@ export const Negocio = ({ title, descripcion }: Props) => {
         {
             arreglo.map(e => (
                 <Grid my={ 2 } item>
-                    <Chip label={ descripcion } variant="outlined" onClick={handleClick} />
+                    {
+                        ( title === 'Ubicación')
+                            ?
+                        <Chip label={ descripcion } variant="outlined" onClick={handleClick} icon = { <Directions /> } />
+                            :
+                        <Chip label={ descripcion } variant="outlined" onClick={handleClick} />
+                    }
                 </Grid>
             ))
         }

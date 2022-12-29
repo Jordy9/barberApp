@@ -42,7 +42,7 @@ export const Layaout = ({ children }: Props) => {
       </Box>
 
       {
-        ( respWidth <= 991 && pathname !== '/Perfil/name/:id' )
+        ( respWidth <= 991 && !pathname.includes('/Perfil') )
           &&
         <NavbBottom pathname = { pathname } />
       }
