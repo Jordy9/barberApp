@@ -1,4 +1,4 @@
-import { Dispatch, forwardRef, SetStateAction, useState } from 'react';
+import { forwardRef, useState } from 'react';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography } from "@mui/material"
 import { TransitionProps } from "@mui/material/transitions";
@@ -9,11 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, useIsPresent } from 'framer-motion';
 import IconButton from '@mui/material/IconButton/IconButton';
 import { useResponsive } from '../../hooks/useResponsive';
-
-interface CitaProps {
-  showDialog2: boolean;
-  setShowDialog2: Dispatch<SetStateAction<boolean>>
-}
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { isOpenCita } from '../../store/citas/CitasSlice';
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -24,16 +21,20 @@ const Transition = forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
-export const DialogCita = ({ showDialog2, setShowDialog2 }: CitaProps) => {
+export const DialogCita = () => {
+
+  const dispatch = useAppDispatch();
+  
+  const { isOpen } = useAppSelector( state => state.ct );
 
   const handleClose = () => {
-    setShowDialog2(false)
+    dispatch( isOpenCita(false) )
   }
 
   const navigate = useNavigate()
 
   const handleBarber = () => {
-    setShowDialog2(false)
+    dispatch( isOpenCita(false) )
     const timeout = setTimeout(() => {
       navigate('/Barberos')
       clearTimeout(timeout)
@@ -48,7 +49,7 @@ export const DialogCita = ({ showDialog2, setShowDialog2 }: CitaProps) => {
 
   return (
     <Dialog
-      open={ showDialog2 }
+      open={ isOpen }
       fullWidth
       fullScreen = { ( respWidth <= 600 ) }
       TransitionComponent={ Transition }

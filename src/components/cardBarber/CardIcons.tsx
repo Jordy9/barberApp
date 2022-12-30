@@ -1,9 +1,11 @@
-import { CardActions, IconButton, IconButtonProps } from "@mui/material"
+import { CardActions, IconButton, IconButtonProps, Tooltip  } from "@mui/material"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { LibraryAdd } from "@mui/icons-material";
 import { styled  } from '@mui/material/styles';
+import { useAppDispatch } from "../../store/hooks";
+import { isOpenCita } from "../../store/citas/CitasSlice";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -26,29 +28,38 @@ interface ExpandProps {
   }));
 
 export const CardIcons = ({ expanded, handleExpandClick }: ExpandProps) => {
+
+  const dispatch = useAppDispatch();
+
   return (
     <CardActions disableSpacing>
 
-        <IconButton title="Agregar a favoritos" aria-label="add to favorites">
+      <Tooltip title="Agregar a favoritos" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
+        <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
+      </Tooltip>
 
-        <IconButton title="Compartir" aria-label="share">
+      <Tooltip title="Compartir" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
+        <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
+      </Tooltip>
 
-        <IconButton title="Crear cita" aria-label="library add">
+      <Tooltip title="Crear cita" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
+        <IconButton onClick={ () => dispatch( isOpenCita(true) ) } aria-label="library add">
           <LibraryAdd />
         </IconButton>
+      </Tooltip>
 
-        <ExpandMore
-          expand={ expanded }
-          onClick={ handleExpandClick }
-          aria-expanded={ expanded }
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
+      <ExpandMore
+        expand={ expanded }
+        onClick={ handleExpandClick }
+        aria-expanded={ expanded }
+        aria-label="show more"
+      >
+        <ExpandMoreIcon />
+      </ExpandMore>
 
     </CardActions>
   )

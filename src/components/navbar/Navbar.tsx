@@ -12,6 +12,8 @@ import { Login } from '../formSesion';
 import Fab from '@mui/material/Fab';
 import { DialogCita } from '../crearCitaComponent';
 import { NavbarSesion } from './NavbarSesion';
+import { useAppDispatch } from '../../store/hooks';
+import { isOpenCita } from '../../store/citas/CitasSlice';
 
 interface RespWidthProps {
   respWidth: number
@@ -20,6 +22,8 @@ interface RespWidthProps {
 }
 
 export const Navbar = ({ respWidth, setShow, pathname }: RespWidthProps) => {
+
+  const dispatch = useAppDispatch();
 
   const [showDialog, setShowDialog] = useState(false)
 
@@ -47,8 +51,6 @@ export const Navbar = ({ respWidth, setShow, pathname }: RespWidthProps) => {
     textDecoration: "none",
     color: 'hsla(0,0%,100%,.55)'
   };
-
-  const [showDialog2, setshowDialog2] = useState(false)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -113,13 +115,13 @@ export const Navbar = ({ respWidth, setShow, pathname }: RespWidthProps) => {
           size="large" 
           color="inherit" 
           aria-label="add"
-          onClick={ () => setshowDialog2(true) }
+          onClick={ () => dispatch( isOpenCita(true) ) }
         >
           <LibraryAdd />
         </Fab>
       }
 
-      <DialogCita showDialog2 = { showDialog2 } setShowDialog2 = { setshowDialog2 } />
+      <DialogCita />
     </Box>
   )
 }

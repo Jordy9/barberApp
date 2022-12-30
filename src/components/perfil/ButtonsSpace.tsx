@@ -1,8 +1,15 @@
 import { LibraryAdd, Comment, Favorite } from '@mui/icons-material';
-import { Button, Grid, IconButton } from '@mui/material';
+import { Button, Grid, IconButton, Tooltip } from '@mui/material';
+
+import { isOpenCita } from '../../store/citas/CitasSlice';
+
 import { useResponsive } from '../../hooks/useResponsive';
 
+import { useAppDispatch } from '../../store/hooks';
+
 export const ButtonsSpace = () => {
+
+  const dispatch = useAppDispatch();
 
   const [ respWidth ] = useResponsive()
 
@@ -22,9 +29,11 @@ export const ButtonsSpace = () => {
             }
           </Button>
             :
-          <IconButton>
-            <Comment />
-          </IconButton>
+          <Tooltip title="Nuevo anuncio" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
+            <IconButton>
+              <Comment />
+            </IconButton>
+          </Tooltip>
         }
       </Grid>
 
@@ -39,7 +48,7 @@ export const ButtonsSpace = () => {
             }
           </Button>
 
-          <Button color='inherit' endIcon = { <LibraryAdd /> } variant='contained'>
+          <Button onClick={ () => dispatch( isOpenCita(true) ) } color='inherit' endIcon = { <LibraryAdd /> } variant='contained'>
             {
               ( respWidth > 991 )
                 ?
