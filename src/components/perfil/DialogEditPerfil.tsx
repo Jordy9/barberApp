@@ -1,16 +1,12 @@
 import { forwardRef, Dispatch, SetStateAction, useState } from 'react';
 
-import { styled } from '@mui/material/styles';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Box, Typography, Grid, Avatar, IconButtonProps } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Box, Typography, Grid, Avatar, TextField } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 
 import IconButton from '@mui/material/IconButton';
-import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { ArrowBackIos } from '@mui/icons-material';
 
 import { useResponsive } from '../../hooks/useResponsive';
-import TextField from '@mui/material/TextField';
-import Collapse from '@mui/material/Collapse';
 
 interface loginProps {
     showDialog: boolean;
@@ -26,21 +22,6 @@ interface loginProps {
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
-  interface ExpandMoreProps extends IconButtonProps {
-    expand: boolean;
-  }
-  
-  const ExpandMore = styled((props: ExpandMoreProps) => {
-    const { expand, ...other } = props;
-    return <IconButton {...other} />;
-  })(({ theme, expand }) => ({
-    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  }));
-
 export const DialogEditPerfil = ({ showDialog, setShowDialog }: loginProps) => {
 
   const handleClose = () => {
@@ -48,12 +29,6 @@ export const DialogEditPerfil = ({ showDialog, setShowDialog }: loginProps) => {
   }
 
   const [ respWidth ] = useResponsive()
-
-  const [expanded, setExpanded] = useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   return (
     <Dialog

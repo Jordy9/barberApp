@@ -1,5 +1,5 @@
 import { Box, Grid, IconButton, Typography, Button } from '@mui/material';
-import { ButtonsSpace, Descripcion, DialogEditPerfil, FotoPerfil, NegocioContainer, Portada } from "./"
+import { ButtonsSpace, Descripcion, DialogEditPerfil, DialogNegocio, FotoPerfil, NegocioContainer, Portada } from "./"
 import { useResponsive } from '../../hooks/useResponsive';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,8 @@ export const Perfil = ({ isUser = false }) => {
   const navigate = useNavigate()
 
   const [showDialog, setShowDialog] = useState(false)
+
+  const [showDialog2, setShowDialog2] = useState(false)
 
   return (
     <>
@@ -45,15 +47,29 @@ export const Perfil = ({ isUser = false }) => {
 
         </Grid>
 
-        <Grid px={ ( respWidth ) > 991 ? 4 : 0 } my = { 1 }>
-          <ButtonsSpace />
-        </Grid>
+        {
+          ( !isUser )
+            &&
+          <Grid px={ ( respWidth ) > 991 ? 4 : 0 } my = { 1 }>
+            <ButtonsSpace />
+          </Grid>
+        }
+
+        {
+          ( isUser )
+            &&
+          <Grid my={ 1 } px={ ( respWidth ) > 991 ? 4 : 0 } display={ 'flex' } justifyContent = { 'end' }>
+            <Button onClick={ () => setShowDialog2(true) } endIcon = { <Edit /> } variant='contained' color='inherit'>Editar información de mi negocio</Button>
+          </Grid>
+        }
         
         <Grid my = { 1 }>
           <NegocioContainer />
         </Grid>
 
         <DialogEditPerfil showDialog = { showDialog } setShowDialog = { setShowDialog } />
+
+        <DialogNegocio showDialog2 = { showDialog2 } setShowDialog2 = { setShowDialog2 } />
       </Box>
     </>
   )
