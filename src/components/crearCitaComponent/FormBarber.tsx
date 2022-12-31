@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent } from 'react';
 
 import { Autocomplete, Button, FormControlLabel, Grid, IconButton, MenuItem, TextField } from "@mui/material"
 import { useResponsive } from "../../hooks/useResponsive"
@@ -12,14 +12,16 @@ interface FormBarberProps {
     formCount: number
     hora: string;
     barbero: string;
-    servicio: string;
+    servicio: string[];
     ninos: boolean;
     setNinos: Dispatch<SetStateAction<boolean>>;
     addNino: () => void;
     deleteNino: (i: number) => void;
+    handleChange: (i: number, e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
+    handleChangeAutoComplete: (i: number, e: string[]) => void
 }
 
-export const FormBarber = ({ count, setCont, formCount, hora, barbero, servicio, ninos, setNinos, addNino, deleteNino }: FormBarberProps) => {
+export const FormBarber = ({ count, setCont, formCount, hora, barbero, servicio, ninos, setNinos, addNino, deleteNino, handleChange, handleChangeAutoComplete }: FormBarberProps) => {
 
     const [ respWidth ] = useResponsive()
 
@@ -29,12 +31,13 @@ export const FormBarber = ({ count, setCont, formCount, hora, barbero, servicio,
 
         <Grid item container p={ 2 }>
 
-            <Grid px={ 1 } xs = { 6 }>
+            <Grid px={ 1 } item xs = { 6 }>
                 <TextField
                     id="outlined-select-currency"
                     select
                     name='hora'
                     value={ hora }
+                    onChange = { ( e ) => handleChange(count, e) }
                     label="Hora"
                     defaultValue="3:00"
                     helperText={ ( respWidth < 700 ) ? 'Aproximada' : "Hora aproximada a la que será atendido"}
@@ -47,8 +50,11 @@ export const FormBarber = ({ count, setCont, formCount, hora, barbero, servicio,
                 </TextField>
             </Grid>
 
-            <Grid px={ 1 } xs = { 6 }>
+            <Grid px={ 1 } item xs = { 6 }>
                 <TextField
+                    name='barbero'
+                    value={ barbero }
+                    onChange = { ( e ) => handleChange(count, e) }
                     fullWidth
                     id="outlined-select-currency"
                     select
@@ -63,20 +69,24 @@ export const FormBarber = ({ count, setCont, formCount, hora, barbero, servicio,
                 </TextField>
             </Grid>
             
-            <Grid px={ 1 } mt={ 3 } xs = { 12 }>
+            <Grid px={ 1 } mt={ 3 } item xs = { 12 }>
                 <Autocomplete
                     multiple
                     id="tags-outlined"
                     options={top100Films}
-                    getOptionLabel={(option) => option.title}
+                    getOptionLabel={(option) => option}
                     defaultValue={[top100Films[13]]}
                     fullWidth
+                    value={ servicio }
                     filterSelectedOptions
+                    onChange = { ( _, newValue ) => handleChangeAutoComplete(count, newValue) }
                     renderInput={(params) => (
                         <TextField
-                        {...params}
-                        label="Servicios"
-                        placeholder="Favorites"
+                            {...params}
+                            name='servicio'
+                            value={ servicio }
+                            label="Servicios"
+                            placeholder="Favorites"
                         />
                     )}
                 />
@@ -115,7 +125,7 @@ export const FormBarber = ({ count, setCont, formCount, hora, barbero, servicio,
             </Grid>
 
             {
-                ( ninos )
+                ( ninos && formCount > 1 )
                     &&
                 <Grid mt={ 1 } item container display={ 'flex' } justifyContent = { 'space-between' }>
 

@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { ChangeEvent, forwardRef, Fragment, SyntheticEvent, useState } from 'react';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography } from "@mui/material"
 import { TransitionProps } from "@mui/material/transitions";
@@ -39,11 +39,13 @@ export const DialogCita = () => {
 
   const [count, setCont] = useState(0)
 
+  let servicio: string[] = [];
+
   const [formValues, setFormValues] = useState([
     {
       hora: '',
       barbero: '',
-      servicio: '',
+      servicio,
     }
   ])
 
@@ -53,11 +55,33 @@ export const DialogCita = () => {
       {
         hora: '',
         barbero: '',
-        servicio: '',
+        servicio: [''],
       }
     ])
     setCont( prev => prev + 1 )
   }
+
+  const handleChange = ( i: number, { target }: ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ) => {
+    let newFormValues = [ ...formValues ]
+    newFormValues[i] = {
+      ...newFormValues[i],
+      [target.name]: target.value
+    }
+
+    setFormValues(newFormValues)
+  }
+
+  const handleChangeAutoComplete = ( i: number, e: string[] ) => {
+    let newFormValues = [ ...formValues ]
+
+    newFormValues[i].servicio = [ ...e ]
+
+    console.log(e)
+
+    setFormValues(newFormValues)
+  }
+
+  console.log(formValues)
 
   const deleteNino = ( i: number ) => {
     let newFormValues = [ ...formValues ]
@@ -130,7 +154,7 @@ export const DialogCita = () => {
 
         {
           formValues.map( (e, index) =>  (
-            <>
+            <Fragment key={ index }>
               {
                 ( index === count )
                   &&
@@ -149,10 +173,12 @@ export const DialogCita = () => {
                     setNinos = { setNinos }
                     addNino = { addNino }
                     deleteNino = { deleteNino }
+                    handleChange = { handleChange }
+                    handleChangeAutoComplete = { handleChangeAutoComplete }
                   />
                 </motion.div>
               }
-            </>
+            </Fragment>
           ))
         }
       </DialogContent>
