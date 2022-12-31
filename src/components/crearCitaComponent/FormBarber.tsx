@@ -1,16 +1,20 @@
-import { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 
 import { Autocomplete, Button, FormControlLabel, Grid, IconButton, MenuItem, TextField } from "@mui/material"
 import { useResponsive } from "../../hooks/useResponsive"
 import { Android12Switch, hoursSelect, top100Films } from "../../utils/Search"
 import { SlideImage } from "./"
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+import moment, { Moment } from 'moment';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 interface FormBarberProps {
     count: number;
     setCont: Dispatch<SetStateAction<number>>;
     formCount: number
-    hora: string;
+    hora: Moment | null;
     barbero: string;
     servicio: string[];
     ninos: boolean;
@@ -19,11 +23,30 @@ interface FormBarberProps {
     deleteNino: (i: number) => void;
     handleChange: (i: number, e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
     handleChangeAutoComplete: (i: number, e: string[]) => void
+    handleChangeHora: (i: number, e: Moment | null) => void
+    minTime: Moment | null;
 }
 
-export const FormBarber = ({ count, setCont, formCount, hora, barbero, servicio, ninos, setNinos, addNino, deleteNino, handleChange, handleChangeAutoComplete }: FormBarberProps) => {
+export const FormBarber = ({ 
+    count, 
+    setCont, 
+    formCount, 
+    hora, 
+    barbero, 
+    servicio, 
+    ninos, 
+    setNinos, 
+    addNino, 
+    deleteNino, 
+    handleChange, 
+    handleChangeAutoComplete, 
+    handleChangeHora, 
+    minTime 
+}: FormBarberProps) => {
 
     const [ respWidth ] = useResponsive()
+
+    let minTimeow = ( moment(minTime).isSameOrBefore(hora) ) && minTime
 
   return (
     <>
@@ -32,22 +55,24 @@ export const FormBarber = ({ count, setCont, formCount, hora, barbero, servicio,
         <Grid item container p={ 2 }>
 
             <Grid px={ 1 } item xs = { 6 }>
-                <TextField
-                    id="outlined-select-currency"
-                    select
-                    name='hora'
-                    value={ hora }
-                    onChange = { ( e ) => handleChange(count, e) }
-                    label="Hora"
-                    defaultValue="3:00"
-                    helperText={ ( respWidth < 700 ) ? 'Aproximada' : "Hora aproximada a la que será atendido"}
-                >
-                {hoursSelect.map((option) => (
-                    <MenuItem key={option} value={option}>
-                    {option}
-                    </MenuItem>
-                ))}
-                </TextField>
+                <LocalizationProvider dateAdapter={AdapterMoment}>
+                    <MobileTimePicker
+                        label="Hora"
+                        minTime={ minTimeow || hora }
+                        value={ hora }
+                        ampmInClock
+                        onChange={(newValue) => {
+                            handleChangeHora(count, newValue)
+                        }}
+                        renderInput={(params) => 
+                            <TextField 
+                                name='hora' 
+                                {...params} 
+                                helperText={ ( respWidth < 700 ) ? 'Hora aproximada' : "Hora aproximada a la que será atendido"}
+                            />
+                        }
+                    />
+                </LocalizationProvider>
             </Grid>
 
             <Grid px={ 1 } item xs = { 6 }>

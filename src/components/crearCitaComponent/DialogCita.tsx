@@ -1,4 +1,4 @@
-import { ChangeEvent, forwardRef, Fragment, SyntheticEvent, useState } from 'react';
+import { ChangeEvent, forwardRef, Fragment, useState } from 'react';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography } from "@mui/material"
 import { TransitionProps } from "@mui/material/transitions";
@@ -17,6 +17,14 @@ import { useResponsive } from '../../hooks/useResponsive';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 import { isOpenCita } from '../../store/citas/CitasSlice';
+
+import moment, { Moment } from 'moment';
+
+interface formValuesProps {
+  hora: Moment | null;
+  barbero: string;
+  servicio: string[]
+}
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -39,13 +47,11 @@ export const DialogCita = () => {
 
   const [count, setCont] = useState(0)
 
-  let servicio: string[] = [];
-
-  const [formValues, setFormValues] = useState([
+  const [formValues, setFormValues] = useState<formValuesProps[]>([
     {
-      hora: '',
+      hora: moment(),
       barbero: '',
-      servicio,
+      servicio: [],
     }
   ])
 
@@ -53,13 +59,15 @@ export const DialogCita = () => {
     setFormValues([
       ...formValues, 
       {
-        hora: '',
+        hora: moment(),
         barbero: '',
-        servicio: [''],
+        servicio: [],
       }
     ])
     setCont( prev => prev + 1 )
   }
+
+  console.log(formValues)
 
   const handleChange = ( i: number, { target }: ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ) => {
     let newFormValues = [ ...formValues ]
@@ -71,17 +79,21 @@ export const DialogCita = () => {
     setFormValues(newFormValues)
   }
 
+  const handleChangeHora = ( i: number, e: Moment | null ) => {
+    let newFormValues = [ ...formValues ]
+
+    newFormValues[i].hora = e 
+
+    setFormValues(newFormValues)
+  }
+
   const handleChangeAutoComplete = ( i: number, e: string[] ) => {
     let newFormValues = [ ...formValues ]
 
     newFormValues[i].servicio = [ ...e ]
 
-    console.log(e)
-
     setFormValues(newFormValues)
   }
-
-  console.log(formValues)
 
   const deleteNino = ( i: number ) => {
     let newFormValues = [ ...formValues ]
@@ -175,6 +187,8 @@ export const DialogCita = () => {
                     deleteNino = { deleteNino }
                     handleChange = { handleChange }
                     handleChangeAutoComplete = { handleChangeAutoComplete }
+                    handleChangeHora = { handleChangeHora }
+                    minTime = { ( index > 0 ) ? formValues[index - 1].hora : moment() }
                   />
                 </motion.div>
               }

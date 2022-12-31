@@ -21,6 +21,10 @@ body {
   overflow-x: hidden;
 }
 
+.css-n0h0jd-MuiButtonBase-root-MuiIconButton-root-MuiPickersToolbar-penIconButton {
+  display: none !important;
+}
+
 /* Login class */
 
 .navLink {
