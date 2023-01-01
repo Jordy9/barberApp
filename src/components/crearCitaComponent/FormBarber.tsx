@@ -46,7 +46,7 @@ export const FormBarber = ({
 
     const [ respWidth ] = useResponsive()
 
-    let minTimeow = ( moment(minTime).isSameOrBefore(hora) ) && minTime
+    let minTimeNow2 = ( moment(minTime).minutes() === 2 ) ? moment(minTime).endOf('hour').add(1, 'seconds') : minTime
 
   return (
     <>
@@ -58,7 +58,7 @@ export const FormBarber = ({
                 <LocalizationProvider dateAdapter={AdapterMoment}>
                     <MobileTimePicker
                         label="Hora"
-                        minTime={ minTimeow || hora }
+                        minTime={ minTimeNow2 }
                         value={ hora }
                         ampmInClock
                         onChange={(newValue) => {

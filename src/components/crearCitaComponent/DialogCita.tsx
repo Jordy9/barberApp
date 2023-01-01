@@ -67,8 +67,6 @@ export const DialogCita = () => {
     setCont( prev => prev + 1 )
   }
 
-  console.log(formValues)
-
   const handleChange = ( i: number, { target }: ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ) => {
     let newFormValues = [ ...formValues ]
     newFormValues[i] = {
