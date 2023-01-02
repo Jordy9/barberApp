@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useState, useMemo } from 'react';
 
 import { Autocomplete, Button, FormControlLabel, Grid, IconButton, MenuItem, TextField } from "@mui/material"
 import { useResponsive } from "../../hooks/useResponsive"
@@ -10,21 +10,33 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
+type service = {
+    title: string;
+    time: number;
+}
+
+interface formValuesProps {
+    hora: Moment | null;
+    barbero: string;
+    servicio: service[]
+}
+
 interface FormBarberProps {
     count: number;
     setCont: Dispatch<SetStateAction<number>>;
     formCount: number
     hora: Moment | null;
     barbero: string;
-    servicio: string[];
+    servicio: service[];
     ninos: boolean;
     setNinos: Dispatch<SetStateAction<boolean>>;
     addNino: () => void;
     deleteNino: (i: number) => void;
     handleChange: (i: number, e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
-    handleChangeAutoComplete: (i: number, e: string[]) => void
+    handleChangeAutoComplete: (i: number, e: service[]) => void
     handleChangeHora: (i: number, e: Moment | null) => void
     minTime: Moment | null;
+    formValues: formValuesProps[];
 }
 
 export const FormBarber = ({ 
@@ -41,12 +53,19 @@ export const FormBarber = ({
     handleChange, 
     handleChangeAutoComplete, 
     handleChangeHora, 
-    minTime 
+    minTime,
+    formValues
 }: FormBarberProps) => {
+
+    const tiempoAdicional = servicio
+
+    let suma = 0
+
+    formValues[0].servicio.map( e => suma = suma + e.time )
 
     const [ respWidth ] = useResponsive()
 
-    let minTimeNow2 = ( moment(minTime).minutes() === 2 ) ? moment(minTime).endOf('hour').add(1, 'seconds') : minTime
+    let minTimeNow2 = useMemo(() => ( count > 0 ) ? minTime?.clone()?.add(45, 'minutes') : minTime, [])
 
   return (
     <>
@@ -59,7 +78,7 @@ export const FormBarber = ({
                     <MobileTimePicker
                         label="Hora"
                         minTime={ minTimeNow2 }
-                        value={ hora }
+                        value={ ( count > 0 ) ? minTimeNow2 : hora }
                         ampmInClock
                         onChange={(newValue) => {
                             handleChangeHora(count, newValue)
@@ -99,8 +118,7 @@ export const FormBarber = ({
                     multiple
                     id="tags-outlined"
                     options={top100Films}
-                    getOptionLabel={(option) => option}
-                    defaultValue={[top100Films[13]]}
+                    getOptionLabel={(option) => option.title}
                     fullWidth
                     value={ servicio }
                     filterSelectedOptions
@@ -164,7 +182,6 @@ export const FormBarber = ({
 
                 </Grid>
             }
-
 
         </Grid>
     </>

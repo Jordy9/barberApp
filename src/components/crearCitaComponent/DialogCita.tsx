@@ -1,4 +1,4 @@
-import { ChangeEvent, forwardRef, Fragment, useState } from 'react';
+import { ChangeEvent, forwardRef, Fragment, useState, useEffect } from 'react';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography } from "@mui/material"
 import { TransitionProps } from "@mui/material/transitions";
@@ -20,10 +20,20 @@ import { isOpenCita } from '../../store/citas/CitasSlice';
 
 import moment, { Moment } from 'moment';
 
+type horas = {
+  fecha: Moment | null | undefined;
+  hora: string | undefined | number;
+}
+
+type service = {
+  title: string;
+  time: number;
+}
+
 interface formValuesProps {
   hora: Moment | null;
   barbero: string;
-  servicio: string[]
+  servicio: service[]
 }
 
 const Transition = forwardRef(function Transition(
@@ -85,7 +95,7 @@ export const DialogCita = () => {
     setFormValues(newFormValues)
   }
 
-  const handleChangeAutoComplete = ( i: number, e: string[] ) => {
+  const handleChangeAutoComplete = ( i: number, e: service[] ) => {
     let newFormValues = [ ...formValues ]
 
     newFormValues[i].servicio = [ ...e ]
@@ -119,6 +129,63 @@ export const DialogCita = () => {
 
   const [ respWidth ] = useResponsive()
 
+  let arreglo: horas[] = []
+
+  for (let index = 0; index < 20; index++) {
+
+    let horaSuma = 30
+
+    if ( index === 0 ) {
+      arreglo.push({ fecha: moment(), hora: moment().format('hh:mm') })
+    } else {
+      if ( index === 1 ) {
+        arreglo.push({fecha: moment().add(horaSuma, 'minutes'), hora: moment().add(horaSuma, 'minutes').format('hh:mm')})
+      } else {
+        // if ( index === 10 ) {
+        //   let fecha = arreglo[index - 1]?.fecha?.clone().add(10, 'minutes')
+        //   let hora = arreglo[index - 1]?.fecha?.clone().add(10, 'minutes').format('hh:mm')
+        //   arreglo.push({ fecha, hora })
+        // } else {
+
+          // if ( index === 11 ) {
+          //   let fecha = arreglo[index - 1]?.fecha?.clone().add(20, 'minutes')
+          //   let hora = arreglo[index - 1]?.fecha?.clone().add(20, 'minutes').format('hh:mm')
+          //   arreglo.push({ fecha, hora })
+          // } else {
+          //   let fecha = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes')
+          //   let hora = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes').format('hh:mm')
+          //   arreglo.push({ fecha, hora })
+          // }
+          let fecha = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes')
+          let hora = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes').format('hh:mm')
+          arreglo.push({ fecha, hora })
+        // }
+      }
+    }
+    
+  }
+
+  console.log(arreglo)
+
+  useEffect(() => {
+    if ( arreglo?.length === 0 ) return
+
+    let lol = []
+
+    // arreglo?.map( ( e, index ) => (arreglo[index + 1]?.fecha?.diff(e.fecha, 'minutes')! < 30) && e.fecha)
+
+    lol = arreglo?.map( ( e, index ) => (index === 10) ? { fecha: e.fecha?.clone()?.subtract(20, 'minutes'), hora: e.fecha?.clone()?.subtract(20, 'minutes').format('hh:mm') } : {fecha: e.fecha, hora: e.hora})
+
+    lol.push({ fecha: arreglo[10].fecha?.clone(), hora: arreglo[10].fecha?.clone().format('hh:mm') })
+
+    lol.sort( (a:horas, b: horas) => a.fecha!.unix() - b.fecha!.unix() )
+
+    // console.log({fecha: arreglo[10].fecha?.clone()?.subtract(20, 'minutes'), hora: arreglo[10].fecha?.clone()?.subtract(20, 'minutes').format('hh:mm')})
+
+    console.log(lol)
+
+  }, [])
+  
   return (
     <Dialog
       open={ isOpen }
@@ -187,6 +254,7 @@ export const DialogCita = () => {
                     handleChangeAutoComplete = { handleChangeAutoComplete }
                     handleChangeHora = { handleChangeHora }
                     minTime = { ( index > 0 ) ? formValues[index - 1].hora : moment() }
+                    formValues = { formValues }
                   />
                 </motion.div>
               }

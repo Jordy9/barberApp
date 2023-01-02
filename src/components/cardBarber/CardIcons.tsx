@@ -6,14 +6,15 @@ import { LibraryAdd } from "@mui/icons-material";
 import { styled  } from '@mui/material/styles';
 import { useAppDispatch } from "../../store/hooks";
 import { isOpenCita } from "../../store/citas/CitasSlice";
+import { useState } from 'react';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
 
 interface ExpandProps {
-  expanded: boolean,
-  handleExpandClick: () => void
+  expanded: boolean;
+  handleExpandClick: () => void;
 }
   
   const ExpandMore = styled((props: ExpandMoreProps) => {
@@ -31,17 +32,27 @@ export const CardIcons = ({ expanded, handleExpandClick }: ExpandProps) => {
 
   const dispatch = useAppDispatch();
 
+  const handleShare = () => {
+    navigator.share({
+      title: 'Probando compartir',
+      text: 'Se esta probando',
+      url: 'https://cdn.pixabay.com/photo/2020/05/24/01/50/barber-shop-5212042_960_720.jpg'
+    })
+  }
+
+  const [isFavorite, setIsFavorite] = useState(false)
+
   return (
     <CardActions disableSpacing>
 
       <Tooltip title="Agregar a favoritos" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+        <IconButton onClick={ () => setIsFavorite(!isFavorite) } aria-label="add to favorites">
+          <FavoriteIcon color={ ( isFavorite ) ? 'error' : 'inherit' } />
         </IconButton>
       </Tooltip>
 
       <Tooltip title="Compartir" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
-        <IconButton aria-label="share">
+        <IconButton onClick={ handleShare } aria-label="share">
           <ShareIcon />
         </IconButton>
       </Tooltip>

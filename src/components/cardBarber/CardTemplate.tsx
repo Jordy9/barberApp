@@ -22,7 +22,7 @@ export const CardTemplate = () => {
   const navigate = useNavigate()
 
   return (
-    <Card title=" Ir al perfil " sx={{ height: ( isTransitionEnd ) ? 'auto' : '550px', width: '100%', borderRadius: '12px' }}>
+    <Card title=" Ir al perfil " sx={{ height: ( isTransitionEnd ) ? 'auto' : '544.9px', width: '100%', borderRadius: '12px' }}>
       
       <CardActionArea onClick={ () => navigate('/Perfil/name/:id') }>
 
@@ -30,7 +30,7 @@ export const CardTemplate = () => {
 
         <CardHeaderTemplate />
         
-        <CardTextElipsis />
+        <CardTextElipsis expanded = { expanded } />
 
       </CardActionArea>
       

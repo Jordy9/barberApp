@@ -1,9 +1,11 @@
 import { CardContent, Typography } from "@mui/material"
 
-export const CardTextElipsis = () => {
+export const CardTextElipsis = ({ expanded = false }) => {
   return (
-    <CardContent>
+    <CardContent sx={{ paddingTop: ( expanded ) ? 0 : 1.5, paddingBottom: ( expanded ) ? 0 : 1.5, transition: 'padding .3s ease', }}>
       <Typography sx={{
+        height: ( expanded ) ? 0 : 64,
+        transition: 'height .3s ease',
         display: '-webkit-box',
         overflow: 'hidden',
         WebkitBoxOrient: 'vertical',
