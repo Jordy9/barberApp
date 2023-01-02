@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { useResponsive } from '../../hooks/useResponsive';
 import {
   ComposedChart,
   Line,
@@ -55,8 +56,11 @@ const data = [
 ];
 
 export const BarChart = () => {
+
+  const [ respWidth ] = useResponsive()
+
   return (
-    <Box sx={{ width: '100%', height: '100%', mx: 'auto' }}>
+    <Box sx={{ width: '100%', height: ( respWidth < 991 ) ? '350px' : '349px', mx: 'auto' }}>
       <ResponsiveContainer>
         <ComposedChart
           width={500}

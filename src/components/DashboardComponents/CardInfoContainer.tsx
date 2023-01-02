@@ -48,7 +48,7 @@ export const CardInfoContainer = () => {
     <>
       {
         arregloCardInfo.map(({ title, actual, total, backgroundImage, Icon, image, name }) => (
-        <Grid p={ 1 } xs = { 6 } sm = { 3 } >
+        <Grid p={ 1 } xs = { 6 } sm = { 6 } md = { 6 } lg = { 3 } >
           <CardInfo 
             title = { title } 
             actual={ actual } 
