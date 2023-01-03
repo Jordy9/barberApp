@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { CitasSlice } from './citas/CitasSlice';
+import { dialogConfirmSlice } from './dialogConfirm/dialogConfirmSlice';
 
 export const store = configureStore({
   reducer: {
-    ct: CitasSlice.reducer
+    ct: CitasSlice.reducer,
+    dc: dialogConfirmSlice.reducer
   },
   
   middleware: (getDefaultMiddleware) =>

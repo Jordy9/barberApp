@@ -106,7 +106,7 @@ export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, foto, fec
               id="tags-outlined"
               options={top100Films}
               getOptionLabel={(option) => option.title}
-              defaultValue={[top100Films[13], top100Films[11]]}
+              // defaultValue={[top100Films[13], top100Films[11]]}
               fullWidth
               filterSelectedOptions
               popupIcon = { false }

@@ -2,6 +2,7 @@ import { Routes, Navigate, Route, useLocation } from 'react-router-dom';
 import { Barberos, Galeria, Inicio, NuevaContrasena, ProfileBarber, RecuperarContrasena } from "../components/pages"
 import { DashBoard, ListadoDeCitas, BarberosFavoritos, SubirImagenGaleria, ListadoMiGaleria, Anuncio, Perfil } from "../components/pagesAccount"
 import { AnimatePresence } from "framer-motion"
+import { DialogConfirm } from '../components/dialogConfirm/DialogConfirm';
 
 export const AppRouter = () => {
 
@@ -25,6 +26,8 @@ export const AppRouter = () => {
         <Route path="/NuevaContrasena" element = { <NuevaContrasena /> } />
         <Route path="/*" element = { <Navigate to='/Inicio' /> } />
       </Routes>
+
+      <DialogConfirm />
     </AnimatePresence>
   )
 }

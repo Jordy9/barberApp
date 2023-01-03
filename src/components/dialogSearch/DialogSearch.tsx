@@ -1,6 +1,6 @@
 import { forwardRef, Dispatch, SetStateAction } from 'react';
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Box } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 
 import IconButton from '@mui/material/IconButton';
