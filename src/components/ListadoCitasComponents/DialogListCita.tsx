@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, forwardRef } from "react";
+import { Dispatch, SetStateAction, forwardRef, useState } from "react";
 
 import { Dialog, Slide, Button, DialogContent, DialogActions, IconButton, DialogTitle, TextField } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
@@ -9,6 +9,9 @@ import Avatar from "@mui/material/Avatar";
 import moment from 'moment';
 import Autocomplete from '@mui/material/Autocomplete';
 import { top100Films } from "../../utils/Search";
+import { useAppDispatch } from '../../store/hooks';
+import { isOpenDialogConfirm } from "../../store/dialogConfirm/dialogConfirmSlice";
+import { toast } from "react-hot-toast";
 
 interface UsuariosProps {
   Barbero: string;
@@ -34,9 +37,24 @@ const Transition = forwardRef(function Transition(
 
 export const DialogListCita = ({ showDialog, setShowDialog, respWidth, fecha, Hora }: DialogProps) => {
 
-    const handleClose = () => {
-      setShowDialog(false)
-    }
+  const dispatch = useAppDispatch();
+
+  const handleClose = () => {
+    setShowDialog(false)
+    toast.success('Cita actualizada');
+  }
+
+  const handleCancelarCita = () => {
+    dispatch( 
+      isOpenDialogConfirm(
+        { 
+          isOpen: true, 
+          // function: holaM, 
+          content: '¿Está seguro que desea cancelar esta cita?' 
+        }
+      ) 
+    )
+  }
 
   return (
     <Dialog
@@ -95,8 +113,8 @@ export const DialogListCita = ({ showDialog, setShowDialog, respWidth, fecha, Ho
               inputProps={
                 { readOnly: true, }
               }
-              >
-              </TextField>
+            >
+            </TextField>
           </Grid>
           
           <Grid px={ 1 } mt={ 3 } xs = { 12 }>
@@ -105,7 +123,7 @@ export const DialogListCita = ({ showDialog, setShowDialog, respWidth, fecha, Ho
               id="tags-outlined"
               options={top100Films}
               getOptionLabel={(option) => option.title}
-              defaultValue={[top100Films[13], top100Films[11]]}
+              // defaultValue={[top100Films[13], top100Films[11]]}
               fullWidth
               filterSelectedOptions
               popupIcon = { false }
@@ -128,7 +146,7 @@ export const DialogListCita = ({ showDialog, setShowDialog, respWidth, fecha, Ho
           ( Hora === 1 )
             ?
           <>
-            <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Cancelar cita</Button>
+            <Button fullWidth onClick={ handleCancelarCita } color = { 'inherit' } variant='contained'>Cancelar cita</Button>
             <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Actualizar</Button>
           </>
             :

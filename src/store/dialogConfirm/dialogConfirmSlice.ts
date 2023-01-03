@@ -2,18 +2,24 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface citasState {
     isOpen: boolean
+    function?: Function | undefined;
+    content?: string
 }
 
 const initialState: citasState = {
-    isOpen: false
+    isOpen: false,
+    function: () => {},
+    content: ''
 }
 
 export const dialogConfirmSlice = createSlice({
    name: 'dialogConfirm',
    initialState,
    reducers: {
-        isOpenDialogConfirm: (state, action: PayloadAction<boolean> ) => {
-            state.isOpen = action.payload;
+        isOpenDialogConfirm: (state, action: PayloadAction<citasState> ) => {
+            state.content = action.payload.content;
+            state.function = action.payload.function;
+            state.isOpen = action.payload.isOpen;
         },
    }
 });

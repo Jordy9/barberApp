@@ -3,6 +3,7 @@ import { Barberos, Galeria, Inicio, NuevaContrasena, ProfileBarber, RecuperarCon
 import { DashBoard, ListadoDeCitas, BarberosFavoritos, SubirImagenGaleria, ListadoMiGaleria, Anuncio, Perfil } from "../components/pagesAccount"
 import { AnimatePresence } from "framer-motion"
 import { DialogConfirm } from '../components/dialogConfirm/DialogConfirm';
+import { Toaster } from 'react-hot-toast'
 
 export const AppRouter = () => {
 
@@ -27,6 +28,7 @@ export const AppRouter = () => {
         <Route path="/*" element = { <Navigate to='/Inicio' /> } />
       </Routes>
 
+      <Toaster />
       <DialogConfirm />
     </AnimatePresence>
   )

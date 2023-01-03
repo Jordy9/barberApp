@@ -9,6 +9,8 @@ import Avatar from "@mui/material/Avatar";
 import moment from 'moment';
 import Autocomplete from '@mui/material/Autocomplete';
 import { top100Films } from "../../utils/Search";
+import { useAppDispatch } from '../../store/hooks';
+import { isOpenDialogConfirm } from "../../store/dialogConfirm/dialogConfirmSlice";
 
 interface UsuariosProps {
     foto: string,
@@ -35,9 +37,23 @@ const Transition = forwardRef(function Transition(
 
 export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, foto, fecha, name }: DialogProps) => {
 
-    const handleClose = () => {
-      setShowDialog(false)
-    }
+  const dispatch = useAppDispatch();
+
+  const handleCancelarCita = () => {
+    dispatch( 
+      isOpenDialogConfirm(
+        { 
+          isOpen: true, 
+          // function: holaM, 
+          content: '¿Está seguro que desea cancelar esta cita?' 
+        }
+      ) 
+    )
+  }
+
+  const handleClose = () => {
+    setShowDialog(false)
+  }
 
   return (
     <Dialog
@@ -125,7 +141,7 @@ export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, foto, fec
       </DialogContent>
       
       <DialogActions sx={{ p: 2 }}>
-        <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Cancelar cita</Button>
+        <Button fullWidth onClick={ handleCancelarCita } color = { 'inherit' } variant='contained'>Cancelar cita</Button>
         <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Finalizada</Button>
       </DialogActions>
     </Dialog>

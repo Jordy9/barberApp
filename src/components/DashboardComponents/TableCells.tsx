@@ -16,14 +16,14 @@ export const TableCells = ({ respWidth }: tableCellsProps) => {
                 <TableCell align="center">Servicio</TableCell>
                 <TableCell align="center">Hora</TableCell>
                 <TableCell align="center">Fecha</TableCell>
-                <TableCell align="center">Acción</TableCell>
+                <TableCell align="center">Acciones</TableCell>
             </>
                 :
             <>
                 <TableCell align="center">Foto</TableCell>
                 <TableCell align="center">Nombre</TableCell>
                 <TableCell align="center">Más...</TableCell>
-                <TableCell align="center">Acción</TableCell>
+                <TableCell align="center">Acciones</TableCell>
             </>
         }
     </>

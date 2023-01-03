@@ -22,10 +22,14 @@ export const DialogConfirm = () => {
 
   const dispatch = useAppDispatch();
 
-  const { isOpen } = useAppSelector( state => state.dc );
+  const { isOpen, function: funciones, content } = useAppSelector( state => state.dc );
 
   const handleClose = () => {
-    dispatch( isOpenDialogConfirm(false) )
+    dispatch( isOpenDialogConfirm({isOpen: false}) )
+  }
+
+  const handleClick = () => {
+    funciones!()
   }
 
   return (
@@ -49,15 +53,15 @@ export const DialogConfirm = () => {
         Información de la cita
       </DialogTitle>
 
-      <DialogContent>
+      <DialogContent sx={{ display: 'flex', justifyContent: 'center' }}>
 
-        
+        { content }
         
       </DialogContent>
       
       <DialogActions sx={{ p: 2 }}>
-        <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Cancelar cita</Button>
-        <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Finalizada</Button>
+        <Button fullWidth onClick={ handleClick } color = { 'inherit' } variant='contained'>No</Button>
+        <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Si</Button>
       </DialogActions>
     </Dialog>
   )

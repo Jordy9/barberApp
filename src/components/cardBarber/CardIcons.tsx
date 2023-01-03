@@ -2,11 +2,13 @@ import { CardActions, IconButton, IconButtonProps, Tooltip  } from "@mui/materia
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { LibraryAdd } from "@mui/icons-material";
+import { LibraryAdd, TroubleshootTwoTone } from "@mui/icons-material";
 import { styled  } from '@mui/material/styles';
 import { useAppDispatch } from "../../store/hooks";
 import { isOpenCita } from "../../store/citas/CitasSlice";
 import { useState } from 'react';
+import { DialogShare } from "./DialogShare";
+import { useResponsive } from '../../hooks/useResponsive';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -32,13 +34,21 @@ export const CardIcons = ({ expanded, handleExpandClick }: ExpandProps) => {
 
   const dispatch = useAppDispatch();
 
+  const [ respWidth ] = useResponsive()
+
   const handleShare = () => {
-    navigator.share({
-      title: 'Probando compartir',
-      text: 'Se esta probando',
-      url: 'https://cdn.pixabay.com/photo/2020/05/24/01/50/barber-shop-5212042_960_720.jpg'
-    })
+    if ( respWidth > 991 ) {
+      setShowDialog(true)
+    } else {
+      navigator.share({
+        title: 'Probando compartir',
+        text: 'Se esta probando',
+        url: 'https://cdn.pixabay.com/photo/2020/05/24/01/50/barber-shop-5212042_960_720.jpg'
+      })
+    }
   }
+
+  const [showDialog, setShowDialog] = useState(false)
 
   const [isFavorite, setIsFavorite] = useState(false)
 
@@ -71,6 +81,8 @@ export const CardIcons = ({ expanded, handleExpandClick }: ExpandProps) => {
       >
         <ExpandMoreIcon />
       </ExpandMore>
+
+      <DialogShare showDialog = { showDialog } setShowDialog = { setShowDialog } />
 
     </CardActions>
   )
