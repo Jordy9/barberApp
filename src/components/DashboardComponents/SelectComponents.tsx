@@ -49,7 +49,7 @@ export const SelectComponents = ( { setShowDialogFilter, setShowDialog }: Dialog
           </Grid>
           
           <Grid display={ 'flex' } alignItems={ 'center' } sx = {{ ml: 'auto' }}>
-            <Button onClick={ () => setShowDialog2(true) } variant="contained" color={ 'inherit' }>Pausar servicio</Button>
+            <Button onClick={ () => setShowDialog2(true) } variant="contained" color={ 'inherit' }>Tiempo de servicio</Button>
           </Grid>
 
           {/* <Grid p={ 1 } display={ 'flex' }>
@@ -64,7 +64,7 @@ export const SelectComponents = ( { setShowDialogFilter, setShowDialog }: Dialog
         <>
           <Button onClick={ () => setShowDialogFilter(true) } variant="contained" color={ 'inherit' }>Filtros</Button>
           <Grid display={ 'flex' } sx = {{ ml: 'auto' }}>
-            <Button onClick={ () => setShowDialog2(true) } variant="contained" color={ 'inherit' }>Pausar servicio</Button>
+            <Button onClick={ () => setShowDialog2(true) } variant="contained" color={ 'inherit' }>Tiempo de servicio</Button>
           </Grid>
         </>
       }

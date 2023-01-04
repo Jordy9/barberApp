@@ -18,7 +18,7 @@ export const DrawerMenu = ({ show, setShow }: DrawerProps) => {
         {
             label: 'DashBoard',
             route: '/DashBoard',
-            Icon: () => <Dashboard />
+            Icon: () => <Dashboard color='primary' />
         },
 
         {
@@ -30,7 +30,7 @@ export const DrawerMenu = ({ show, setShow }: DrawerProps) => {
         {
             label: 'Barberos favoritos',
             route: '/BarberosFavoritos',
-            Icon: () => <Favorite />
+            Icon: () => <Favorite color='error' />
         },
 
         {
@@ -42,13 +42,13 @@ export const DrawerMenu = ({ show, setShow }: DrawerProps) => {
         {
             label: 'Listado de mi galería',
             route: '/ListadoDeMiGaleria',
-            Icon: () => <Collections />
+            Icon: () => <Collections color='info' />
         },
 
         {
             label: 'Hacer un anuncio',
             route: '/Anuncio',
-            Icon: () => <Announcement />
+            Icon: () => <Announcement color='warning' />
         },
     ]
 

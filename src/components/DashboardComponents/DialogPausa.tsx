@@ -1,6 +1,6 @@
 import { forwardRef, Dispatch, SetStateAction } from 'react';
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Grid, MenuItem } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Grid, MenuItem, Typography } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 
 import IconButton from '@mui/material/IconButton';
@@ -8,6 +8,7 @@ import { ArrowBackIos } from '@mui/icons-material';
 import TextField from '@mui/material/TextField';
 import { useAppDispatch } from '../../store/hooks';
 import { isOpenDialogConfirm } from '../../store/dialogConfirm/dialogConfirmSlice';
+import { useResponsive } from '../../hooks/useResponsive';
 
 interface loginProps {
     showDialog2: boolean;
@@ -33,21 +34,23 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
 
   const handleConfirm = () => {
     dispatch( isOpenDialogConfirm(
-        {
-            isOpen: true,
-            content: '¿Está seguro que desea detener sus servicios por el día de hoy?',
-            notice: 'Se cancelarán todas sus citas',
-            function: setShowDialog2,
-            argu: false
-        }
+      {
+        isOpen: true,
+        content: '¿Está seguro que desea detener sus servicios por el día de hoy?',
+        notice: 'Se cancelarán todas sus citas',
+        function: setShowDialog2,
+        argu: false
+      }
     ) )
   }
 
+  const [ respWidth ] = useResponsive()
 
   return (
     <Dialog
       open={ showDialog2 }
       fullWidth
+      fullScreen = { ( respWidth < 400 ) }
       TransitionComponent={ Transition }
       maxWidth = 'xs'
       onClose={ handleClose }
@@ -67,20 +70,33 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
       <DialogContent sx={{ p: 2 }}>
 
         <Grid item container>
-            <Grid p={ 1 } item xs = { 6 }>
-                <TextField type={ 'number' } defaultValue = { 30 } variant='outlined' label = { 'Cantidad' } helperText = { 'Tiempo que desea pausar sus servicios' } />
-            </Grid>
 
-            <Grid p={ 1 } item xs = { 6 }>
-                <TextField value={ 'Minutos' } type={ 'number' } select variant='outlined' label = { 'Tiempo' } helperText = { 'Minutos que pausará sus servicios' }>
-                    <MenuItem value = 'Minutos' selected>Minutos</MenuItem>
-                    <MenuItem value = 'Horas'>Horas</MenuItem>
-                </TextField>
-            </Grid>
+          <Typography mb={ 2 }>Tiempo que estará ofreciendo sus servicios</Typography>
 
-            <Grid p={ 1 } item xs = { 12 }>
-                <Button onClick={ handleConfirm } fullWidth variant='contained' color='inherit'>Detener sus servicios por el día de hoy</Button>
-            </Grid>
+          <Grid px={ 1 } item xs = { 6 }>
+            <TextField type={ 'time' } defaultValue = { '08:00' } variant='outlined' label = { 'Desde' } helperText = { 'Desde qué hora ofrecerá sus servicios' } />
+          </Grid>
+
+          <Grid px={ 1 } item xs = { 6 }>
+            <TextField type={ 'time' } defaultValue = { '18:00' } variant='outlined' label = { 'Hasta' } helperText = { 'Hasta qué hora ofrecerá sus servicios' } />
+          </Grid>
+
+          <Typography mb={ 2 }>Tiempo que desea pausar sus servicios</Typography>
+
+          <Grid p={ 1 } item xs = { 6 }>
+            <TextField type={ 'number' } defaultValue = { 30 } variant='outlined' label = { 'Cantidad' } helperText = { 'Tiempo que desea pausar sus servicios' } />
+          </Grid>
+
+          <Grid p={ 1 } item xs = { 6 }>
+            <TextField value={ 'Minutos' } type={ 'number' } select variant='outlined' label = { 'Tiempo' } helperText = { 'Minutos u horas que pausará sus servicios' }>
+              <MenuItem value = 'Minutos' selected>Minutos</MenuItem>
+              <MenuItem value = 'Horas'>Horas</MenuItem>
+            </TextField>
+          </Grid>
+
+          <Grid p={ 1 } item xs = { 12 }>
+            <Button onClick={ handleConfirm } fullWidth variant='contained' color='inherit'>Detener sus servicios por el día de hoy</Button>
+          </Grid>
         </Grid>
 
 

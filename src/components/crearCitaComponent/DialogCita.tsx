@@ -136,28 +136,28 @@ export const DialogCita = () => {
     let horaSuma = 30
 
     if ( index === 0 ) {
-      arreglo.push({ fecha: moment(), hora: moment().format('hh:mm') })
+      arreglo.push({ fecha: moment(), hora: moment().format('hh:mm a') })
     } else {
       if ( index === 1 ) {
-        arreglo.push({fecha: moment().add(horaSuma, 'minutes'), hora: moment().add(horaSuma, 'minutes').format('hh:mm')})
+        arreglo.push({fecha: moment().add(horaSuma, 'minutes'), hora: moment().add(horaSuma, 'minutes').format('hh:mm a')})
       } else {
         // if ( index === 10 ) {
         //   let fecha = arreglo[index - 1]?.fecha?.clone().add(10, 'minutes')
-        //   let hora = arreglo[index - 1]?.fecha?.clone().add(10, 'minutes').format('hh:mm')
+        //   let hora = arreglo[index - 1]?.fecha?.clone().add(10, 'minutes').format('hh:mm a')
         //   arreglo.push({ fecha, hora })
         // } else {
 
           // if ( index === 11 ) {
           //   let fecha = arreglo[index - 1]?.fecha?.clone().add(20, 'minutes')
-          //   let hora = arreglo[index - 1]?.fecha?.clone().add(20, 'minutes').format('hh:mm')
+          //   let hora = arreglo[index - 1]?.fecha?.clone().add(20, 'minutes').format('hh:mm a')
           //   arreglo.push({ fecha, hora })
           // } else {
           //   let fecha = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes')
-          //   let hora = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes').format('hh:mm')
+          //   let hora = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes').format('hh:mm a')
           //   arreglo.push({ fecha, hora })
           // }
           let fecha = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes')
-          let hora = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes').format('hh:mm')
+          let hora = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes').format('hh:mm a')
           arreglo.push({ fecha, hora })
         // }
       }
@@ -174,13 +174,13 @@ export const DialogCita = () => {
 
     // arreglo?.map( ( e, index ) => (arreglo[index + 1]?.fecha?.diff(e.fecha, 'minutes')! < 30) && e.fecha)
 
-    lol = arreglo?.map( ( e, index ) => (index === 10) ? { fecha: e.fecha?.clone()?.subtract(20, 'minutes'), hora: e.fecha?.clone()?.subtract(20, 'minutes').format('hh:mm') } : {fecha: e.fecha, hora: e.hora})
+    lol = arreglo?.map( ( e, index ) => (index === 10) ? { fecha: e.fecha?.clone()?.subtract(20, 'minutes'), hora: e.fecha?.clone()?.subtract(20, 'minutes').format('hh:mm a') } : {fecha: e.fecha, hora: e.hora})
 
-    lol.push({ fecha: arreglo[10].fecha?.clone(), hora: arreglo[10].fecha?.clone().format('hh:mm') })
+    lol.push({ fecha: arreglo[10].fecha?.clone(), hora: arreglo[10].fecha?.clone().format('hh:mm a') })
 
     lol.sort( (a:horas, b: horas) => a.fecha!.unix() - b.fecha!.unix() )
 
-    // console.log({fecha: arreglo[10].fecha?.clone()?.subtract(20, 'minutes'), hora: arreglo[10].fecha?.clone()?.subtract(20, 'minutes').format('hh:mm')})
+    // console.log({fecha: arreglo[10].fecha?.clone()?.subtract(20, 'minutes'), hora: arreglo[10].fecha?.clone()?.subtract(20, 'minutes').format('hh:mm a')})
 
     console.log(lol)
 
