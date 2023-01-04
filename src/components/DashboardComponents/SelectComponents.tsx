@@ -1,8 +1,8 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 import { Button, Grid } from "@mui/material";
 
-import { SelectFilters } from "./"
+import { DialogPausa, SelectFilters } from "./"
 import { useResponsive } from '../../hooks/useResponsive';
 
 interface DialogProps {
@@ -19,6 +19,8 @@ const arregloFServicios = [ 'Recortada', 'Cerquillo', 'Limpieza de cejas' ]
 export const SelectComponents = ( { setShowDialogFilter, setShowDialog }: DialogProps ) => {
 
   const [ respWidth ] = useResponsive()
+
+  const [showDialog2, setShowDialog2] = useState(false)
 
   return (
     <>
@@ -45,6 +47,10 @@ export const SelectComponents = ( { setShowDialogFilter, setShowDialog }: Dialog
           <Grid display={ 'flex' } alignItems={ 'center' }>
             <Button variant="contained" color={ 'inherit' }>Filtrar</Button>
           </Grid>
+          
+          <Grid display={ 'flex' } alignItems={ 'center' } sx = {{ ml: 'auto' }}>
+            <Button onClick={ () => setShowDialog2(true) } variant="contained" color={ 'inherit' }>Pausar servicio</Button>
+          </Grid>
 
           {/* <Grid p={ 1 } display={ 'flex' }>
             {
@@ -55,8 +61,15 @@ export const SelectComponents = ( { setShowDialogFilter, setShowDialog }: Dialog
           </Grid> */}
         </>
           :
-        <Button onClick={ () => setShowDialogFilter(true) } variant="contained" color={ 'inherit' }>Filtros</Button>
+        <>
+          <Button onClick={ () => setShowDialogFilter(true) } variant="contained" color={ 'inherit' }>Filtros</Button>
+          <Grid display={ 'flex' } sx = {{ ml: 'auto' }}>
+            <Button onClick={ () => setShowDialog2(true) } variant="contained" color={ 'inherit' }>Pausar servicio</Button>
+          </Grid>
+        </>
       }
+
+      <DialogPausa showDialog2 = { showDialog2 } setShowDialog2 = { setShowDialog2 } />
     </>
   )
 }

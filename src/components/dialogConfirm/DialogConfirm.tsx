@@ -22,14 +22,18 @@ export const DialogConfirm = () => {
 
   const dispatch = useAppDispatch();
 
-  const { isOpen, function: funciones, content } = useAppSelector( state => state.dc );
+  const { isOpen, function: funciones, content, notice, argu } = useAppSelector( state => state.dc );
 
   const handleClose = () => {
     dispatch( isOpenDialogConfirm({isOpen: false}) )
   }
 
   const handleClick = () => {
-    funciones!()
+    if ( !argu ) {
+      funciones!()
+    } else {
+      funciones!(argu)
+    }
   }
 
   return (
@@ -53,9 +57,14 @@ export const DialogConfirm = () => {
         Información de la cita
       </DialogTitle>
 
-      <DialogContent sx={{ display: 'flex', justifyContent: 'center' }}>
+      <DialogContent sx={{ display: 'flex', textAlign: 'center' }}>
 
         { content }
+
+        <br />
+        <br />
+
+        { notice }
         
       </DialogContent>
       

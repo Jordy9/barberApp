@@ -25,6 +25,8 @@ body {
   display: none !important;
 }
 
+/* Efecto neon: boxShadow: '0 0 13px #00ccff', */
+
 /* Login class */
 
 .navLink {
