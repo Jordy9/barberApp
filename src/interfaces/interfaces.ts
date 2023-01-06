@@ -1,5 +1,7 @@
 import { SvgIconTypeMap } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
+import { FieldInputProps } from 'formik/dist/types';
+import { FormikTouched, FormikErrors } from 'formik';
 
 export interface CardInterface {
   condicion: Boolean
@@ -20,7 +22,13 @@ type CardInfoTitle = 'Citas completas' | 'Citas en espera' | 'Citas canceladas' 
 export interface TextFieldProps {
   mb?: number;
   mt?: number;
+  name: string;
   label: string;
+  touched?: any
+  errors?: any
+  initialValue?: string;
+  getFieldProps?: FieldInputProps<any>
+  validations?: any;
   required: boolean;
   helperText?: string;
   type: TextFieldPropsType

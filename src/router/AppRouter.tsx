@@ -4,10 +4,28 @@ import { DashBoard, ListadoDeCitas, BarberosFavoritos, SubirImagenGaleria, Lista
 import { AnimatePresence } from "framer-motion"
 import { DialogConfirm } from '../components/dialogConfirm/DialogConfirm';
 import { Toaster } from 'react-hot-toast'
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { checkAuthToken } from '../store/auth/thunk';
+import { CircularProgressIndicator } from '../circularProgress/CircularProgressIndicator';
 
 export const AppRouter = () => {
 
+  const dispatch = useAppDispatch();
+
+  const { usuarioActivo } = useAppSelector( state => state.auth );
+
   const location = useLocation()
+
+  const token = localStorage.getItem('token')
+
+  useEffect(() => {
+    dispatch( checkAuthToken() )
+  }, [])
+
+  if ( token && !usuarioActivo ) {
+    return <CircularProgressIndicator />
+  }
 
   return (
     <AnimatePresence mode="wait" initial={true}>

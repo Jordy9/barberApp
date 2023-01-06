@@ -2,6 +2,8 @@ import InputBase from '@mui/material/InputBase';
 import { styled, alpha } from '@mui/material/styles';
 import { TextFieldProps } from '../interfaces/interfaces';
 import Switch, { SwitchProps } from '@mui/material/Switch';
+import { string } from 'yup';
+import * as Yup from 'yup';
 
 export const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -87,44 +89,71 @@ export const StyledInputBaseFilter = styled(InputBase)(({ theme }) => ({
 export const inputPropsRegister: TextFieldProps[] = [
   {
     mb: 1.5,
+    initialValue: '',
     label: "Nombre",
     Adornment: false,
     required: true ,
     type: 'text',
-},
-{
+    name: 'name',
+    validations: string()
+                  .required('Requerido')
+                  .max(50, 'Debe de tener 50 caracteres o menos')
+                  .min(3, 'Debe de tener 3 caracteres o más')
+  },
+  {
     mb: 1.5,
     label: "Apellido",
+    initialValue: '',
     Adornment: false,
     required: true ,
     type: 'text',
-},
-{
+    name: 'lastName',
+    validations: string()
+                  .required('Requerido')
+                  .max(50, 'Debe de tener 50 caracteres o menos')
+                  .min(3, 'Debe de tener 3 caracteres o más')
+  },
+  {
     mb: 1.5,
     label: "Correo electrónico",
     Adornment: true,
+    initialValue: '',
     required: true ,
     type: 'email',
     helperText: 'Nunca compartas tu correo',
-    Icon: 'Arroba'
-},
+    Icon: 'Arroba',
+    name: 'email',
+    validations: string()
+                  .required('Requerido')
+                  .email('El correo no es válido')
+  },
   {
     mt: 1.5,
     label: "Contraseña",
     Adornment: true,
+    initialValue: '',
     required: true ,
     type: 'password',
     helperText: 'Nunca compartas tu contraseña',
-    Icon: "Eye"
+    Icon: "Eye",
+    name: 'password',
+    validations: string()
+                  .required('Requerido')
   },
   {
     mt: 1.5,
     label: "Confirmar contraseña",
     Adornment: true,
+    initialValue: '',
     required: true ,
     type: 'password',
     helperText: 'Nunca compartas tu contraseña',
-    Icon: "Eye"
+    Icon: "Eye",
+    name: 'confirmPassword',
+    validations: string()
+                  .required('Requerido')
+                  .oneOf([Yup.ref('password')], 'Las contraseñas deben ser iguales')
+    
   },
 ]
 
@@ -133,19 +162,23 @@ export const inputPropsLogin: TextFieldProps[] = [
     mb: 1.5,
     label: "Correo electrónico",
     Adornment: true,
+    initialValue: '',
     required: true ,
     type: 'email',
     helperText: 'Nunca compartas tu correo',
-    Icon: 'Arroba'
+    Icon: 'Arroba',
+    name: 'email',
   },
   {
     mt: 1.5,
     label: "Contraseña",
     Adornment: true,
+    initialValue: '',
     required: true ,
     type: 'password',
     helperText: 'Nunca compartas tu contraseña',
-    Icon: "Eye"
+    Icon: "Eye",
+    name: 'password',
   },
 ]
 
@@ -160,6 +193,16 @@ export const hoursSelect = [
   '4:30',
   '5:00',
   '5:30',
+];
+
+export const daysSelect = [
+  'Lunes',
+  'Martes',
+  'Miércoles',
+  'Jueves',
+  'Viernes',
+  'Sabado',
+  'Domingo',
 ];
 
 export const Android12Switch = styled(Switch)(({ theme }) => ({
