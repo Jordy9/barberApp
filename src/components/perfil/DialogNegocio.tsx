@@ -1,7 +1,7 @@
-import { forwardRef, Dispatch, SetStateAction, useState } from 'react';
+import { forwardRef, Dispatch, SetStateAction, useState, ChangeEvent } from 'react';
 
 import { styled } from '@mui/material/styles';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Typography, Grid, IconButtonProps } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Typography, Grid, IconButtonProps, Box } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 
 import IconButton from '@mui/material/IconButton';
@@ -11,6 +11,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useResponsive } from '../../hooks/useResponsive';
 import Collapse from '@mui/material/Collapse';
 import { Horario, HorarioList, MisServicios, MisServiciosList, Ubicacion, UbicacionList } from './';
+
+import { useFormik } from 'formik';
+import * as Yup from 'yup'
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { createNegocio } from '../../store/negocio/thunk';
 
 interface loginProps {
     showDialog2: boolean;
@@ -40,6 +45,10 @@ interface loginProps {
       duration: theme.transitions.duration.shortest,
     }),
   }));
+
+  let serviciosList: object[] = []
+  let ubicacionesList: object[] = []
+  let horariosList: object[] = []
 
 export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
 
@@ -73,6 +82,83 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
     setExpanded3(!expanded3);
   };
 
+  const dispatch = useAppDispatch();
+
+  const { usuarioActivo } = useAppSelector( state => state.auth );
+
+  const [servicios, setServicios] = useState(
+    {
+      servicio: '',
+      tiempo: '10',
+      minHor: 'Minutos',
+    }
+  )
+
+  const addServicio = () => {
+    serviciosList.push(servicios)
+
+    setServicios(
+      {
+        servicio: '',
+        tiempo: '',
+        minHor: 'Minutos',
+      }
+    )
+  }
+
+  const [ubicaciones, setUbicaciones] = useState(
+    {
+      ubicacion: '',
+      link: ''
+    }
+  )
+
+  const addUbicaciones = () => {
+    ubicacionesList.push(ubicaciones)
+    setUbicaciones(
+      {
+        ubicacion: '',
+        link: ''
+      }
+    )
+  }
+
+  const [horarios, setHorarios] = useState(
+    {
+      horario: '',
+    }
+  )
+
+  const addHorarios = () => {
+    horariosList.push(horarios)
+    setHorarios(
+      {
+        horario: '',
+      }
+    )
+  }
+
+  const {handleSubmit, getFieldProps, touched, errors} = useFormik({
+    initialValues: {
+      servicios: serviciosList,
+      ubicacion: ubicacionesList,
+      horasClientes: horariosList
+    },
+    enableReinitialize: true,
+    onSubmit: ({ servicios, ubicacion, horasClientes }) => {
+      const negocio = { barberId: usuarioActivo?._id, servicios, ubicacion, horasClientes }
+
+      dispatch( createNegocio(negocio) )
+
+    },
+    validationSchema: Yup.object({
+    })
+  })
+
+  const handleButtonSubmit = () => {
+    document.getElementById('buttonNegocioSubmit')?.click()
+  }
+
   return (
     <Dialog
       open={ showDialog2 }
@@ -97,23 +183,27 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
       <DialogContent>
         {
             ( !showList )
-                &&
-            <>
+              &&
+            <Box component={ 'form' } noValidate onSubmit={ handleSubmit }>
                 <Grid pb={ 1 }>
                 <Grid component={ 'div' } onClick = { handleExpandClick } display={ 'flex' } alignItems = { 'center' } justifyContent = { 'space-between' }>
                     <Typography>Mis servicios</Typography>
                     <ExpandMore
-                    expand={expanded}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
+                      expand={expanded}
+                      onClick={handleExpandClick}
+                      aria-expanded={expanded}
+                      aria-label="show more"
                     >
                     <ExpandMoreIcon />
                     </ExpandMore>
                 </Grid>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <Grid py={ 1 }>
-                        <MisServicios />
+                        <MisServicios
+                          servicio = { servicios } 
+                          setServicios = { setServicios }
+                          addServicio = { addServicio }
+                        />
                         <Button onClick={ () => setShowList('Servicios') } sx={{ my: 2 }} fullWidth variant='contained' color='inherit'>Ver listado de servicios</Button>
                     </Grid>
                 </Collapse>
@@ -133,7 +223,11 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
                 </Grid>
                 <Collapse in={expanded2} timeout="auto" unmountOnExit>
                     <Grid py={ 1 }>
-                        <Ubicacion />
+                        <Ubicacion 
+                          ubicaciones = { ubicaciones }
+                          setUbicaciones = { setUbicaciones }
+                          addUbicaciones = { addUbicaciones }
+                        />
                         <Button onClick={ () => setShowList('Ubicacion') } sx={{ my: 2 }} fullWidth variant='contained' color='inherit'>Ver listado de ubicaciones</Button>
                     </Grid>
                 </Collapse>
@@ -153,12 +247,18 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
                 </Grid>
                 <Collapse in={expanded3} timeout="auto" unmountOnExit>
                     <Grid py={ 1 }>
-                        <Horario />
+                        <Horario
+                          horarios = { horarios }
+                          setHorarios = { setHorarios }
+                          addHorarios = { addHorarios }
+                        />
                         <Button onClick={ () => setShowList('Horario') } sx={{ my: 2 }} fullWidth variant='contained' color='inherit'>Ver listado de horarios</Button>
                     </Grid>
                 </Collapse>
                 </Grid>
-            </>
+
+                <button id='buttonNegocioSubmit' hidden></button>
+            </Box>
                 
         }
         
@@ -183,7 +283,7 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
       </DialogContent>
       
       <DialogActions sx={{ p: 2 }}>
-        <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Guardar cambios</Button>
+        <Button fullWidth onClick={ handleButtonSubmit } color = { 'inherit' } variant='contained'>Guardar cambios</Button>
       </DialogActions>
     </Dialog>
   )

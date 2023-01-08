@@ -1,31 +1,37 @@
-import moment, { Moment } from 'moment';
+import { Moment } from 'moment';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import TextField from '@mui/material/TextField';
-import { useState } from 'react';
 
-export const MobileClock = () => {
+import { Dispatch, SetStateAction } from 'react';
 
-    const [first, setfirst] = useState<Moment | null>(moment())
+interface mobileClockProps {
+    value: Moment | null;
+    setValue: Dispatch<SetStateAction<Moment>>
+    minTime: Moment | null;
+    error: boolean
+}
+
+export const MobileClock = ({ value, setValue, minTime, error }: mobileClockProps) => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
         <MobileTimePicker
             label="Desde"
-            // minTime={ minTimeNow2 }
-            // value={ ( count > 0 ) ? minTimeNow2 : hora }
-            value={ first }
+            minTime={ minTime }
+            value={ value }
             ampmInClock
             onChange={(newValue) => {
-                setfirst(newValue)
-                // handleChangeHora(count, newValue)
+                setValue(newValue!)
             }}
             renderInput={(params) => 
-                <TextField 
-                    name='hora' 
-                    {...params} 
-                    helperText={ "Hora aproximada a la que será atendido" }
+                <TextField
+                    error = { error }
+                    name='hora'
+                    defaultValue={ minTime }
+                    { ...params } 
+                    helperText={ ( error ) && "Verifique que no haya seleccionado una hora menor a la actual" }
                 />
             }
         />

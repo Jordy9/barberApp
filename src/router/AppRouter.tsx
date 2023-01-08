@@ -8,6 +8,10 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { checkAuthToken } from '../store/auth/thunk';
 import { CircularProgressIndicator } from '../circularProgress/CircularProgressIndicator';
+import { useSocket } from '../hooks/useSocket';
+import { getEnvVariables } from '../helpers/getEnvVariables';
+import { startSocket } from '../store/socket/socketSlice';
+import { getHorarioNegocio } from '../store/negocio/thunk';
 
 export const AppRouter = () => {
 
@@ -19,9 +23,30 @@ export const AppRouter = () => {
 
   const token = localStorage.getItem('token')
 
+  const { VITE_API_URL } = getEnvVariables()
+
+  const { socket, conectarSocket, desconectarSocket } = useSocket(`${VITE_API_URL.split('/api')[0]}`)
+
   useEffect(() => {
     dispatch( checkAuthToken() )
+    dispatch( getHorarioNegocio() )
   }, [])
+
+  useEffect(() => {
+    dispatch( startSocket(socket) )
+  }, [dispatch, socket])
+
+  useEffect(() => {
+    if ( usuarioActivo?._id ) {
+      conectarSocket()
+    }
+  }, [usuarioActivo?._id, conectarSocket])
+
+  useEffect(() => {
+    if ( !usuarioActivo?._id ) {
+      desconectarSocket()
+    }
+  }, [usuarioActivo?._id, desconectarSocket])
 
   if ( token && !usuarioActivo ) {
     return <CircularProgressIndicator />
