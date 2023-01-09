@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import * as io from "socket.io-client";
 import { useAppDispatch } from '../store/hooks';
 import { onUpdateNegocio } from '../store/negocio/negocioSlice';
+import { toast } from 'react-hot-toast';
 
 export const useSocket = ( serverPath: string ) => {
 
@@ -34,6 +35,15 @@ export const useSocket = ( serverPath: string ) => {
 
     useEffect(() => {
         socket?.on('started-service', ( resp ) => {
+            toast.success('Horario de servicio creado', {
+                position: 'top-right'
+            })
+            dispatch( onUpdateNegocio(resp) )
+        });
+    }, [ socket ])
+
+    useEffect(() => {
+        socket?.on('updated-service-cita', ( resp ) => {
             dispatch( onUpdateNegocio(resp) )
         });
     }, [ socket ])

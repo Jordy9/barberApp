@@ -21,17 +21,18 @@ import { isOpenCita } from '../../store/citas/CitasSlice';
 import moment, { Moment } from 'moment';
 
 type horas = {
-  fecha: Moment | null | undefined;
+  fecha: string;
   hora: string | undefined | number;
 }
 
 type service = {
-  title: string;
-  time: number;
+  servicio: string;
+  tiempo: string;
+  minHor: string
 }
 
 interface formValuesProps {
-  hora: Moment | null;
+  hora: string;
   barbero: string;
   servicio: service[]
 }
@@ -59,7 +60,7 @@ export const DialogCita = () => {
 
   const [formValues, setFormValues] = useState<formValuesProps[]>([
     {
-      hora: moment(),
+      hora: '',
       barbero: '',
       servicio: [],
     }
@@ -67,9 +68,9 @@ export const DialogCita = () => {
 
   const addNino = () => {
     setFormValues([
-      ...formValues, 
+      ...formValues,
       {
-        hora: moment(),
+        hora: '',
         barbero: '',
         servicio: [],
       }
@@ -87,10 +88,10 @@ export const DialogCita = () => {
     setFormValues(newFormValues)
   }
 
-  const handleChangeHora = ( i: number, e: Moment | null ) => {
+  const handleChangeBarber = ( i: number, e: string ) => {
     let newFormValues = [ ...formValues ]
 
-    newFormValues[i].hora = e 
+    newFormValues[i].barbero = e
 
     setFormValues(newFormValues)
   }
@@ -252,8 +253,9 @@ export const DialogCita = () => {
                     deleteNino = { deleteNino }
                     handleChange = { handleChange }
                     handleChangeAutoComplete = { handleChangeAutoComplete }
-                    handleChangeHora = { handleChangeHora }
-                    minTime = { ( index > 0 ) ? formValues[index - 1].hora : moment() }
+                    // handleChangeHora = { handleChangeHora }
+                    handleChangeBarber = { handleChangeBarber }
+                    // minTime = { ( index > 0 ) ? formValues[index - 1].hora : moment() }
                     formValues = { formValues }
                   />
                 </motion.div>

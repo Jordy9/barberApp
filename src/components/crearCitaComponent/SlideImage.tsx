@@ -12,8 +12,17 @@ import "swiper/css/pagination";
 import { FreeMode } from "swiper";
 import { ImageComponent } from "./ImageComponent";
 import { Box } from '@mui/material';
+import { useAppSelector } from "../../store/hooks";
 
-export const SlideImage = () => {
+interface Props {
+  barbero: string;
+  handleChangeBarber: (i: number, e: string) => void;
+  count: number;
+}
+
+export const SlideImage = ({ barbero, handleChangeBarber, count }: Props) => {
+
+  const { usuarios } = useAppSelector( state => state.auth );
 
   return (
     <Box>
@@ -26,9 +35,10 @@ export const SlideImage = () => {
         className="mySwiperBarber"
       >
         {
-          [1, 2, 3, 4, 5].map( e => (
-            <SwiperSlide key={ e } style = {{ height: 'auto', width: 'auto', borderRadius: '50%' }}>
+          usuarios.filter( usuario => ( barbero === '' ) ? usuario : ( usuario._id === barbero ) ).map( e => (
+            <SwiperSlide onClick={ () => handleChangeBarber(count, e._id) } key={ e._id } style = {{ display: 'block', height: 'auto', width: 'auto', borderRadius: '50%', backgroundColor: 'transparent', cursor: 'pointer' }}>
               <ImageComponent />
+              { e.name }
             </SwiperSlide>
           ))
         }

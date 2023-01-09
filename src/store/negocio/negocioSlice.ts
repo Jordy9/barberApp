@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Negocio } from '../../interfaces/negocioInterface';
 
 interface negocioState {
-    negocio: any[]
+    negocio: Negocio[]
 }
 
 const initialState: negocioState = {
@@ -12,14 +13,14 @@ export const negocioSlice = createSlice({
    name: 'negocio',
    initialState,
    reducers: {
-       onGetNegocio: (state, action: PayloadAction<negocioState[]> ) => {
+       onGetNegocio: (state, action: PayloadAction<Negocio[]> ) => {
            state.negocio = action.payload
         },
 
-       onCreateNegocio: (state, action: PayloadAction<negocioState> ) => {
+       onCreateNegocio: (state, action: PayloadAction<Negocio> ) => {
            state.negocio.push(action.payload)
         },
-       onUpdateNegocio: (state, action: any ) => {
+       onUpdateNegocio: (state, action: PayloadAction<Negocio> ) => {
            state.negocio = state.negocio.map(
             e => e._id === action.payload._id ? action.payload : e
            )

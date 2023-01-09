@@ -1,9 +1,25 @@
 import { Dispatch } from "@reduxjs/toolkit"
 import barberApi from "../../Api/barberApi"
 import { toast } from 'react-hot-toast';
-import { getUsuarioActivo, logoutAuth } from "./authSlice";
-import { UsuarioLogin, UsuarioPost, Usuarios } from "../../interfaces/usuarios";
+import { getUsuarioActivo, getUsuarios, logoutAuth } from "./authSlice";
+import { Usuario, UsuarioLogin, UsuarioPost, Usuarios } from "../../interfaces/usuarios";
 import { AppDispatch } from "../store";
+
+export const obtenerUsuarios = () => {
+    return async( dispatch: Dispatch ) => {
+
+        try {
+
+            const { data } = await barberApi.get('auth')
+
+            dispatch( getUsuarios(data.usuario) )
+            
+        } catch (error) {
+            toast.error('Hubo un error')
+        }
+
+    }
+}
 
 export const createUsuario = ( usuario: UsuarioPost ) => {
     return async( dispatch: Dispatch ) => {

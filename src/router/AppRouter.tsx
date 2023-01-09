@@ -6,7 +6,7 @@ import { DialogConfirm } from '../components/dialogConfirm/DialogConfirm';
 import { Toaster } from 'react-hot-toast'
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { checkAuthToken } from '../store/auth/thunk';
+import { checkAuthToken, obtenerUsuarios } from '../store/auth/thunk';
 import { CircularProgressIndicator } from '../circularProgress/CircularProgressIndicator';
 import { useSocket } from '../hooks/useSocket';
 import { getEnvVariables } from '../helpers/getEnvVariables';
@@ -30,6 +30,7 @@ export const AppRouter = () => {
   useEffect(() => {
     dispatch( checkAuthToken() )
     dispatch( getHorarioNegocio() )
+    dispatch( obtenerUsuarios() )
   }, [])
 
   useEffect(() => {

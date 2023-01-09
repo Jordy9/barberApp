@@ -22,7 +22,7 @@ export interface Negocio {
 export interface Hora {
     fecha:    number;
     hora:     string;
-    selected: boolean;
+    selected: boolean | string;
 }
 
 export interface Horas {

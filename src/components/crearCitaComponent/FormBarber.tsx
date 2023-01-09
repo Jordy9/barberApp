@@ -1,22 +1,21 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState, useMemo } from 'react';
 
 import { Autocomplete, Button, FormControlLabel, Grid, IconButton, MenuItem, TextField } from "@mui/material"
-import { useResponsive } from "../../hooks/useResponsive"
 import { Android12Switch, hoursSelect, top100Films } from "../../utils/Search"
 import { SlideImage } from "./"
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
-import moment, { Moment } from 'moment';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { updateServiceCita } from '../../store/socket/thunk';
+import Typography from '@mui/material/Typography';
 
 type service = {
-    title: string;
-    time: number;
-}
+    servicio: string;
+    tiempo: string;
+    minHor: string
+  }
 
 interface formValuesProps {
-    hora: Moment | null;
+    hora: string;
     barbero: string;
     servicio: service[]
 }
@@ -25,7 +24,7 @@ interface FormBarberProps {
     count: number;
     setCont: Dispatch<SetStateAction<number>>;
     formCount: number
-    hora: Moment | null;
+    hora: string;
     barbero: string;
     servicio: service[];
     ninos: boolean;
@@ -34,8 +33,9 @@ interface FormBarberProps {
     deleteNino: (i: number) => void;
     handleChange: (i: number, e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
     handleChangeAutoComplete: (i: number, e: service[]) => void
-    handleChangeHora: (i: number, e: Moment | null) => void
-    minTime: Moment | null;
+    handleChangeBarber: (i: number, e: string) => void;
+    // handleChangeHora: (i: number, e:string ) => void
+    // minTime: Moment | null;
     formValues: formValuesProps[];
 }
 
@@ -51,63 +51,71 @@ export const FormBarber = ({
     addNino, 
     deleteNino, 
     handleChange, 
-    handleChangeAutoComplete, 
-    handleChangeHora, 
-    minTime,
+    handleChangeAutoComplete,
+    handleChangeBarber,
     formValues
 }: FormBarberProps) => {
 
-    const tiempoAdicional = servicio
+    const dispatch = useAppDispatch();
 
-    let suma = 0
+    const { negocio } = useAppSelector( state => state.ng );
 
-    formValues[0].servicio.map( e => suma = suma + e.time )
+    const { usuarioActivo, usuarios } = useAppSelector( state => state.auth );
 
-    const [ respWidth ] = useResponsive()
+    const negocioFilt = negocio.find( neg => neg.barberId === barbero )
 
-    let minTimeNow2 = useMemo(() => ( count > 0 ) ? minTime?.clone()?.add(45, 'minutes') : minTime, [])
+    // const handleUpdateServiceCita = ( id: string, hora: string ) => {
+    //     dispatch( updateServiceCita( id, hora, usuarioActivo!._id ) )
+    // }
 
   return (
     <>
-        <SlideImage />
+        {
+            ( !barbero )
+                &&
+            <Typography my={ 2 } variant='h5' textAlign={ 'center' }>Seleccione su barbero</Typography>
+        }
+
+        <SlideImage barbero = { barbero } handleChangeBarber = { handleChangeBarber } count = { count } />
 
         <Grid item container p={ 2 }>
-
-            <Grid px={ 1 } item xs = { 6 }>
-                <LocalizationProvider dateAdapter={AdapterMoment}>
-                    <MobileTimePicker
-                        label="Hora"
-                        minTime={ minTimeNow2 }
-                        value={ ( count > 0 ) ? minTimeNow2 : hora }
-                        ampmInClock
-                        onChange={(newValue) => {
-                            handleChangeHora(count, newValue)
-                        }}
-                        renderInput={(params) => 
-                            <TextField 
-                                name='hora' 
-                                {...params} 
-                                helperText={ ( respWidth < 700 ) ? 'Hora aproximada' : "Hora aproximada a la que será atendido"}
-                            />
-                        }
-                    />
-                </LocalizationProvider>
-            </Grid>
 
             <Grid px={ 1 } item xs = { 6 }>
                 <TextField
                     name='barbero'
                     value={ barbero }
-                    onChange = { ( e ) => handleChange(count, e) }
+                    onChange = { ({ target }) => handleChangeBarber(count, target.value) }
                     fullWidth
                     id="outlined-select-currency"
                     select
                     label="Barbero"
+                >
+                    <MenuItem value={ '' }>
+                        <em>Ninguno</em>
+                    </MenuItem>
+
+                    {usuarios.map((option) => (
+                        <MenuItem key={option._id} value={option._id}>
+                            {option.name}
+                        </MenuItem>
+                    ))}
+                </TextField>
+            </Grid>
+
+            <Grid px={ 1 } item xs = { 6 }>
+                <TextField
+                    name='hora'
+                    value={ hora }
+                    onChange = { ( e ) => handleChange(count, e) }
+                    fullWidth
+                    id="outlined-select-currency"
+                    select
+                    label="Hora"
                     // helperText="Barbero que te atenderá"
                 >
-                {hoursSelect.map((option) => (
-                    <MenuItem key={option} value={option}>
-                    {option}
+                {negocioFilt?.horarioDia?.map((option) => (
+                    <MenuItem disabled = { ( formValues.some( values => values.hora === option.hora || option.selected === true ) ) } /* onClick={ () => handleUpdateServiceCita( negocioFilt._id, option.hora ) } */ key={option.hora} value={option.hora}>
+                        {option.hora}
                     </MenuItem>
                 ))}
                 </TextField>
@@ -117,8 +125,8 @@ export const FormBarber = ({
                 <Autocomplete
                     multiple
                     id="tags-outlined"
-                    options={top100Films}
-                    getOptionLabel={(option) => option.title}
+                    options={negocioFilt?.servicios || []}
+                    getOptionLabel={(option) => option?.servicio}
                     fullWidth
                     value={ servicio }
                     filterSelectedOptions
@@ -129,7 +137,7 @@ export const FormBarber = ({
                             name='servicio'
                             value={ servicio }
                             label="Servicios"
-                            placeholder="Favorites"
+                            placeholder="Servicio"
                         />
                     )}
                 />

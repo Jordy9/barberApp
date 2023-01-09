@@ -3,7 +3,7 @@ import { Usuario } from '../../interfaces/usuarios';
 
 interface AuthState {
     usuarioActivo: Usuario | null;
-    usuarios: object[];
+    usuarios: Usuario[];
 }
 
 const initialState: AuthState = {
@@ -18,7 +18,7 @@ export const authSlice = createSlice({
        getUsuarioActivo: ( state, action: PayloadAction<Usuario> ) => {
            state.usuarioActivo = action.payload
         },
-       getUsuarios: ( state, action: PayloadAction<object[]> ) => {
+       getUsuarios: ( state, action: PayloadAction<Usuario[]> ) => {
            state.usuarios = action.payload
         },
 

@@ -18,3 +18,13 @@ export const startService = ({ firstValue, secondValue, id, thirdValue }: startS
 
     }
 }
+
+export const updateServiceCita = ( id: string, hora: string, uid: string ) => {
+    return ( dispatch: Dispatch, getState: any) => {
+
+        const { socket } = getState().sk;
+
+        socket?.emit('update-service-cita', { id, hora, uid })
+
+    }
+}

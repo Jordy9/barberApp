@@ -3,7 +3,7 @@
 export interface Usuarios {
     ok:      boolean;
     usuario: Usuario;
-    msg:     string;
+    msg?:     string;
     token?: string;
 }
 
