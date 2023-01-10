@@ -8,22 +8,14 @@ import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import moment from 'moment';
 import Autocomplete from '@mui/material/Autocomplete';
-import { top100Films } from "../../utils/Search";
 import { useAppDispatch } from '../../store/hooks';
 import { isOpenDialogConfirm } from "../../store/dialogConfirm/dialogConfirmSlice";
+import { nuevaCitasInterfaceCita } from "../../interfaces/citasInterface";
 
-interface UsuariosProps {
-    foto: string,
-    name: string,
-    Servicio: string,
-    Hora: number,
-    fecha: number
-}
-
-interface DialogProps extends UsuariosProps {
-    showDialog: boolean;
-    setShowDialog: Dispatch<SetStateAction<boolean>>;
-    respWidth: number;
+interface DialogProps extends nuevaCitasInterfaceCita {
+  showDialog: boolean;
+  setShowDialog: Dispatch<SetStateAction<boolean>>;
+  respWidth: number;
 }
 
 const Transition = forwardRef(function Transition(
@@ -35,7 +27,7 @@ const Transition = forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
-export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, foto, fecha, name }: DialogProps) => {
+export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, createdAt, hora, nombre, servicio }: DialogProps) => {
 
   const dispatch = useAppDispatch();
 
@@ -80,12 +72,12 @@ export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, foto, fec
       <DialogContent>
 
         <Grid my={ 1 } textAlign={ 'end' }> 
-          { moment(fecha).format('MMMM Do YYYY') }
+          { moment(createdAt).format('MMMM Do YYYY') }
         </Grid>
 
         <Grid item container mt = { ( respWidth < 400 ) ? 5 : 3 }>
           <Grid display={ 'flex' } sx={{ mx: 'auto' }}> 
-            <Avatar sx={{ width: '182px', height: '182px' }} src={ foto } />
+            <Avatar sx={{ width: '182px', height: '182px' }} src={ 'https://mui.com/static/images/avatar/3.jpg' } />
           </Grid>
         </Grid>
 
@@ -95,7 +87,7 @@ export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, foto, fec
             <TextField
               id="outlined-select-currency"
               label="Hora"
-              defaultValue="3:00"
+              value={ hora }
               inputProps={
                 { readOnly: true, }
               }
@@ -107,8 +99,8 @@ export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, foto, fec
             <TextField
               fullWidth
               id="outlined-select-currency"
-              label="Barbero"
-              defaultValue="Fulano"
+              label="Nombre"
+              value={ nombre }
               inputProps={
                 { readOnly: true, }
               }
@@ -120,9 +112,9 @@ export const DialogUserCita = ({ showDialog, setShowDialog, respWidth, foto, fec
             <Autocomplete
               multiple
               id="tags-outlined"
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              // defaultValue={[top100Films[13], top100Films[11]]}
+              options={servicio}
+              getOptionLabel={(option) => option.servicio}
+              value = { servicio }
               fullWidth
               filterSelectedOptions
               popupIcon = { false }

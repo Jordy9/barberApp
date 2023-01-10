@@ -12,6 +12,7 @@ import { useSocket } from '../hooks/useSocket';
 import { getEnvVariables } from '../helpers/getEnvVariables';
 import { startSocket } from '../store/socket/socketSlice';
 import { getHorarioNegocio } from '../store/negocio/thunk';
+import { obtenerCita } from '../store/citas/thunk';
 
 export const AppRouter = () => {
 
@@ -31,6 +32,7 @@ export const AppRouter = () => {
     dispatch( checkAuthToken() )
     dispatch( getHorarioNegocio() )
     dispatch( obtenerUsuarios() )
+    dispatch( obtenerCita() )
   }, [])
 
   useEffect(() => {

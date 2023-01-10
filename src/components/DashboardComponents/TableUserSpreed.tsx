@@ -1,4 +1,6 @@
+import { useAppSelector } from "../../store/hooks"
 import { TableUsersContent } from "./TableUsersContent"
+import { Fragment } from 'react';
 
 interface UsuariosProps {
     foto: string,
@@ -9,6 +11,8 @@ interface UsuariosProps {
 }
 
 export const TableUserSpreed = () => {
+
+    const { cita } = useAppSelector( state => state.ct );
 
     const arreglo: UsuariosProps[] = [
         {
@@ -51,8 +55,18 @@ export const TableUserSpreed = () => {
   return (
     <>
         {
-            arreglo.map( usuario => (
-                <TableUsersContent key={ usuario.foto } { ...usuario } />
+            cita.map( cita => (
+                <Fragment key={ cita._id }>
+                    {
+                        cita.cita.map(({ barberId, hora, nombre, servicio, usuarioId }) => {
+                            const nuevaCita = { ...cita, barberId, hora, nombre, servicio, usuarioId }
+                            return (
+                                <TableUsersContent key={ hora } { ...nuevaCita } />
+                            )
+                        }
+                        )
+                    }
+                </Fragment>
             ))
         }
     </>

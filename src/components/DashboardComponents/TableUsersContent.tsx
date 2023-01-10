@@ -10,6 +10,7 @@ import moment from 'moment';
 
 import { useResponsive } from "../../hooks/useResponsive";
 import { DialogUserCita, IconCondicionBarber } from './';
+import { nuevaCitasInterfaceCita } from '../../interfaces/citasInterface';
 
 interface UsuariosProps {
     foto: string,
@@ -34,9 +35,11 @@ interface ExpandMoreProps extends IconButtonProps {
     }),
   }));
 
-export const TableUsersContent = ( props: UsuariosProps ) => {
+export const TableUsersContent = ( props: nuevaCitasInterfaceCita ) => {
 
-    const { foto, name, Servicio, Hora, fecha } = props
+    const { _id, barberId, hora, ninos, nombre, servicio, usuarioId, estado, createdAt } = props
+
+    
 
     const [expanded, setExpanded] = useState(false);
 
@@ -54,11 +57,11 @@ export const TableUsersContent = ( props: UsuariosProps ) => {
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
             <TableCell size='small' component="th" scope="row">
-                <Avatar src={ foto } alt="" />
+                <Avatar src={ 'https://mui.com/static/images/avatar/3.jpg' } alt="" />
             </TableCell>
 
             <TableCell size='small' style = {{verticalAlign: 'middle'}} align='center' component="th" scope="row">
-                { name }
+                { nombre }
             </TableCell>
 
             {
@@ -66,15 +69,15 @@ export const TableUsersContent = ( props: UsuariosProps ) => {
                     ?
                 <>
                     <TableCell size='small' style = {{verticalAlign: 'middle'}} align='center' component="th" scope="row">
-                        { Servicio }
+                        { servicio.map( e => e.servicio) }
                     </TableCell>
 
                     <TableCell size='small' style = {{verticalAlign: 'middle'}} align='center' component="th" scope="row">
-                        { Hora }
+                        { hora }
                     </TableCell>
 
                     <TableCell size='small' style = {{verticalAlign: 'middle'}} align='center' component="th" scope="row">
-                        { moment(fecha).format('MMMM Do YYYY') }
+                        { moment(createdAt).format('MMMM Do YYYY') }
                     </TableCell>
                 </>
                     :
@@ -96,9 +99,9 @@ export const TableUsersContent = ( props: UsuariosProps ) => {
                 </IconButton>
 
                 {
-                    ( true )
+                    ( estado !== 'Finalizada' )
                         ?
-                    <IconCondicionBarber Hora={ Hora } />
+                    <IconCondicionBarber estado={ estado } />
                         :
                     <IconButton color = 'success'>
                         <CheckCircle />
@@ -131,15 +134,15 @@ export const TableUsersContent = ( props: UsuariosProps ) => {
                                 >
 
                                     <TableCell size='small' align='left' component="th" scope="row">
-                                        { Servicio }
+                                        { servicio.map( e => e.servicio) }
                                     </TableCell>
 
                                     <TableCell size='small' align='left' component="th" scope="row">
-                                        { Hora }
+                                        { hora }
                                     </TableCell>
 
                                     <TableCell size='small' align='left' component="th" scope="row">
-                                        { moment(fecha).format('MMM Do YYYY') }
+                                        { moment(createdAt).format('MMM Do YYYY') }
                                     </TableCell>
 
                                     <TableCell size='small' align='left' component="th" scope="row">

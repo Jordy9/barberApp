@@ -1,6 +1,6 @@
 import { ChangeEvent, forwardRef, Fragment, useState, useEffect } from 'react';
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography, Box } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 
 import { FormBarber } from "./";
@@ -19,6 +19,11 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { isOpenCita } from '../../store/citas/CitasSlice';
 
 import moment, { Moment } from 'moment';
+import { useFormik } from 'formik';
+
+import * as Yup from 'yup'
+import { createCita } from '../../store/citas/thunk';
+import { updateServiceCita } from '../../store/socket/thunk';
 
 type horas = {
   fecha: string;
@@ -52,6 +57,8 @@ export const DialogCita = () => {
   
   const { isOpen } = useAppSelector( state => state.ct );
 
+  const { usuarioActivo } = useAppSelector( state => state.auth );
+
   const handleClose = () => {
     dispatch( isOpenCita(false) )
   }
@@ -65,6 +72,40 @@ export const DialogCita = () => {
       servicio: [],
     }
   ])
+
+  const [ninos, setNinos] = useState(false)
+
+  const {handleSubmit, touched, errors} = useFormik({
+    initialValues: {
+      cita: formValues
+    },
+    enableReinitialize: true,
+    onSubmit: ({ cita }) => {
+
+      let nuevaCita: any = []
+
+      for (let index = 0; index < cita.length; index++) {
+        const element = cita[index];
+
+        nuevaCita.push({ barberId: element.barbero, usuarioId: usuarioActivo?._id, hora: element.hora, servicio: element.servicio, nombre: ( index > 0 ) ? usuarioActivo?.name + ' niño ' + index : usuarioActivo?.name })
+        
+      }
+
+      dispatch( createCita(nuevaCita, ninos) )
+      
+    },
+    validationSchema: Yup.object({
+      cita: Yup.array().of(Yup.object({
+        hora: Yup.string().required('Requerido'),
+        barbero: Yup.string().required('Requerido'),
+        servicio: Yup.array().of(Yup.object({
+          servicio: Yup.string().required('Requerido'),
+          tiempo: Yup.string().required('Requerido'),
+          minHor: Yup.string().required('Requerido'),
+        })).min(1, 'Debe de seleccionar al menos un servicio')
+      }))
+    })
+  })
 
   const addNino = () => {
     setFormValues([
@@ -113,8 +154,6 @@ export const DialogCita = () => {
 
     setCont( prev => prev - 1 )
   }
-
-  const [ninos, setNinos] = useState(false)
 
   const navigate = useNavigate()
 
@@ -186,6 +225,10 @@ export const DialogCita = () => {
   //   // console.log(lol)
 
   // }, [])
+
+  const handleSubmitCita = () => {
+    document.getElementById('buttonSubmitCita')?.click()
+  }
   
   return (
     <Dialog
@@ -230,43 +273,52 @@ export const DialogCita = () => {
           </Grid>
         </Grid>
 
-        {
-          formValues.map( (e, index) =>  (
-            <Fragment key={ index }>
-              {
-                ( index === count )
-                  &&
-                <motion.div
-                  initial={{ width: '100%', opacity: 0, scaleX: 0 }}
-                  animate={{ width: '100%', scaleX: 1, opacity: 1, transition: { duration: 0.5, ease: "linear" } }}
-                  exit={{ scaleX: 0.5, transition: { duration: 0.3, ease: "linear" } }}
-                  style={{ originX: isPresent ? 0 : 2 }}
-                >
-                  <FormBarber 
-                    count = { count }
-                    setCont = { setCont }
-                    formCount = { formValues.length }
-                    { ...formValues[index] }
-                    ninos = { ninos }
-                    setNinos = { setNinos }
-                    addNino = { addNino }
-                    deleteNino = { deleteNino }
-                    handleChange = { handleChange }
-                    handleChangeAutoComplete = { handleChangeAutoComplete }
-                    // handleChangeHora = { handleChangeHora }
-                    handleChangeBarber = { handleChangeBarber }
-                    // minTime = { ( index > 0 ) ? formValues[index - 1].hora : moment() }
-                    formValues = { formValues }
-                  />
-                </motion.div>
-              }
-            </Fragment>
-          ))
-        }
+        <Box component={ 'form' } onSubmit = { handleSubmit }>
+
+          {
+            formValues.map( (e, index) =>  (
+              <Fragment key={ index }>
+                {
+                  ( index === count )
+                    &&
+                  <motion.div
+                    initial={{ width: '100%', opacity: 0, scaleX: 0 }}
+                    animate={{ width: '100%', scaleX: 1, opacity: 1, transition: { duration: 0.5, ease: "linear" } }}
+                    exit={{ scaleX: 0.5, transition: { duration: 0.3, ease: "linear" } }}
+                    style={{ originX: isPresent ? 0 : 2 }}
+                  >
+                    <FormBarber 
+                      count = { count }
+                      setCont = { setCont }
+                      formCount = { formValues.length }
+                      { ...formValues[index] }
+                      ninos = { ninos }
+                      setNinos = { setNinos }
+                      addNino = { addNino }
+                      deleteNino = { deleteNino }
+                      handleChange = { handleChange }
+                      handleChangeAutoComplete = { handleChangeAutoComplete }
+                      // handleChangeHora = { handleChangeHora }
+                      handleChangeBarber = { handleChangeBarber }
+                      // minTime = { ( index > 0 ) ? formValues[index - 1].hora : moment() }
+                      touchedBarbero = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].barbero : false }
+                      touchedHora = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].hora : false }
+                      touchedServicio = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].servicio : false }
+                      errors = { ( errors?.cita && errors?.cita?.length > 0 ) ? errors.cita[index] : false }
+                      formValues = { formValues }
+                    />
+                  </motion.div>
+                }
+              </Fragment>
+            ))
+          }
+          <button id='buttonSubmitCita' hidden></button>
+        </Box>
+
       </DialogContent>
       
       <DialogActions sx={{ p: 2 }}>
-        <Button fullWidth color = { 'inherit' } variant='contained'>Crear cita</Button>
+        <Button onClick={ handleSubmitCita } type = 'submit' fullWidth color = { 'inherit' } variant='contained'>Crear cita</Button>
       </DialogActions>
     </Dialog>
   )

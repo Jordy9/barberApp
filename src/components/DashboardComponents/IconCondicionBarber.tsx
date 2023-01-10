@@ -1,20 +1,26 @@
 import { ContentCut, Timer } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
+type EstadoType = 'En-espera' | 'Cancelada' | 'Finalizada' | 'Recortando'
+
 interface iconCondicionProps {
-    Hora: number
+    estado: EstadoType;
 }
 
-export const IconCondicionBarber = ({ Hora }: iconCondicionProps ) => {
+export const IconCondicionBarber = ({ estado }: iconCondicionProps ) => {
   return (
     <>
         {
-            ( Hora === 1 )
-                ?
+            ( estado === 'Recortando' )
+                &&
             <IconButton>
                 <ContentCut />
             </IconButton>
-                :
+        }
+        
+        {
+            ( estado === 'En-espera' )
+                &&
             <IconButton color = 'warning'>
                 <Timer />
             </IconButton>
