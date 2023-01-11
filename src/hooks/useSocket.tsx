@@ -4,6 +4,7 @@ import * as io from "socket.io-client";
 import { useAppDispatch } from '../store/hooks';
 import { onUpdateNegocio } from '../store/negocio/negocioSlice';
 import { toast } from 'react-hot-toast';
+import { getHorarioNegocio } from '../store/negocio/thunk';
 
 export const useSocket = ( serverPath: string ) => {
 
@@ -38,31 +39,43 @@ export const useSocket = ( serverPath: string ) => {
             toast.success('Horario de servicio creado', {
                 position: 'top-right'
             })
+            if ( !resp ) return
+
             dispatch( onUpdateNegocio(resp) )
         });
     }, [ socket ])
 
     useEffect(() => {
         socket?.on('updated-service-cita', ( resp ) => {
+            if ( !resp ) return
+
             dispatch( onUpdateNegocio(resp) )
         });
     }, [ socket ])
 
     useEffect(() => {
         socket?.on('removed-service-cita', ( resp ) => {
+            if ( !resp ) return
+
             dispatch( onUpdateNegocio(resp) )
         });
     }, [ socket ])
 
     useEffect(() => {
         socket?.on('removed-all-or-many-service-cita', ( resp ) => {
+            if ( !resp ) return
+            
             dispatch( onUpdateNegocio(resp) )
         });
     }, [ socket ])
 
-    // useEffect(() => {
-    //     socket?.on('disconnect', () => setOnline( false ));
-    // }, [ socket ])
+    useEffect(() => {
+        socket?.on('disconect-remove-accidentally-service-cita', ( resp ) => {
+            if ( !resp ) return
+            
+            dispatch( onUpdateNegocio(resp) )
+        });
+    }, [ socket ])
     
     return {
         socket,

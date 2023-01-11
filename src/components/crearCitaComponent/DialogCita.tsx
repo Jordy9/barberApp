@@ -78,17 +78,19 @@ export const DialogCita = () => {
   const handleClose = () => {
     if ( citaActiva ) {
       dispatch( onClearCitaActiva() )
-      setFormValues([
-        {
-          hora: '',
-          barberId: '',
-          servicio: [],
-          estado: 'En-espera'
-        }
-      ])
-      setNinos(false)
-      setCont(0)
+    } else if ( formValues.some( e => e.hora ) ) {
+      dispatch( removeAllOrManyServiceCita(formValues) )
     }
+    setFormValues([
+      {
+        hora: '',
+        barberId: '',
+        servicio: [],
+        estado: 'En-espera'
+      }
+    ])
+    setNinos(false)
+    setCont(0)
     dispatch( isOpenCita(false) )
   }
 
@@ -113,7 +115,7 @@ export const DialogCita = () => {
 
       const id = citaActiva?._id!
 
-      for (let index = 0; index < citaCortada.length; index++) {
+      for ( let index = 0; index < citaCortada.length; index++ ) {
         const element = citaCortada[index];
 
         nuevaCita.push({ barberId: element.barberId, usuarioId: usuarioActivo?._id, hora: element.hora, servicio: element.servicio, nombre: ( index > 0 ) ? usuarioActivo?.name + ' niño ' + index : usuarioActivo?.name, estado: element.estado })
@@ -121,9 +123,9 @@ export const DialogCita = () => {
       }
 
       if ( !citaActiva ) {
-        dispatch( createCita(nuevaCita, ninos) )
+        dispatch( createCita(nuevaCita, ninos, usuarioActivo?._id!) )
       } else {
-        dispatch( actualizarCita(id, nuevaCita, ninos) )
+        dispatch( actualizarCita(id, nuevaCita, ninos, usuarioActivo?._id!) )
       }
     },
     validationSchema: Yup.object({
@@ -210,7 +212,6 @@ export const DialogCita = () => {
 
   }, [citaActiva])
   
-
   const isPresent = useIsPresent();
 
   const [ respWidth ] = useResponsive()

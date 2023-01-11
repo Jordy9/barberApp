@@ -77,6 +77,8 @@ export const FormBarber = ({
     const handleUpdateServiceCita = ( id: string, hora: string ) => {
         dispatch( updateServiceCita( id, hora, ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count ) )
     }
+
+    const uid = ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count
     
   return (
     <>
@@ -128,7 +130,9 @@ export const FormBarber = ({
                     // helperText="Barbero que te atenderá"
                 >
                 {negocioFilt?.horarioDia?.map((option) => (
-                    <MenuItem disabled = { ( formValues.some( values => values.hora === option.hora || option.selected !== false ) ) } onClick={ () => handleUpdateServiceCita( negocioFilt._id, option.hora ) } key={option.hora} value={option.hora}>
+                    ( option.selected === false || option.selected === uid )
+                        &&
+                    <MenuItem disabled = { ( formValues.some( values => values.hora === option.hora && option.selected === uid || option.selected !== false ) ) } onClick={ () => handleUpdateServiceCita( negocioFilt._id, option.hora ) } key={option.hora} value={option.hora}>
                         {option.hora}
                     </MenuItem>
                 ))}

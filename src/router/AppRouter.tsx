@@ -30,7 +30,6 @@ export const AppRouter = () => {
 
   useEffect(() => {
     dispatch( checkAuthToken() )
-    dispatch( getHorarioNegocio() )
     dispatch( obtenerUsuarios() )
     dispatch( obtenerCita() )
   }, [])
@@ -42,6 +41,7 @@ export const AppRouter = () => {
   useEffect(() => {
     if ( usuarioActivo?._id ) {
       conectarSocket()
+      dispatch( getHorarioNegocio() )
     }
   }, [usuarioActivo?._id, conectarSocket])
 

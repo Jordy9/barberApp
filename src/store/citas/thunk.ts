@@ -17,7 +17,7 @@ export const obtenerCita = () => {
     }
 }
 
-export const createCita = ( cita: any, ninos: boolean ) => {
+export const createCita = ( cita: any, ninos: boolean, userId: string ) => {
     return async ( dispatch: AppDispatch ) => {
 
         const toastId = toast.loading('Guardando cita', {
@@ -25,7 +25,7 @@ export const createCita = ( cita: any, ninos: boolean ) => {
         })
 
         try {
-            const { data } =  await barberApi.post('cita', { cita, ninos })
+            const { data } =  await barberApi.post('cita', { userId, cita, ninos })
             
             dispatch( onCreateCita(data.cita) )
 
@@ -43,7 +43,7 @@ export const createCita = ( cita: any, ninos: boolean ) => {
     }
 }
 
-export const actualizarCita = ( id: string, cita: any, ninos: boolean ) => {
+export const actualizarCita = ( id: string, cita: any, ninos: boolean, userId: string ) => {
     return async ( dispatch: AppDispatch ) => {
 
         const toastId = toast.loading('Actualizando cita', {
@@ -51,7 +51,7 @@ export const actualizarCita = ( id: string, cita: any, ninos: boolean ) => {
         })
 
         try {
-            const { data } =  await barberApi.put(`cita/${id}`, { cita, ninos })
+            const { data } =  await barberApi.put(`cita/${id}`, { userId, cita, ninos })
             
             dispatch( onUpdateCita(data.cita) )
 

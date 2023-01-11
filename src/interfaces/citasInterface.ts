@@ -11,6 +11,7 @@ export interface CitasInterface {
 
 export interface CitasInterfaceCita {
     _id:       string;
+    userId:    string;
     cita:      CitaCita[];
     ninos:     boolean;
     createdAt: string;
