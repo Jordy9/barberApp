@@ -3,7 +3,8 @@ import { CitasInterface, CitasInterfaceCita } from '../../interfaces/citasInterf
 
 const initialState: CitasInterface = {
     isOpen: false,
-    cita: []
+    cita: [],
+    citaActiva: null
 }
 
 export const CitasSlice = createSlice({
@@ -22,14 +23,22 @@ export const CitasSlice = createSlice({
            state.cita.push(action.payload)
         },
 
-        onUpdateNegocio: (state, action: PayloadAction<CitasInterfaceCita> ) => {
+        onUpdateCita: (state, action: PayloadAction<CitasInterfaceCita> ) => {
             state.cita = state.cita.map(
              e => e._id === action.payload._id ? action.payload : e
             )
-         },
+        },
+        
+        onGetCitaActiva: (state, action: PayloadAction<CitasInterfaceCita> ) => {
+            state.citaActiva = action.payload
+        },
+
+        onClearCitaActiva: ( state ) => {
+            state.citaActiva = null
+        },
    }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { isOpenCita, onGetCita, onCreateCita, onUpdateNegocio } = CitasSlice.actions;
+export const { isOpenCita, onGetCita, onCreateCita, onUpdateCita, onGetCitaActiva, onClearCitaActiva } = CitasSlice.actions;

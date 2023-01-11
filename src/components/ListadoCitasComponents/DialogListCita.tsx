@@ -1,29 +1,45 @@
-import { Dispatch, SetStateAction, forwardRef, useState } from "react";
+import { ChangeEvent, forwardRef, Fragment, useState, useEffect } from 'react';
 
-import { Dialog, Slide, Button, DialogContent, DialogActions, IconButton, DialogTitle, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography, Box } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 
-import { ArrowBackIos } from "@mui/icons-material";
-import Grid from "@mui/material/Grid";
-import Avatar from "@mui/material/Avatar";
-import moment from 'moment';
-import Autocomplete from '@mui/material/Autocomplete';
-import { top100Films } from "../../utils/Search";
-import { useAppDispatch } from '../../store/hooks';
-import { isOpenDialogConfirm } from "../../store/dialogConfirm/dialogConfirmSlice";
-import { toast } from "react-hot-toast";
+import { FormBarber } from "./";
 
-interface UsuariosProps {
-  Barbero: string;
-  Servicio: string;
-  Hora: number;
-  fecha: number;
+import { ArrowBackIos, Search } from '@mui/icons-material';
+import IconButton from '@mui/material/IconButton/IconButton';
+
+import { useNavigate } from 'react-router-dom';
+
+import { motion, useIsPresent } from 'framer-motion';
+
+import { useResponsive } from '../../hooks/useResponsive';
+
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+
+import { isOpenCita } from '../../store/citas/CitasSlice';
+
+import { useFormik } from 'formik';
+
+import * as Yup from 'yup'
+import { createCita } from '../../store/citas/thunk';
+import { EstadoType } from '../../interfaces/citasInterface';
+
+type horas = {
+  fecha: string;
+  hora: string | undefined | number;
 }
 
-interface DialogProps extends UsuariosProps {
-  showDialog: boolean;
-  setShowDialog: Dispatch<SetStateAction<boolean>>;
-  respWidth: number;
+type service = {
+  servicio: string;
+  tiempo: string;
+  minHor: string
+}
+
+interface formValuesProps {
+  hora: string;
+  barbero: string;
+  servicio: service[];
+  estado: EstadoType;
 }
 
 const Transition = forwardRef(function Transition(
@@ -35,34 +51,194 @@ const Transition = forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
-export const DialogListCita = ({ showDialog, setShowDialog, respWidth, fecha, Hora }: DialogProps) => {
+export const DialogListCita = () => {
 
   const dispatch = useAppDispatch();
+  
+  const { isOpen } = useAppSelector( state => state.ct );
+
+  const { usuarioActivo } = useAppSelector( state => state.auth );
 
   const handleClose = () => {
-    setShowDialog(false)
-    toast.success('Cita actualizada');
+    dispatch( isOpenCita(false) )
   }
 
-  const handleCancelarCita = () => {
-    dispatch( 
-      isOpenDialogConfirm(
-        { 
-          isOpen: true, 
-          // function: holaM, 
-          content: '¿Está seguro que desea cancelar esta cita?' 
-        }
-      ) 
-    )
+  const [count, setCont] = useState(0)
+
+  const [formValues, setFormValues] = useState<formValuesProps[]>([
+    {
+      hora: '',
+      barbero: '',
+      servicio: [],
+      estado: 'En-espera'
+    }
+  ])
+
+  const [ninos, setNinos] = useState(false)
+
+  const {handleSubmit, touched, errors} = useFormik({
+    initialValues: {
+      cita: formValues
+    },
+    enableReinitialize: true,
+    onSubmit: ({ cita }) => {
+
+      let nuevaCita: any = []
+
+      for (let index = 0; index < cita.length; index++) {
+        const element = cita[index];
+
+        nuevaCita.push({ barberId: element.barbero, usuarioId: usuarioActivo?._id, hora: element.hora, servicio: element.servicio, nombre: ( index > 0 ) ? usuarioActivo?.name + ' niño ' + index : usuarioActivo?.name, estado: element.estado })
+        
+      }
+
+      dispatch( createCita(nuevaCita, ninos) )
+      
+    },
+    validationSchema: Yup.object({
+      cita: Yup.array().of(Yup.object({
+        hora: Yup.string().required('Requerido'),
+        barbero: Yup.string().required('Requerido'),
+        servicio: Yup.array().of(Yup.object({
+          servicio: Yup.string().required('Requerido'),
+          tiempo: Yup.string().required('Requerido'),
+          minHor: Yup.string().required('Requerido'),
+        })).min(1, 'Debe de seleccionar al menos un servicio')
+      }))
+    })
+  })
+
+  const addNino = () => {
+    setFormValues([
+      ...formValues,
+      {
+        hora: '',
+        barbero: '',
+        servicio: [],
+        estado: 'En-espera'
+      }
+    ])
+    setCont( prev => prev + 1 )
   }
 
+  const handleChange = ( i: number, { target }: ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ) => {
+    let newFormValues = [ ...formValues ]
+    newFormValues[i] = {
+      ...newFormValues[i],
+      [target.name]: target.value
+    }
+
+    setFormValues(newFormValues)
+  }
+
+  const handleChangeBarber = ( i: number, e: string ) => {
+    let newFormValues = [ ...formValues ]
+
+    newFormValues[i].barbero = e
+
+    setFormValues(newFormValues)
+  }
+
+  const handleChangeAutoComplete = ( i: number, e: service[] ) => {
+    let newFormValues = [ ...formValues ]
+
+    newFormValues[i].servicio = [ ...e ]
+
+    setFormValues(newFormValues)
+  }
+
+  const deleteNino = ( i: number ) => {
+    let newFormValues = [ ...formValues ]
+
+    newFormValues.splice( i, 1 )
+    
+    setFormValues([ ...newFormValues ])
+
+    setCont( prev => prev - 1 )
+  }
+
+  const navigate = useNavigate()
+
+  const handleBarber = () => {
+    dispatch( isOpenCita(false) )
+    const timeout = setTimeout(() => {
+      navigate('/Barberos')
+      clearTimeout(timeout)
+    }, 350);
+  }
+
+  const isPresent = useIsPresent();
+
+  const [ respWidth ] = useResponsive()
+
+  // let arreglo: horas[] = []
+
+  // for (let index = 0; index < 20; index++) {
+
+  //   let horaSuma = 30
+
+  //   if ( index === 0 ) {
+  //     arreglo.push({ fecha: moment(), hora: moment().format('hh:mm a') })
+  //   } else {
+  //     if ( index === 1 ) {
+  //       arreglo.push({fecha: moment().add(horaSuma, 'minutes'), hora: moment().add(horaSuma, 'minutes').format('hh:mm a')})
+  //     } else {
+  //       // if ( index === 10 ) {
+  //       //   let fecha = arreglo[index - 1]?.fecha?.clone().add(10, 'minutes')
+  //       //   let hora = arreglo[index - 1]?.fecha?.clone().add(10, 'minutes').format('hh:mm a')
+  //       //   arreglo.push({ fecha, hora })
+  //       // } else {
+
+  //         // if ( index === 11 ) {
+  //         //   let fecha = arreglo[index - 1]?.fecha?.clone().add(20, 'minutes')
+  //         //   let hora = arreglo[index - 1]?.fecha?.clone().add(20, 'minutes').format('hh:mm a')
+  //         //   arreglo.push({ fecha, hora })
+  //         // } else {
+  //         //   let fecha = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes')
+  //         //   let hora = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes').format('hh:mm a')
+  //         //   arreglo.push({ fecha, hora })
+  //         // }
+  //         let fecha = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes')
+  //         let hora = arreglo[index - 1]?.fecha?.clone().add(horaSuma, 'minutes').format('hh:mm a')
+  //         arreglo.push({ fecha, hora })
+  //       // }
+  //     }
+  //   }
+    
+  // }
+
+  // // console.log(arreglo)
+
+  // useEffect(() => {
+  //   if ( arreglo?.length === 0 ) return
+
+  //   let lol = []
+
+  //   // arreglo?.map( ( e, index ) => (arreglo[index + 1]?.fecha?.diff(e.fecha, 'minutes')! < 30) && e.fecha)
+
+  //   lol = arreglo?.map( ( e, index ) => (index === 10) ? { fecha: e.fecha?.clone()?.subtract(20, 'minutes'), hora: e.fecha?.clone()?.subtract(20, 'minutes').format('hh:mm a') } : {fecha: e.fecha, hora: e.hora})
+
+  //   lol.push({ fecha: arreglo[10].fecha?.clone(), hora: arreglo[10].fecha?.clone().format('hh:mm a') })
+
+  //   lol.sort( (a:horas, b: horas) => a.fecha!.unix() - b.fecha!.unix() )
+
+  //   // console.log({fecha: arreglo[10].fecha?.clone()?.subtract(20, 'minutes'), hora: arreglo[10].fecha?.clone()?.subtract(20, 'minutes').format('hh:mm a')})
+
+  //   // console.log(lol)
+
+  // }, [])
+
+  const handleSubmitCita = () => {
+    document.getElementById('buttonSubmitCita')?.click()
+  }
+  
   return (
     <Dialog
-      open={ showDialog }
+      open={ isOpen }
       fullWidth
-      fullScreen = { ( respWidth < 400 ) }
+      fullScreen = { ( respWidth <= 600 ) }
       TransitionComponent={ Transition }
-      maxWidth = 'xs'
+      maxWidth = 'sm'
       onClose={ handleClose }
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
@@ -71,87 +247,80 @@ export const DialogListCita = ({ showDialog, setShowDialog, respWidth, fecha, Ho
         style: { borderRadius: '11px' }
       }}
     >
-      <DialogTitle align="center">
-        <IconButton onClick={ handleClose } sx={{ position: 'absolute', left: 24, top: 12.10 }}>
+      <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <IconButton onClick={ handleClose }>
           <ArrowBackIos />
         </IconButton>
-        Información de la cita
+        
+        Crear cita
+
+        <Typography variant='h6'>{ count + 1 } / { formValues.length }</Typography>
       </DialogTitle>
 
       <DialogContent>
-
-        <Grid mb={ 1 } textAlign={ 'end' }> 
-          { moment(fecha).format('MMMM Do YYYY') }
-        </Grid>
-
-        <Grid item container>
-          <Grid display={ 'flex' } sx={{ mx: 'auto' }}> 
-            <Avatar sx={{ width: '182px', height: '182px' }} src={ 'https://mui.com/static/images/avatar/5.jpg' } />
+        <Grid display={ 'flex' } justifyContent = { 'space-between' }>
+          <Grid>
+            <Typography variant='h5' p={ 2 }>Mis barberos</Typography>
           </Grid>
-        </Grid>
-
-        <Grid item container p={ 2 }>
-
-          <Grid px={ 1 } xs = { 6 }>
-            <TextField
-              id="outlined-select-currency"
-              label="Hora"
-              defaultValue="3:00"
-              inputProps={
-                { readOnly: true, }
+          <Grid display={ 'flex' } alignItems = { 'center' }>
+            <Button size='large' onClick={ handleBarber } variant='contained' color='inherit' endIcon = { <Search /> }>
+              {
+                ( respWidth > 991 )
+                  ?
+                'Buscar más Barberos'
+                  :
+                'Barberos'  
               }
-            >
-            </TextField>
-          </Grid>
-
-          <Grid px={ 1 } xs = { 6 }>
-            <TextField
-              fullWidth
-              id="outlined-select-currency"
-              label="Barbero"
-              defaultValue="Fulano"
-              inputProps={
-                { readOnly: true, }
-              }
-            >
-            </TextField>
-          </Grid>
-          
-          <Grid px={ 1 } mt={ 3 } xs = { 12 }>
-            <Autocomplete
-              multiple
-              id="tags-outlined"
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              // defaultValue={[top100Films[13], top100Films[11]]}
-              fullWidth
-              filterSelectedOptions
-              popupIcon = { false }
-              readOnly
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Servicios"
-                  placeholder="..."
-                />
-              )}
-            />
+            </Button>
           </Grid>
         </Grid>
-        
+
+        <Box component={ 'form' } onSubmit = { handleSubmit }>
+
+          {
+            formValues.map( (e, index) =>  (
+              <Fragment key={ index }>
+                {
+                  ( index === count )
+                    &&
+                  <motion.div
+                    initial={{ width: '100%', opacity: 0, scaleX: 0 }}
+                    animate={{ width: '100%', scaleX: 1, opacity: 1, transition: { duration: 0.5, ease: "linear" } }}
+                    exit={{ scaleX: 0.5, transition: { duration: 0.3, ease: "linear" } }}
+                    style={{ originX: isPresent ? 0 : 2 }}
+                  >
+                    <FormBarber 
+                      count = { count }
+                      setCont = { setCont }
+                      formCount = { formValues.length }
+                      { ...formValues[index] }
+                      ninos = { ninos }
+                      setNinos = { setNinos }
+                      addNino = { addNino }
+                      deleteNino = { deleteNino }
+                      handleChange = { handleChange }
+                      handleChangeAutoComplete = { handleChangeAutoComplete }
+                      // handleChangeHora = { handleChangeHora }
+                      handleChangeBarber = { handleChangeBarber }
+                      // minTime = { ( index > 0 ) ? formValues[index - 1].hora : moment() }
+                      touchedBarbero = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].barbero : false }
+                      touchedHora = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].hora : false }
+                      touchedServicio = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].servicio : false }
+                      errors = { ( errors?.cita && errors?.cita?.length > 0 ) ? errors.cita[index] : false }
+                      formValues = { formValues }
+                    />
+                  </motion.div>
+                }
+              </Fragment>
+            ))
+          }
+          <button id='buttonSubmitCita' hidden></button>
+        </Box>
+
       </DialogContent>
       
       <DialogActions sx={{ p: 2 }}>
-        {
-          ( Hora === 1 )
-            ?
-          <>
-            <Button fullWidth onClick={ handleCancelarCita } color = { 'inherit' } variant='contained'>Cancelar cita</Button>
-            <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Actualizar</Button>
-          </>
-            :
-          <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Cerrar</Button>
-        }
+        <Button onClick={ handleSubmitCita } type = 'submit' fullWidth color = { 'inherit' } variant='contained'>Crear cita</Button>
       </DialogActions>
     </Dialog>
   )

@@ -17,7 +17,7 @@ type service = {
 
 interface formValuesProps {
     hora: string;
-    barbero: string;
+    barberId: string;
     servicio: service[]
 }
 
@@ -26,7 +26,7 @@ interface FormBarberProps {
     setCont: Dispatch<SetStateAction<number>>;
     formCount: number
     hora: string;
-    barbero: string;
+    barberId: string;
     servicio: service[];
     ninos: boolean;
     setNinos: Dispatch<SetStateAction<boolean>>;
@@ -49,7 +49,7 @@ export const FormBarber = ({
     setCont, 
     formCount, 
     hora, 
-    barbero, 
+    barberId, 
     servicio, 
     ninos, 
     setNinos, 
@@ -68,23 +68,25 @@ export const FormBarber = ({
 
     const { negocio } = useAppSelector( state => state.ng );
 
+    const { citaActiva } = useAppSelector( state => state.ct );
+
     const { usuarioActivo, usuarios } = useAppSelector( state => state.auth );
 
-    const negocioFilt = negocio.find( neg => neg.barberId === barbero )
+    const negocioFilt = negocio.find( neg => neg.barberId === barberId )
 
     const handleUpdateServiceCita = ( id: string, hora: string ) => {
         dispatch( updateServiceCita( id, hora, ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count ) )
     }
-
+    
   return (
     <>
         {
-            ( !barbero )
+            ( !barberId )
                 &&
             <Typography my={ 2 } variant='h5' textAlign={ 'center' }>Seleccione su barbero</Typography>
         }
 
-        <SlideImage barbero = { barbero } handleChangeBarber = { handleChangeBarber } count = { count } />
+        <SlideImage barbero = { barberId } handleChangeBarber = { handleChangeBarber } count = { count } />
 
         <Grid item container p={ 2 }>
 
@@ -92,7 +94,7 @@ export const FormBarber = ({
                 <TextField
                     error={ ( touchedBarbero && errors.barbero ) }
                     name='barbero'
-                    value={ barbero }
+                    value={ barberId }
                     onChange = { ({ target }) => handleChangeBarber(count, target.value) }
                     fullWidth
                     id="outlined-select-currency"
@@ -114,8 +116,8 @@ export const FormBarber = ({
 
             <Grid px={ 1 } item xs = { 6 }>
                 <TextField
-                    error={ ( barbero && touchedHora && errors.hora ) }
-                    helperText = { ( barbero && touchedHora && errors.hora ) && errors.hora }
+                    error={ ( barberId && touchedHora && errors.hora ) }
+                    helperText = { ( barberId && touchedHora && errors.hora ) && errors.hora }
                     name='hora'
                     value={ hora }
                     onChange = { ( e ) => handleChange(count, e) }
@@ -145,8 +147,8 @@ export const FormBarber = ({
                     onChange = { ( _, newValue ) => handleChangeAutoComplete(count, newValue) }
                     renderInput={(params) => (
                         <TextField
-                            error={ barbero && servicio.length === 0 && errors.servicio }
-                            helperText = { ( barbero && servicio.length === 0 && errors.servicio ) && errors.servicio }
+                            error={ barberId && servicio.length === 0 && errors.servicio }
+                            helperText = { ( barberId && servicio.length === 0 && errors.servicio ) && errors.servicio }
                             {...params}
                             name='servicio'
                             value={ servicio }
@@ -164,7 +166,7 @@ export const FormBarber = ({
                     <>
                         <FormControlLabel
                             sx={{ my: 2, px: 1 }}
-                            control={<Android12Switch onChange={( e ) => setNinos(e.target.checked) } defaultChecked = { ( ninos ) } value={ ninos } />}
+                            control={<Android12Switch onChange={( e ) => setNinos(e.target.checked) } defaultChecked = { ( citaActiva?.ninos || ninos ) ? true : false } value={ ninos } />}
                             label="¿LLevas niños a ser atendido?"
                         />
 

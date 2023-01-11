@@ -16,14 +16,14 @@ import { useResponsive } from '../../hooks/useResponsive';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
-import { isOpenCita } from '../../store/citas/CitasSlice';
+import { isOpenCita, onClearCitaActiva } from '../../store/citas/CitasSlice';
 
-import moment, { Moment } from 'moment';
 import { useFormik } from 'formik';
 
 import * as Yup from 'yup'
-import { createCita } from '../../store/citas/thunk';
-import { updateServiceCita } from '../../store/socket/thunk';
+import { actualizarCita, createCita } from '../../store/citas/thunk';
+import { EstadoType } from '../../interfaces/citasInterface';
+import { removeAllOrManyServiceCita, removeServiceCita } from '../../store/socket/thunk';
 
 type horas = {
   fecha: string;
@@ -38,8 +38,11 @@ type service = {
 
 interface formValuesProps {
   hora: string;
-  barbero: string;
-  servicio: service[]
+  barberId: string;
+  servicio: service[];
+  estado: EstadoType;
+  nombre?: string;
+  usuarioId?: string;
 }
 
 const Transition = forwardRef(function Transition(
@@ -55,25 +58,39 @@ export const DialogCita = () => {
 
   const dispatch = useAppDispatch();
   
-  const { isOpen } = useAppSelector( state => state.ct );
+  const { isOpen, citaActiva } = useAppSelector( state => state.ct );
 
   const { usuarioActivo } = useAppSelector( state => state.auth );
-
-  const handleClose = () => {
-    dispatch( isOpenCita(false) )
-  }
 
   const [count, setCont] = useState(0)
 
   const [formValues, setFormValues] = useState<formValuesProps[]>([
     {
       hora: '',
-      barbero: '',
+      barberId: '',
       servicio: [],
+      estado: 'En-espera'
     }
   ])
 
   const [ninos, setNinos] = useState(false)
+
+  const handleClose = () => {
+    if ( citaActiva ) {
+      dispatch( onClearCitaActiva() )
+      setFormValues([
+        {
+          hora: '',
+          barberId: '',
+          servicio: [],
+          estado: 'En-espera'
+        }
+      ])
+      setNinos(false)
+      setCont(0)
+    }
+    dispatch( isOpenCita(false) )
+  }
 
   const {handleSubmit, touched, errors} = useFormik({
     initialValues: {
@@ -84,20 +101,35 @@ export const DialogCita = () => {
 
       let nuevaCita: any = []
 
-      for (let index = 0; index < cita.length; index++) {
-        const element = cita[index];
+      let citaCortada = [ ...cita ]
 
-        nuevaCita.push({ barberId: element.barbero, usuarioId: usuarioActivo?._id, hora: element.hora, servicio: element.servicio, nombre: ( index > 0 ) ? usuarioActivo?.name + ' niño ' + index : usuarioActivo?.name })
+      if ( !ninos && cita.length > 1 ) {
+        citaCortada = cita.slice( 0, 1 )
+
+        const citaBorrar = cita.slice(1)
+
+        dispatch( removeAllOrManyServiceCita(citaBorrar) )
+      }
+
+      const id = citaActiva?._id!
+
+      for (let index = 0; index < citaCortada.length; index++) {
+        const element = citaCortada[index];
+
+        nuevaCita.push({ barberId: element.barberId, usuarioId: usuarioActivo?._id, hora: element.hora, servicio: element.servicio, nombre: ( index > 0 ) ? usuarioActivo?.name + ' niño ' + index : usuarioActivo?.name, estado: element.estado })
         
       }
 
-      dispatch( createCita(nuevaCita, ninos) )
-      
+      if ( !citaActiva ) {
+        dispatch( createCita(nuevaCita, ninos) )
+      } else {
+        dispatch( actualizarCita(id, nuevaCita, ninos) )
+      }
     },
     validationSchema: Yup.object({
       cita: Yup.array().of(Yup.object({
         hora: Yup.string().required('Requerido'),
-        barbero: Yup.string().required('Requerido'),
+        barberId: Yup.string().required('Requerido'),
         servicio: Yup.array().of(Yup.object({
           servicio: Yup.string().required('Requerido'),
           tiempo: Yup.string().required('Requerido'),
@@ -112,8 +144,9 @@ export const DialogCita = () => {
       ...formValues,
       {
         hora: '',
-        barbero: '',
+        barberId: '',
         servicio: [],
+        estado: 'En-espera'
       }
     ])
     setCont( prev => prev + 1 )
@@ -132,7 +165,7 @@ export const DialogCita = () => {
   const handleChangeBarber = ( i: number, e: string ) => {
     let newFormValues = [ ...formValues ]
 
-    newFormValues[i].barbero = e
+    newFormValues[i].barberId = e
 
     setFormValues(newFormValues)
   }
@@ -147,6 +180,10 @@ export const DialogCita = () => {
 
   const deleteNino = ( i: number ) => {
     let newFormValues = [ ...formValues ]
+
+    if ( newFormValues[i].barberId && newFormValues[i].hora ) {
+      dispatch( removeServiceCita(newFormValues[i].barberId, usuarioActivo?._id + ' nino ' + i) )
+    }
 
     newFormValues.splice( i, 1 )
     
@@ -164,6 +201,15 @@ export const DialogCita = () => {
       clearTimeout(timeout)
     }, 350);
   }
+
+  useEffect(() => {
+    if ( citaActiva ) {
+      setFormValues(citaActiva.cita)
+      setNinos( citaActiva.ninos )
+    }
+
+  }, [citaActiva])
+  
 
   const isPresent = useIsPresent();
 
@@ -249,9 +295,15 @@ export const DialogCita = () => {
         <IconButton onClick={ handleClose }>
           <ArrowBackIos />
         </IconButton>
-        
-        Crear cita
 
+        {
+          ( !citaActiva )
+            ?
+          'Crear cita'
+            :
+          'Actualizar cita'
+        }
+        
         <Typography variant='h6'>{ count + 1 } / { formValues.length }</Typography>
       </DialogTitle>
 
@@ -301,7 +353,7 @@ export const DialogCita = () => {
                       // handleChangeHora = { handleChangeHora }
                       handleChangeBarber = { handleChangeBarber }
                       // minTime = { ( index > 0 ) ? formValues[index - 1].hora : moment() }
-                      touchedBarbero = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].barbero : false }
+                      touchedBarbero = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].barberId : false }
                       touchedHora = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].hora : false }
                       touchedServicio = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].servicio : false }
                       errors = { ( errors?.cita && errors?.cita?.length > 0 ) ? errors.cita[index] : false }
@@ -318,7 +370,15 @@ export const DialogCita = () => {
       </DialogContent>
       
       <DialogActions sx={{ p: 2 }}>
-        <Button onClick={ handleSubmitCita } type = 'submit' fullWidth color = { 'inherit' } variant='contained'>Crear cita</Button>
+        <Button onClick={ handleSubmitCita } type = 'submit' fullWidth color = { 'inherit' } variant='contained'>
+          {
+            ( !citaActiva )
+              ?
+            'Crear cita'
+              :
+            'Actualizar cita'
+          }
+        </Button>
       </DialogActions>
     </Dialog>
   )

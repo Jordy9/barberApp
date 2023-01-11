@@ -10,13 +10,10 @@ import moment from "moment";
 
 import { useResponsive } from '../../hooks/useResponsive';
 import { DialogListCita } from './';
-
-interface UsuariosProps {
-    Barbero: string;
-    Servicio: string;
-    Hora: number;
-    fecha: number;
-}
+import { CitasInterfaceCita } from '../../interfaces/citasInterface';
+import { IconCondicionBarber } from '../DashboardComponents';
+import { useAppDispatch } from '../../store/hooks';
+import { isOpenCita, onGetCitaActiva } from '../../store/citas/CitasSlice';
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -33,9 +30,11 @@ interface ExpandMoreProps extends IconButtonProps {
     }),
   }));
 
-export const TableCitaContent = ( props: UsuariosProps ) => {
+export const TableCitaContent = ( props: CitasInterfaceCita ) => {
 
-    const { Barbero, Servicio, Hora, fecha } = props
+    const dispatch = useAppDispatch();
+
+    const { _id, cita, createdAt, ninos } = props
 
     const [expanded, setExpanded] = useState(false);
 
@@ -47,6 +46,11 @@ export const TableCitaContent = ( props: UsuariosProps ) => {
 
     const [showDialog, setShowDialog] = useState(false)
 
+    const handleOpenCita = ( props: CitasInterfaceCita ) => {
+        dispatch( onGetCitaActiva(props))
+        dispatch( isOpenCita(true))
+    }
+
   return (
     <>
         <TableRow
@@ -54,11 +58,23 @@ export const TableCitaContent = ( props: UsuariosProps ) => {
         >
 
             <TableCell size='small' align='center' component="th" scope="row">
-                { Barbero }
+                { 
+                    ( ninos )
+                        ?
+                    cita[0].barberId + ', ...'
+                        :
+                    cita[0].barberId
+                }
             </TableCell>
 
             <TableCell size='small' align='center' component="th" scope="row">
-                { Hora }
+                { 
+                    ( ninos )
+                        ?
+                    cita[0].hora + ', ...'
+                        :
+                    cita[0].hora
+                }
             </TableCell>
 
             {
@@ -66,11 +82,17 @@ export const TableCitaContent = ( props: UsuariosProps ) => {
                     ?
                 <>
                     <TableCell size='small' align='center' component="th" scope="row">
-                        { Servicio }
+                        { 
+                            ( ninos )
+                                ?
+                            cita[0].servicio[0].servicio + ', ...'
+                                :
+                            cita[0].servicio[0].servicio
+                        }
                     </TableCell>
 
                     <TableCell size='small' align='center' component="th" scope="row">
-                        { moment(fecha).format('MMMM Do YYYY') }
+                        { moment(createdAt).format('MMMM Do YYYY') }
                     </TableCell>
                 </>
                     :
@@ -87,7 +109,7 @@ export const TableCitaContent = ( props: UsuariosProps ) => {
             }
 
             <TableCell size='small' sx={{ display: 'flex', justifyContent: 'center' }}>
-                <IconButton onClick={ () => setShowDialog(true) } color = 'info'>
+                <IconButton onClick={ () => handleOpenCita( props ) } color = 'info'>
                     <VisibilityOutlined />
                 </IconButton> 
             </TableCell>
@@ -114,11 +136,17 @@ export const TableCitaContent = ( props: UsuariosProps ) => {
                                 >
 
                                     <TableCell size='small' align='center' component="th" scope="row">
-                                        { Servicio }
+                                        { 
+                                            ( ninos )
+                                                ?
+                                            cita[0].servicio[0].servicio + ', ...'
+                                                :
+                                            cita[0].servicio[0].servicio
+                                        }
                                     </TableCell>
 
                                     <TableCell size='small' align='center' component="th" scope="row">
-                                        { moment(fecha).format('MMMM Do YYYY') }
+                                        { moment(createdAt).format('MMMM Do YYYY') }
                                     </TableCell>
 
                                 </TableRow>
@@ -129,12 +157,12 @@ export const TableCitaContent = ( props: UsuariosProps ) => {
             </TableCell>
         }
 
-        <DialogListCita
+        {/* <DialogListCita
             showDialog = { showDialog }
             setShowDialog = { setShowDialog }
             respWidth = { respWidth }
             { ...props }
-        />
+        /> */}
     </>
   )
 }

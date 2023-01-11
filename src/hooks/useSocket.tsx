@@ -48,6 +48,18 @@ export const useSocket = ( serverPath: string ) => {
         });
     }, [ socket ])
 
+    useEffect(() => {
+        socket?.on('removed-service-cita', ( resp ) => {
+            dispatch( onUpdateNegocio(resp) )
+        });
+    }, [ socket ])
+
+    useEffect(() => {
+        socket?.on('removed-all-or-many-service-cita', ( resp ) => {
+            dispatch( onUpdateNegocio(resp) )
+        });
+    }, [ socket ])
+
     // useEffect(() => {
     //     socket?.on('disconnect', () => setOnline( false ));
     // }, [ socket ])

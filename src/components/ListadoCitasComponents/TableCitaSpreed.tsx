@@ -1,3 +1,4 @@
+import { useAppSelector } from "../../store/hooks";
 import { TableCitaContent } from "./"
 
 interface UsuariosProps {
@@ -8,6 +9,8 @@ interface UsuariosProps {
 }
 
 export const TableCitaSpreed = () => {
+
+    const { cita } = useAppSelector( state => state.ct );
 
     const arreglo: UsuariosProps[] = [
         {
@@ -45,8 +48,8 @@ export const TableCitaSpreed = () => {
   return (
     <>
         {
-            arreglo.map( usuario => (
-                <TableCitaContent key={ usuario.Hora } { ...usuario } />
+            cita.map( cita => (
+                <TableCitaContent key={ cita._id } { ...cita } />
             ))
         }
     </>

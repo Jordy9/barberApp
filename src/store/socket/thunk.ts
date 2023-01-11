@@ -10,7 +10,7 @@ interface startServiceProps {
 
 
 export const startService = ({ firstValue, secondValue, id, thirdValue }: startServiceProps) => {
-    return ( dispatch: Dispatch, getState: any) => {
+    return ( dispatch: Dispatch, getState: any ) => {
 
         const { socket } = getState().sk;
 
@@ -20,11 +20,31 @@ export const startService = ({ firstValue, secondValue, id, thirdValue }: startS
 }
 
 export const updateServiceCita = ( id: string, hora: string, uid: string ) => {
-    return ( dispatch: Dispatch, getState: any) => {
+    return ( dispatch: Dispatch, getState: any ) => {
 
         const { socket } = getState().sk;
 
         socket?.emit('update-service-cita', { id, hora, uid })
+
+    }
+}
+
+export const removeServiceCita = ( id: string, uid: string ) => {
+    return ( dispatch: Dispatch, getState: any ) => {
+
+        const { socket } = getState().sk;
+
+        socket?.emit('remove-service-cita', { id, uid })
+
+    }
+}
+
+export const removeAllOrManyServiceCita = ( content: any ) => {
+    return ( dispatch: Dispatch, getState: any ) => {
+
+        const { socket } = getState().sk;
+
+        socket?.emit('remove-all-or-many-service-cita', content)
 
     }
 }
