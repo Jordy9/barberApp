@@ -23,7 +23,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import { actualizarCita, createCita } from '../../store/citas/thunk';
 import { EstadoType } from '../../interfaces/citasInterface';
-import { removeAllOrManyServiceCita, removeServiceCita } from '../../store/socket/thunk';
+import { removeAllOrManyServiceCita, removeManyServiceCita, removeServiceCita, removeServiceCitaForm } from '../../store/socket/thunk';
+import { toast } from 'react-hot-toast';
 
 type horas = {
   fecha: string;
@@ -78,8 +79,11 @@ export const DialogCita = () => {
   const handleClose = () => {
     if ( citaActiva ) {
       dispatch( onClearCitaActiva() )
+      if ( formValues.some( e => e.hora ) ) {
+        dispatch( removeAllOrManyServiceCita() )
+      }
     } else if ( formValues.some( e => e.hora ) ) {
-      dispatch( removeAllOrManyServiceCita(formValues) )
+      dispatch( removeAllOrManyServiceCita() )
     }
     setFormValues([
       {
@@ -110,23 +114,28 @@ export const DialogCita = () => {
 
         const citaBorrar = cita.slice(1)
 
-        dispatch( removeAllOrManyServiceCita(citaBorrar) )
+        dispatch( removeManyServiceCita(citaBorrar) )
       }
+
+      const ninosValid = ( ninos && cita.length === 1 ) ? false : ninos
 
       const id = citaActiva?._id!
 
       for ( let index = 0; index < citaCortada.length; index++ ) {
         const element = citaCortada[index];
 
-        nuevaCita.push({ barberId: element.barberId, usuarioId: usuarioActivo?._id, hora: element.hora, servicio: element.servicio, nombre: ( index > 0 ) ? usuarioActivo?.name + ' niño ' + index : usuarioActivo?.name, estado: element.estado })
+        nuevaCita.push({ barberId: element.barberId, usuarioId: ( index === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + index , hora: element.hora, servicio: element.servicio, nombre: ( index > 0 ) ? usuarioActivo?.name + ' niño ' + index : usuarioActivo?.name, estado: element.estado })
         
       }
 
       if ( !citaActiva ) {
-        dispatch( createCita(nuevaCita, ninos, usuarioActivo?._id!) )
+        dispatch( createCita(nuevaCita, ninosValid, usuarioActivo?._id!) )
+        dispatch( removeServiceCitaForm() )
       } else {
-        dispatch( actualizarCita(id, nuevaCita, ninos, usuarioActivo?._id!) )
+        dispatch( actualizarCita(id, nuevaCita, ninosValid, usuarioActivo?._id!) )
+        dispatch( removeServiceCitaForm() )
       }
+
     },
     validationSchema: Yup.object({
       cita: Yup.array().of(Yup.object({
@@ -216,6 +225,12 @@ export const DialogCita = () => {
 
   const [ respWidth ] = useResponsive()
 
+  useEffect(() => {
+    if ( formValues.length > 1 && errors.cita && errors.cita?.length > 0 ) {
+      toast.error('Revise que haya llenado todos los campos correctamente, incluyendo los de los niños', { position: 'top-right' })
+    }
+  }, [errors])
+  
   // let arreglo: horas[] = []
 
   // for (let index = 0; index < 20; index++) {
@@ -354,10 +369,10 @@ export const DialogCita = () => {
                       // handleChangeHora = { handleChangeHora }
                       handleChangeBarber = { handleChangeBarber }
                       // minTime = { ( index > 0 ) ? formValues[index - 1].hora : moment() }
-                      touchedBarbero = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].barberId : false }
-                      touchedHora = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].hora : false }
-                      touchedServicio = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index].servicio : false }
-                      errors = { ( errors?.cita && errors?.cita?.length > 0 ) ? errors.cita[index] : false }
+                      touchedBarbero = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index]?.barberId : false }
+                      touchedHora = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index]?.hora : false }
+                      touchedServicio = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index]?.servicio : false }
+                      errors = { ( errors?.cita ) ? errors?.cita[index] : false }
                       formValues = { formValues }
                     />
                   </motion.div>

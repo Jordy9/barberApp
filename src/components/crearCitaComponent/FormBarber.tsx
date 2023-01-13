@@ -5,7 +5,7 @@ import { Android12Switch } from "../../utils/Search"
 import { SlideImage } from "./"
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { updateServiceCita } from '../../store/socket/thunk';
+import { createServiceCitaForm, updateServiceCita } from '../../store/socket/thunk';
 import Typography from '@mui/material/Typography';
 import { FormikTouched } from 'formik';
 
@@ -76,6 +76,7 @@ export const FormBarber = ({
 
     const handleUpdateServiceCita = ( id: string, hora: string ) => {
         dispatch( updateServiceCita( id, hora, ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count ) )
+        dispatch( createServiceCitaForm({ barberId: id, hora, usuarioId: ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count, estado: ( citaActiva ) ? 'Update' : 'Create' }) )
     }
 
     const uid = ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count
@@ -94,14 +95,14 @@ export const FormBarber = ({
 
             <Grid px={ 1 } item xs = { 6 }>
                 <TextField
-                    error={ ( touchedBarbero && errors.barbero ) }
+                    error={ ( touchedBarbero && errors?.barberId ) }
                     name='barbero'
                     value={ barberId }
                     onChange = { ({ target }) => handleChangeBarber(count, target.value) }
                     fullWidth
                     id="outlined-select-currency"
                     select
-                    helperText = { ( touchedBarbero && errors.barbero ) && errors.barbero }
+                    helperText = { ( touchedBarbero && errors?.barberId ) && errors?.barberId }
                     label="Barbero"
                 >
                     <MenuItem value={ '' }>
@@ -118,8 +119,8 @@ export const FormBarber = ({
 
             <Grid px={ 1 } item xs = { 6 }>
                 <TextField
-                    error={ ( barberId && touchedHora && errors.hora ) }
-                    helperText = { ( barberId && touchedHora && errors.hora ) && errors.hora }
+                    error={ ( barberId && touchedHora && errors?.hora ) }
+                    helperText = { ( barberId && touchedHora && errors?.hora ) && errors?.hora }
                     name='hora'
                     value={ hora }
                     onChange = { ( e ) => handleChange(count, e) }
@@ -151,8 +152,8 @@ export const FormBarber = ({
                     onChange = { ( _, newValue ) => handleChangeAutoComplete(count, newValue) }
                     renderInput={(params) => (
                         <TextField
-                            error={ barberId && servicio.length === 0 && errors.servicio }
-                            helperText = { ( barberId && servicio.length === 0 && errors.servicio ) && errors.servicio }
+                            error={ barberId && servicio.length === 0 && errors?.servicio }
+                            helperText = { ( barberId && servicio.length === 0 && errors?.servicio ) && errors?.servicio }
                             {...params}
                             name='servicio'
                             value={ servicio }
@@ -170,7 +171,7 @@ export const FormBarber = ({
                     <>
                         <FormControlLabel
                             sx={{ my: 2, px: 1 }}
-                            control={<Android12Switch onChange={( e ) => setNinos(e.target.checked) } defaultChecked = { ( citaActiva?.ninos || ninos ) ? true : false } value={ ninos } />}
+                            control={<Android12Switch onChange={ ( e ) => setNinos(e.target.checked) } defaultChecked = { ( citaActiva?.ninos || ninos ) ? true : false } value={ ninos } />}
                             label="¿LLevas niños a ser atendido?"
                         />
 

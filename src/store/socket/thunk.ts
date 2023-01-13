@@ -29,6 +29,26 @@ export const updateServiceCita = ( id: string, hora: string, uid: string ) => {
     }
 }
 
+export const createServiceCitaForm = ( form: any ) => {
+    return ( dispatch: Dispatch, getState: any ) => {
+
+        const { socket } = getState().sk;
+
+        socket?.emit('create-service-cita-form', form)
+
+    }
+}
+
+export const removeServiceCitaForm = () => {
+    return ( dispatch: Dispatch, getState: any ) => {
+
+        const { socket } = getState().sk;
+
+        socket?.emit('remove-service-cita-form')
+
+    }
+}
+
 export const removeServiceCita = ( id: string, uid: string ) => {
     return ( dispatch: Dispatch, getState: any ) => {
 
@@ -39,12 +59,22 @@ export const removeServiceCita = ( id: string, uid: string ) => {
     }
 }
 
-export const removeAllOrManyServiceCita = ( content: any ) => {
+export const removeAllOrManyServiceCita = () => {
     return ( dispatch: Dispatch, getState: any ) => {
 
         const { socket } = getState().sk;
 
-        socket?.emit('remove-all-or-many-service-cita', content)
+        socket?.emit('remove-all-or-many-service-cita')
+
+    }
+}
+
+export const removeManyServiceCita = ( content: any ) => {
+    return ( dispatch: Dispatch, getState: any ) => {
+
+        const { socket } = getState().sk;
+
+        socket?.emit('remove-meny-service-cita', content)
 
     }
 }
