@@ -79,9 +79,7 @@ export const DialogCita = () => {
   const handleClose = () => {
     if ( citaActiva ) {
       dispatch( onClearCitaActiva() )
-      if ( formValues.some( e => e.hora ) ) {
-        dispatch( removeAllOrManyServiceCita() )
-      }
+      dispatch( removeAllOrManyServiceCita() )
     } else if ( formValues.some( e => e.hora ) ) {
       dispatch( removeAllOrManyServiceCita() )
     }
@@ -176,17 +174,37 @@ export const DialogCita = () => {
   const handleChangeBarber = ( i: number, e: string ) => {
     let newFormValues = [ ...formValues ]
 
-    newFormValues[i].barberId = e
+    newFormValues[i] = {
+      ...newFormValues[i],
+      barberId: e
+    }
 
     setFormValues(newFormValues)
   }
 
-  const handleChangeAutoComplete = ( i: number, e: service[] ) => {
+  const handleChangeAutoComplete = ( i: number, e: service[], index: number ) => {
     let newFormValues = [ ...formValues ]
 
-    newFormValues[i].servicio = [ ...e ]
+    if ( newFormValues[i].servicio.some( sv => sv.servicio === e[0].servicio ) ) {
 
-    setFormValues(newFormValues)
+      const newForm = newFormValues[i].servicio.filter( sv => sv.servicio !== e[0].servicio)
+
+      newFormValues[i] = {
+        ...newFormValues[i],
+        servicio: newForm
+      }
+      setFormValues(newFormValues)
+
+    } else {
+
+      newFormValues[i] = {
+        ...newFormValues[i],
+        servicio: [ ...newFormValues[i].servicio, ...e ]
+      }
+      setFormValues(newFormValues)
+      
+    }
+
   }
 
   const deleteNino = ( i: number ) => {

@@ -1,6 +1,6 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 
-import { Autocomplete, Button, FormControlLabel, Grid, IconButton, MenuItem, TextField } from "@mui/material"
+import { Autocomplete, Button, FormControlLabel, Grid, IconButton, MenuItem, TextField, FormControl, InputLabel, Select, ListItemText } from '@mui/material';
 import { Android12Switch } from "../../utils/Search"
 import { SlideImage } from "./"
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
@@ -8,6 +8,8 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { createServiceCitaForm, updateServiceCita } from '../../store/socket/thunk';
 import Typography from '@mui/material/Typography';
 import { FormikTouched } from 'formik';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Checkbox from '@mui/material/Checkbox';
 
 type service = {
     servicio: string;
@@ -33,7 +35,7 @@ interface FormBarberProps {
     addNino: () => void;
     deleteNino: (i: number) => void;
     handleChange: (i: number, e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
-    handleChangeAutoComplete: (i: number, e: service[]) => void
+    handleChangeAutoComplete: (i: number, e: service[], index: number) => void
     handleChangeBarber: (i: number, e: string) => void;
     // handleChangeHora: (i: number, e:string ) => void
     // minTime: Moment | null;
@@ -141,27 +143,29 @@ export const FormBarber = ({
             </Grid>
             
             <Grid px={ 1 } mt={ 3 } item xs = { 12 }>
-                <Autocomplete
-                    multiple
-                    id="tags-outlined"
-                    options={negocioFilt?.servicios || []}
-                    getOptionLabel={(option) => option?.servicio}
-                    fullWidth
-                    value={ servicio }
-                    filterSelectedOptions
-                    onChange = { ( _, newValue ) => handleChangeAutoComplete(count, newValue) }
-                    renderInput={(params) => (
-                        <TextField
-                            error={ barberId && servicio.length === 0 && errors?.servicio }
-                            helperText = { ( barberId && servicio.length === 0 && errors?.servicio ) && errors?.servicio }
-                            {...params}
-                            name='servicio'
-                            value={ servicio }
-                            label="Servicios"
-                            placeholder="Servicio"
-                        />
-                    )}
-                />
+
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="demo-multiple-checkbox-label">Servicios</InputLabel>
+                    <Select
+                        fullWidth
+                        labelId="demo-multiple-checkbox-label"
+                        id="demo-multiple-checkbox"
+                        multiple
+                        sx={{ borderRadius: '12px', }}
+                        value={servicio.map( e => e.servicio )}
+                        input={<OutlinedInput label="Servicios" />}
+                        renderValue={(selected) => selected.join(', ')}
+                        // MenuProps={MenuProps}
+                    >
+                    {negocioFilt?.servicios.map((options, index) => (
+                        <MenuItem key={options.servicio} onClick = { () => handleChangeAutoComplete(count, [ options ], index) }>
+                            <Checkbox checked={ servicio.findIndex( e => e.servicio === options.servicio ) > -1 } />
+                            <ListItemText primary={options.servicio} />
+                        </MenuItem>
+                    ))}
+                    </Select>
+                </FormControl>
+                
             </Grid>
 
             <Grid item container display={ 'flex' } justifyContent = { 'space-between' }>

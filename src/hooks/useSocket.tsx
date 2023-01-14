@@ -62,19 +62,8 @@ export const useSocket = ( serverPath: string ) => {
     }, [ socket ])
 
     useEffect(() => {
-        socket?.on('removed-all-or-many-service-cita', ( resp ) => {
-            if ( resp.length === 0 ) return
-
-            resp.forEach((element: any) => {
-                dispatch( onUpdateNegocio(element) )    
-            });
-            
-        });
-    }, [ socket ])
-
-    useEffect(() => {
         socket?.on('disconect-remove-accidentally-service-cita', ( resp ) => {
-            if ( resp.length === 0 ) return
+            if ( !resp || resp.length === 0 ) return
 
             resp.forEach((element: any) => {
                 dispatch( onUpdateNegocio(element) )    
