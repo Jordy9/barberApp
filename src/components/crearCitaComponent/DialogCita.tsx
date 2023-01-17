@@ -22,13 +22,13 @@ import { useFormik } from 'formik';
 
 import * as Yup from 'yup'
 import { actualizarCita, createCita } from '../../store/citas/thunk';
-import { EstadoType } from '../../interfaces/citasInterface';
+import { citaHoraType, EstadoType } from '../../interfaces/citasInterface';
 import { removeAllOrManyServiceCita, removeManyServiceCita, removeServiceCita, removeServiceCitaForm } from '../../store/socket/thunk';
 import { toast } from 'react-hot-toast';
 
 type horas = {
   fecha: string;
-  hora: string | undefined | number;
+  hora: citaHoraType | undefined | number;
 }
 
 type service = {
@@ -38,7 +38,7 @@ type service = {
 }
 
 interface formValuesProps {
-  hora: string;
+  hora: citaHoraType;
   barberId: string;
   servicio: service[];
   estado: EstadoType;
@@ -67,7 +67,7 @@ export const DialogCita = () => {
 
   const [formValues, setFormValues] = useState<formValuesProps[]>([
     {
-      hora: '',
+      hora: { hora: '', fecha: 0 },
       barberId: '',
       servicio: [],
       estado: 'En-espera'
@@ -80,12 +80,12 @@ export const DialogCita = () => {
     if ( citaActiva ) {
       dispatch( onClearCitaActiva() )
       dispatch( removeAllOrManyServiceCita() )
-    } else if ( formValues.some( e => e.hora ) ) {
+    } else if ( formValues.some( e => e.hora.hora ) ) {
       dispatch( removeAllOrManyServiceCita() )
     }
     setFormValues([
       {
-        hora: '',
+        hora: { hora: '', fecha: 0 },
         barberId: '',
         servicio: [],
         estado: 'En-espera'
@@ -137,7 +137,9 @@ export const DialogCita = () => {
     },
     validationSchema: Yup.object({
       cita: Yup.array().of(Yup.object({
-        hora: Yup.string().required('Requerido'),
+        hora: Yup.object({
+          hora: Yup.string().required('Requerido'),
+        }),
         barberId: Yup.string().required('Requerido'),
         servicio: Yup.array().of(Yup.object({
           servicio: Yup.string().required('Requerido'),
@@ -152,7 +154,7 @@ export const DialogCita = () => {
     setFormValues([
       ...formValues,
       {
-        hora: '',
+        hora: { hora: '', fecha: 0 },
         barberId: '',
         servicio: [],
         estado: 'En-espera'
@@ -161,11 +163,11 @@ export const DialogCita = () => {
     setCont( prev => prev + 1 )
   }
 
-  const handleChange = ( i: number, { target }: ChangeEvent<HTMLTextAreaElement | HTMLInputElement> ) => {
+  const handleChange = ( i: number, e: citaHoraType ) => {
     let newFormValues = [ ...formValues ]
     newFormValues[i] = {
       ...newFormValues[i],
-      [target.name]: target.value
+      hora: e
     }
 
     setFormValues(newFormValues)
@@ -210,7 +212,7 @@ export const DialogCita = () => {
   const deleteNino = ( i: number ) => {
     let newFormValues = [ ...formValues ]
 
-    if ( newFormValues[i].barberId && newFormValues[i].hora ) {
+    if ( newFormValues[i].barberId && newFormValues[i].hora.hora ) {
       dispatch( removeServiceCita(newFormValues[i].barberId, usuarioActivo?._id + ' nino ' + i) )
     }
 
@@ -390,7 +392,7 @@ export const DialogCita = () => {
                       handleChangeBarber = { handleChangeBarber }
                       // minTime = { ( index > 0 ) ? formValues[index - 1].hora : moment() }
                       touchedBarbero = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index]?.barberId : false }
-                      touchedHora = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index]?.hora : false }
+                      touchedHora = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index]?.hora?.hora : false }
                       touchedServicio = { ( touched?.cita && touched?.cita?.length > 0 ) ? touched.cita[index]?.servicio : false }
                       errors = { ( errors?.cita ) ? errors?.cita[index] : false }
                       formValues = { formValues }

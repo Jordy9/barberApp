@@ -2,6 +2,11 @@
 
 export type EstadoType = 'En-espera' | 'Cancelada' | 'Finalizada' | 'Atendiendo'
 
+export type citaHoraType = {
+    hora: string;
+    fecha: number;
+}
+
 export interface CitasInterface {
     ok?:   boolean;
     cita: CitasInterfaceCita[];
@@ -23,7 +28,7 @@ export interface nuevaCitasInterfaceCita {
     _id:       string;
     barberId:  string;
     usuarioId: string;
-    hora:      string;
+    hora:      citaHoraType;
     servicio:  Servicio[];
     nombre:    string;
     ninos:     boolean;
@@ -36,7 +41,7 @@ export interface nuevaCitasInterfaceCita {
 export interface CitaCita {
     barberId:  string;
     usuarioId: string;
-    hora:      string;
+    hora:      citaHoraType;
     servicio:  Servicio[];
     nombre:    string;
     estado:    EstadoType;

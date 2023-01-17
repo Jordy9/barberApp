@@ -10,13 +10,13 @@ import moment from 'moment';
 
 import { useResponsive } from "../../hooks/useResponsive";
 import { DialogUserCita, IconCondicionBarber } from './';
-import { nuevaCitasInterfaceCita } from '../../interfaces/citasInterface';
+import { citaHoraType, nuevaCitasInterfaceCita } from '../../interfaces/citasInterface';
 
 interface UsuariosProps {
     foto: string,
     name: string,
     Servicio: string,
-    Hora: number,
+    Hora: citaHoraType,
     fecha: number
 }
 
@@ -73,7 +73,7 @@ export const TableUsersContent = ( props: nuevaCitasInterfaceCita ) => {
                     </TableCell>
 
                     <TableCell size='small' style = {{verticalAlign: 'middle'}} align='center' component="th" scope="row">
-                        { hora }
+                        { hora.hora }
                     </TableCell>
 
                     <TableCell size='small' style = {{verticalAlign: 'middle'}} align='center' component="th" scope="row">
@@ -138,7 +138,7 @@ export const TableUsersContent = ( props: nuevaCitasInterfaceCita ) => {
                                     </TableCell>
 
                                     <TableCell size='small' align='left' component="th" scope="row">
-                                        { hora }
+                                        { hora.hora }
                                     </TableCell>
 
                                     <TableCell size='small' align='left' component="th" scope="row">

@@ -58,10 +58,10 @@ export const TableUserSpreed = () => {
             cita.map( cita => (
                 <Fragment key={ cita._id }>
                     {
-                        cita.cita.map(({ barberId, hora, nombre, servicio, usuarioId }) => {
-                            const nuevaCita = { ...cita, barberId, hora, nombre, servicio, usuarioId }
+                        cita.cita.map(({ barberId, hora, nombre, servicio, usuarioId, estado }) => {
+                            const nuevaCita = { ...cita, barberId, hora, nombre, servicio, usuarioId, estado }
                             return (
-                                <TableUsersContent key={ hora } { ...nuevaCita } />
+                                <TableUsersContent key={ hora.fecha } { ...nuevaCita } />
                             )
                         }
                         )

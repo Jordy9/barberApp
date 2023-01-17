@@ -71,9 +71,9 @@ export const TableCitaContent = ( props: CitasInterfaceCita ) => {
                 { 
                     ( ninos )
                         ?
-                    cita[0].hora + ', ...'
+                    cita[0].hora.hora + ', ...'
                         :
-                    cita[0].hora
+                    cita[0].hora.hora
                 }
             </TableCell>
 

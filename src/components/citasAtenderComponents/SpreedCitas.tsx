@@ -10,25 +10,30 @@ export const SpreedCitas = () => {
   return (
     <>
         {
-            cita.map( cita => (
-                <Fragment key={ cita._id }>
-                    {
-                        cita.cita.map(({ barberId, hora, nombre, servicio, usuarioId, estado }) => {
-                            const nuevaCita = { ...cita, barberId, hora, nombre, servicio, usuarioId, estado }
-                            return (
-                                <>
-                                    {
-                                        ( estado === 'En-espera' )
-                                            &&
-                                        <CitaContent key={ hora } { ...nuevaCita } />
-                                    }
-                                </>
+            cita.map( cita => {
+
+                const citaOrder = [...cita.cita].sort( (a, b) => a.hora.fecha - b.hora.fecha )
+                return (
+
+                    <Fragment key={ cita._id }>
+                        {
+                            citaOrder.map(({ barberId, hora, nombre, servicio, usuarioId, estado }) => {
+                                const nuevaCita = { ...cita, barberId, hora, nombre, servicio, usuarioId, estado }
+                                return (
+                                    <>
+                                        {
+                                            ( estado === 'En-espera' || estado === 'Atendiendo' )
+                                                &&
+                                            <CitaContent key={ hora.hora } { ...nuevaCita } />
+                                        }
+                                    </>
+                                )
+                            }
                             )
                         }
-                        )
-                    }
-                </Fragment>
-            ))
+                    </Fragment>
+                )
+            })
         }
     </>
   )

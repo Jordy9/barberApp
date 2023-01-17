@@ -92,7 +92,7 @@ export const DialogListCita = () => {
         
       }
 
-      dispatch( createCita(nuevaCita, ninos) )
+      dispatch( createCita(nuevaCita, ninos, 'as') )
       
     },
     validationSchema: Yup.object({

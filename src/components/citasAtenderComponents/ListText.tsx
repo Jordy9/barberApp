@@ -1,6 +1,6 @@
 import { Cancel, Check, CheckCircle, Clear, ContentCut, Timer } from '@mui/icons-material';
 import { ListItemText, Grid, Typography, IconButton, Box, LinearProgress, Button } from '@mui/material';
-import { Servicio, EstadoType } from '../../interfaces/citasInterface';
+import { Servicio, EstadoType, citaHoraType } from '../../interfaces/citasInterface';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { removeServiceCita, updateCitaState } from '../../store/socket/thunk';
 import moment from 'moment';
@@ -10,7 +10,7 @@ interface ListTextProps {
     barberId: string;
     _id: string
     nombre: string;
-    hora: string;
+    hora: citaHoraType;
     servicio: Servicio[];
     estado: EstadoType;
     respWidth: number;
@@ -34,8 +34,6 @@ export const ListText = ({ _id, usuarioId, barberId, nombre, hora, servicio, est
 
     const negocioFilt = negocio.find( neg => neg.barberId === barberId )
 
-    console.log(hora.slice(0, 8), negocioFilt?.horarioDia![0]?.hora.slice(0, 8))
-
   return (
     <ListItemText
         primary={
@@ -54,7 +52,7 @@ export const ListText = ({ _id, usuarioId, barberId, nombre, hora, servicio, est
                 </Grid>
 
                 <Grid ml={ 3 } display={ 'block' }>
-                    <Typography textAlign={ 'center' } color = 'white' variant = 'subtitle1'>{ hora }</Typography>
+                    <Typography textAlign={ 'center' } color = 'white' variant = 'subtitle1'>{ hora.hora }</Typography>
                 </Grid>
 
                 <Grid ml={ 3 } display={ 'block' }>
@@ -63,15 +61,19 @@ export const ListText = ({ _id, usuarioId, barberId, nombre, hora, servicio, est
 
                 <Grid ml={ 3 } display={ 'block' }>
                     <Typography textAlign={ 'center' } color = 'white' variant = 'subtitle1'>
+
                         {
-                            ( negocioFilt && negocioFilt?.horarioDia!.length > 0 && hora.slice(0, 8) === negocioFilt?.horarioDia![0]?.hora.slice(0, 8) )
-                                ?
-                            <ContentCut />
-                                :
                             ( estado === 'En-espera' )
                                 &&
                             <Timer color='warning' />
                         }
+
+                        {
+                            ( estado === 'Atendiendo' )
+                                &&
+                            <ContentCut />
+                        }
+
                     </Typography>
                 </Grid>
             </Grid>

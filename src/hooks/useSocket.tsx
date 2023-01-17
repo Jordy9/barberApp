@@ -95,6 +95,16 @@ export const useSocket = ( serverPath: string ) => {
             
         });
     }, [ socket ])
+
+    useEffect(() => {
+        socket?.on('update-cita-by-state-finish', ( resp ) => {
+
+            if ( !usuarioActivo?._id && !resp ) return
+
+            dispatch( onUpdateCita(resp) )    
+            
+        });
+    }, [ socket ])
     
     return {
         socket,

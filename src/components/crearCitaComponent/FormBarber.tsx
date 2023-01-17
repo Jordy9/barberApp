@@ -1,6 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 
 import { Button, FormControlLabel, Grid, IconButton, MenuItem, TextField, FormControl, InputLabel, Select, ListItemText } from '@mui/material';
+import FormHelperText from '@mui/material/FormHelperText';
 import { Android12Switch } from "../../utils/Search"
 import { SlideImage } from "./"
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
@@ -10,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { FormikTouched } from 'formik';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Checkbox from '@mui/material/Checkbox';
-import { EstadoType } from '../../interfaces/citasInterface';
+import { citaHoraType, EstadoType } from '../../interfaces/citasInterface';
 
 type service = {
     servicio: string;
@@ -19,7 +20,7 @@ type service = {
   }
 
 interface formValuesProps {
-    hora: string;
+    hora: citaHoraType;
     barberId: string;
     servicio: service[]
     estado: EstadoType
@@ -29,14 +30,14 @@ interface FormBarberProps {
     count: number;
     setCont: Dispatch<SetStateAction<number>>;
     formCount: number
-    hora: string;
+    hora: citaHoraType;
     barberId: string;
     servicio: service[];
     ninos: boolean;
     setNinos: Dispatch<SetStateAction<boolean>>;
     addNino: () => void;
     deleteNino: (i: number) => void;
-    handleChange: (i: number, e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
+    handleChange: (i: number, e: citaHoraType) => void
     handleChangeAutoComplete: (i: number, e: service[], index: number) => void
     handleChangeBarber: (i: number, e: string) => void;
     // handleChangeHora: (i: number, e:string ) => void
@@ -64,6 +65,7 @@ export const FormBarber = ({
     handleChangeBarber,
     touchedBarbero,
     touchedHora,
+    touchedServicio,
     errors,
     formValues
 }: FormBarberProps) => {
@@ -78,9 +80,10 @@ export const FormBarber = ({
 
     const negocioFilt = negocio.find( neg => neg.barberId === barberId )
 
-    const handleUpdateServiceCita = ( id: string, hora: string ) => {
+    const handleUpdateServiceCita = ( id: string, hora: string, fecha: number ) => {
         dispatch( updateServiceCita( id, hora, ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count ) )
         dispatch( createServiceCitaForm({ barberId: id, hora, usuarioId: ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count, estado: ( citaActiva ) ? 'Update' : 'Create' }) )
+        handleChange(count, { hora, fecha })
     }
 
     const uid = ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count
@@ -92,6 +95,8 @@ export const FormBarber = ({
     const serviceMin = negocioFilt?.servicios.reduce(function(prev, curr) {
         return prev.tiempo < curr.tiempo ? prev : curr;
     });
+
+    console.log(errors)
     
   return (
     <>
@@ -147,7 +152,7 @@ export const FormBarber = ({
                     ( validState )
                         ?
                     <TextField
-                        value={ hora }
+                        value={ hora.hora }
                         fullWidth
                         inputProps={{
                             readOnly: true
@@ -156,11 +161,11 @@ export const FormBarber = ({
                     />
                         :
                     <TextField
-                        error={ ( barberId && touchedHora && errors?.hora ) }
-                        helperText = { ( barberId && touchedHora && errors?.hora ) && errors?.hora }
+                        error={ ( barberId && touchedHora && errors?.hora?.hora ) }
+                        helperText = { ( barberId && touchedHora && errors?.hora?.hora ) && errors?.hora?.hora }
                         name='hora'
-                        value={ hora }
-                        onChange = { ( e ) => handleChange(count, e) }
+                        value={ hora.hora }
+                        // onChange = { ( e ) => handleChange(count, { e, fecha }) }
                         fullWidth
                         id="outlined-select-currency"
                         select
@@ -170,7 +175,7 @@ export const FormBarber = ({
                     {negocioFilt?.horarioDia?.map((option) => (
                         ( option.selected === false || option.selected === uid )
                             &&
-                        <MenuItem disabled = { ( formValues.some( values => values.hora === option.hora && option.selected === uid || option.selected !== false ) ) } onClick={ () => handleUpdateServiceCita( negocioFilt._id, option.hora ) } key={option.hora} value={option.hora}>
+                        <MenuItem disabled = { ( formValues.some( values => values.hora.hora === option.hora && option.selected === uid || option.selected !== false ) ) } onClick={ () => handleUpdateServiceCita( negocioFilt._id, option.hora, option.fecha ) } key={option.hora} value={option.hora}>
                             {option.hora}
                         </MenuItem>
                     ))}
@@ -194,6 +199,8 @@ export const FormBarber = ({
                     <FormControl sx={{ width: '100%' }}>
                         <InputLabel id="demo-multiple-checkbox-label">Servicios</InputLabel>
                         <Select
+                            error={ ( barberId && touchedServicio && errors?.servicio ) }
+                            // helperText = { ( barberId && touchedHora && errors?.hora?.hora ) && errors?.hora?.hora }
                             fullWidth
                             labelId="demo-multiple-checkbox-label"
                             id="demo-multiple-checkbox"
@@ -205,7 +212,7 @@ export const FormBarber = ({
                             // MenuProps={MenuProps}
                         >
                         {negocioFilt?.servicios.map((options, index) => (
-                            ( hora.length > 8 )
+                            ( hora.hora.length > 8 )
                                 ?
                             ( index === 0 )
                                 &&
@@ -220,6 +227,13 @@ export const FormBarber = ({
                             </MenuItem>
                         ))}
                         </Select>
+
+                        {
+                            ( barberId && touchedServicio && errors?.servicio )
+                                &&
+                            <FormHelperText sx={{ color: '#f44336' }}>{ errors?.servicio }</FormHelperText>
+                        }
+
                     </FormControl>
                 }
             </Grid>
