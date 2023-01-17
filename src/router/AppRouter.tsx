@@ -1,6 +1,6 @@
 import { Routes, Navigate, Route, useLocation } from 'react-router-dom';
 import { Barberos, Galeria, Inicio, NuevaContrasena, ProfileBarber, RecuperarContrasena } from "../components/pages"
-import { DashBoard, ListadoDeCitas, BarberosFavoritos, SubirImagenGaleria, ListadoMiGaleria, Anuncio, Perfil } from "../components/pagesAccount"
+import { DashBoard, ListadoDeCitas, BarberosFavoritos, SubirImagenGaleria, ListadoMiGaleria, Anuncio, Perfil, CitasAtender } from "../components/pagesAccount"
 import { AnimatePresence } from "framer-motion"
 import { DialogConfirm } from '../components/dialogConfirm/DialogConfirm';
 import { Toaster } from 'react-hot-toast'
@@ -65,6 +65,7 @@ export const AppRouter = () => {
         <Route path="/ListadoDeMiGaleria" element = { <ListadoMiGaleria /> } />
         <Route path="/Anuncio" element = { <Anuncio /> } />
         <Route path="/Perfil" element = { <Perfil /> } />
+        <Route path="/CitasAtender" element = { <CitasAtender /> } />
         <Route path="/Inicio" element = { <Inicio /> } />
         <Route path="/Galeria" element = { <Galeria /> } />
         <Route path="/Barberos" element = { <Barberos /> } />

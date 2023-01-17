@@ -6,6 +6,7 @@ import { useResponsive } from '../../hooks/useResponsive';
 import { DialogListadoCita } from './';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import { useAppDispatch } from '../../store/hooks';
 
 export const SearchComponent = () => {
 
@@ -15,7 +16,7 @@ export const SearchComponent = () => {
 
   return (
     <Grid display={ 'flex' } justifyContent = { ( respWidth < 991 ) ? 'space-between' : 'inherit' } alignItems = { 'center' } pb = { 2 }>
-        <Button variant='contained' color='inherit' onClick={ () => setShowDialog(true) }>
+        <Button variant='contained' color='inherit'>
             {
                 (  respWidth < 600 )
                     ?

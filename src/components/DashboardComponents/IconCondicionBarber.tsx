@@ -1,7 +1,7 @@
 import { ContentCut, Timer, Cancel, CheckCircle } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
 
-type EstadoType = 'En-espera' | 'Cancelada' | 'Finalizada' | 'Recortando'
+type EstadoType = 'En-espera' | 'Cancelada' | 'Finalizada' | 'Atendiendo'
 
 interface iconCondicionProps {
     estado: EstadoType;
@@ -11,7 +11,7 @@ export const IconCondicionBarber = ({ estado }: iconCondicionProps ) => {
   return (
     <>
         {
-            ( estado === 'Recortando' )
+            ( estado === 'Atendiendo' )
                 &&
             <Tooltip title="Atendiendo" placement='left' enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
                 <IconButton>

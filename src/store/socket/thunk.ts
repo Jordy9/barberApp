@@ -59,6 +59,16 @@ export const removeServiceCita = ( id: string, uid: string ) => {
     }
 }
 
+export const updateCitaState = ( citaId: string, usuarioId: string, estado: string ) => {
+    return ( dispatch: Dispatch, getState: any ) => {
+
+        const { socket } = getState().sk;
+
+        socket?.emit('update-cita-state', { citaId, usuarioId, estado })
+
+    }
+}
+
 export const removeAllOrManyServiceCita = () => {
     return ( dispatch: Dispatch, getState: any ) => {
 

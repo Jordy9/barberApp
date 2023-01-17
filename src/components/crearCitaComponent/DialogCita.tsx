@@ -309,6 +309,8 @@ export const DialogCita = () => {
   const handleSubmitCita = () => {
     document.getElementById('buttonSubmitCita')?.click()
   }
+
+  const valueFiltrado = formValues.filter( e => e.estado !== 'En-espera' )
   
   return (
     <Dialog
@@ -404,15 +406,19 @@ export const DialogCita = () => {
       </DialogContent>
       
       <DialogActions sx={{ p: 2 }}>
-        <Button onClick={ handleSubmitCita } type = 'submit' fullWidth color = { 'inherit' } variant='contained'>
-          {
-            ( !citaActiva )
-              ?
-            'Crear cita'
-              :
-            'Actualizar cita'
-          }
-        </Button>
+        {
+          ( valueFiltrado.length !== formValues.length )
+            &&
+          <Button onClick={ handleSubmitCita } type = 'submit' fullWidth color = { 'inherit' } variant='contained'>
+            {
+              ( !citaActiva )
+                ?
+              'Crear cita'
+                :
+              'Actualizar cita'
+            }
+          </Button>
+        }
       </DialogActions>
     </Dialog>
   )

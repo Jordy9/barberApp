@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { useNavigate } from 'react-router-dom'
 
-import { Dashboard, Favorite, CloudUpload, Collections, LibraryBooks, Announcement } from '@mui/icons-material'
+import { Dashboard, Favorite, CloudUpload, Collections, LibraryBooks, Announcement, Timer } from '@mui/icons-material';
 import { Box } from '@mui/system'
 
 import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Drawer, Typography } from '@mui/material';
@@ -19,6 +19,12 @@ export const DrawerMenu = ({ show, setShow }: DrawerProps) => {
             label: 'DashBoard',
             route: '/DashBoard',
             Icon: () => <Dashboard color='primary' />
+        },
+
+        {
+            label: 'Citas por atender',
+            route: '/CitasAtender',
+            Icon: () => <Timer color='warning'/>
         },
 
         {
