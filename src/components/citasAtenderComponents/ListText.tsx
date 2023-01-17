@@ -1,9 +1,8 @@
-import { Cancel, Check, CheckCircle, Clear, ContentCut, Timer } from '@mui/icons-material';
-import { ListItemText, Grid, Typography, IconButton, Box, LinearProgress, Button } from '@mui/material';
+import { Cancel, CheckCircle, ContentCut, Timer } from '@mui/icons-material';
+import { ListItemText, Grid, Typography, Button } from '@mui/material';
 import { Servicio, EstadoType, citaHoraType } from '../../interfaces/citasInterface';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppDispatch } from '../../store/hooks';
 import { removeServiceCita, updateCitaState } from '../../store/socket/thunk';
-import moment from 'moment';
 
 interface ListTextProps {
     usuarioId: string;
@@ -30,17 +29,17 @@ export const ListText = ({ _id, usuarioId, barberId, nombre, hora, servicio, est
         dispatch( updateCitaState(_id, usuarioId, 'Finalizada') )
     }
     
-    const { negocio } = useAppSelector( state => state.ng );
-
-    const negocioFilt = negocio.find( neg => neg.barberId === barberId )
-
   return (
     <ListItemText
         primary={
             <Grid display={ 'flex' }>
                 <Grid my = { 1.5 }>
                     <Button onClick={ handleCancelCita } sx={{ mr: 2 }} size = 'small' variant='contained' color='inherit' endIcon = { <Cancel color='error' /> }>Cancelar</Button>
-                    <Button onClick={ handleUpdatelCita } sx={{ ml: 2 }} size = 'small' variant='contained' color='inherit' endIcon = { <CheckCircle color='success' /> }>Finalizada</Button>
+                    {
+                        ( estado === 'Atendiendo' )
+                            &&
+                        <Button onClick={ handleUpdatelCita } sx={{ ml: 2 }} size = 'small' variant='contained' color='inherit' endIcon = { <CheckCircle color='success' /> }>Finalizada</Button>
+                    }
                 </Grid>
             </Grid>
         }
