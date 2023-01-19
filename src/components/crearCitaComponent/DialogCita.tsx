@@ -81,8 +81,10 @@ export const DialogCita = () => {
     if ( citaActiva ) {
       dispatch( onClearCitaActiva() )
       dispatch( removeAllOrManyServiceCita() )
+      dispatch( removeServiceCitaForm() )
     } else if ( formValues.some( e => e.hora.hora ) ) {
       dispatch( removeAllOrManyServiceCita() )
+      dispatch( removeServiceCitaForm() )
     }
     setFormValues([
       {
@@ -129,10 +131,8 @@ export const DialogCita = () => {
 
       if ( !citaActiva ) {
         dispatch( createCita(nuevaCita, ninosValid, usuarioActivo?._id!) )
-        dispatch( removeServiceCitaForm() )
       } else {
         dispatch( actualizarCita(id, nuevaCita, ninosValid, usuarioActivo?._id!) )
-        dispatch( removeServiceCitaForm() )
       }
 
     },
@@ -179,7 +179,8 @@ export const DialogCita = () => {
 
     newFormValues[i] = {
       ...newFormValues[i],
-      barberId: e
+      barberId: e,
+      hora: { hora: '', fecha: 0 },
     }
 
     setFormValues(newFormValues)

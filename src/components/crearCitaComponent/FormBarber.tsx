@@ -101,28 +101,13 @@ export const FormBarber = ({
 
     useEffect(() => {
 
-        const [ citaTo ] = cita.filter( ct => ct.cita.some( e => e.barberId === barberId && e.estado !== 'Cancelada' && e.estado !== 'Finalizada' ) )
+        const [ citaTo ] = cita.filter( ct => ct.cita.some( e => e.estado !== 'Cancelada' && e.estado !== 'Finalizada' ) )
 
         if ( citaTo ) {
             dispatch( onGetCitaActiva(citaTo) )
-        } else {
-
-            if ( citaActiva && !validCheckAndButton ) {
-                dispatch( onClearCitaActiva() )
-                setFormValues([
-                    {
-                      hora: { hora: '', fecha: 0 },
-                      barberId: barberId,
-                      servicio: [],
-                      estado: 'En-espera'
-                    }
-                  ])
-                setNinos(false)
-                setCont(0)
-            }
         }
         
-    }, [barberId])
+    }, [])
 
     const isPresent = useIsPresent();
     
@@ -302,7 +287,7 @@ export const FormBarber = ({
                                 label={ ( citaActiva?.ninos || ninos ) ? 'Llevaste niños a ser atendidos' : "No llevaste niños a ser atendidos?"}
                             />
                                 :
-                            ( cita.filter( ct => ct.cita.some( e => e.barberId === barberId && e.estado !== 'Cancelada' && e.estado !== 'Finalizada' ) ).length > 0 )
+                            ( cita.filter( ct => ct.cita.some( e => e.estado !== 'Cancelada' && e.estado !== 'Finalizada' ) ).length > 0 )
                                 ?
                             <FormControlLabel
                                 sx={{ my: 2, px: 1 }}
