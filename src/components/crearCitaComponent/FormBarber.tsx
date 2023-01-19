@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 import { Button, FormControlLabel, Grid, IconButton, MenuItem, TextField, FormControl, InputLabel, Select, ListItemText } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -12,6 +12,7 @@ import { FormikTouched } from 'formik';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Checkbox from '@mui/material/Checkbox';
 import { citaHoraType, EstadoType } from '../../interfaces/citasInterface';
+import { onClearCitaActiva, onGetCitaActiva } from '../../store/citas/CitasSlice';
 
 type service = {
     servicio: string;
@@ -40,7 +41,7 @@ interface FormBarberProps {
     handleChange: (i: number, e: citaHoraType) => void
     handleChangeAutoComplete: (i: number, e: service[], index: number) => void
     handleChangeBarber: (i: number, e: string) => void;
-    // handleChangeHora: (i: number, e:string ) => void
+    setFormValues: Dispatch<SetStateAction<formValuesProps[]>>
     // minTime: Moment | null;
     touchedBarbero: string | boolean | undefined;
     touchedHora: string | boolean | undefined;
@@ -67,14 +68,15 @@ export const FormBarber = ({
     touchedHora,
     touchedServicio,
     errors,
-    formValues
+    formValues,
+    setFormValues
 }: FormBarberProps) => {
 
     const dispatch = useAppDispatch();
 
     const { negocio } = useAppSelector( state => state.ng );
 
-    const { citaActiva } = useAppSelector( state => state.ct );
+    const { citaActiva, cita } = useAppSelector( state => state.ct );
 
     const { usuarioActivo, usuarios } = useAppSelector( state => state.auth );
 
@@ -90,13 +92,33 @@ export const FormBarber = ({
 
     const validState = formValues[count].estado !== 'En-espera'
 
-    const validFormState = citaActiva?.cita.some( (e, index) => ( index > 0 ) && e.estado !== 'En-espera')
+    const validFormState = ( citaActiva?.cita.length === 1 ) ? citaActiva?.cita[0].estado !== 'En-espera' : citaActiva?.cita.some( (e, index) => ( index > 0 ) && e.estado !== 'En-espera')
 
     const serviceMin = negocioFilt?.servicios.reduce(function(prev, curr) {
         return prev.tiempo < curr.tiempo ? prev : curr;
     });
 
-    console.log(errors)
+    useEffect(() => {
+
+        const [ citaTo ] = cita.filter( ct => ct.cita.some( e => e.barberId === barberId && e.estado !== 'Cancelada' && e.estado !== 'Finalizada' ) )
+
+        if ( citaTo ) {
+            dispatch( onGetCitaActiva(citaTo) )
+        } else {
+            dispatch( onClearCitaActiva() )
+            setFormValues([
+                {
+                  hora: { hora: '', fecha: 0 },
+                  barberId: barberId,
+                  servicio: [],
+                  estado: 'En-espera'
+                }
+              ])
+            setNinos(false)
+            setCont(0)
+        }
+
+    }, [barberId])
     
   return (
     <>
@@ -249,7 +271,7 @@ export const FormBarber = ({
                             <FormControlLabel
                                 sx={{ my: 2, px: 1 }}
                                 control={<Android12Switch disabled defaultChecked = { ( citaActiva?.ninos || ninos ) ? true : false } />}
-                                label={ ( citaActiva?.ninos || ninos ) ? 'Llevaste niños a ser atendido' : "No llevaste niños a ser atendido?"}
+                                label={ ( citaActiva?.ninos || ninos ) ? 'Llevaste niños a ser atendidos' : "No llevaste niños a ser atendidos?"}
                             />
                                 :
                             <FormControlLabel

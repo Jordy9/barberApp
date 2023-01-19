@@ -4,7 +4,7 @@ import * as io from "socket.io-client";
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { onUpdateNegocio } from '../store/negocio/negocioSlice';
 import { toast } from 'react-hot-toast';
-import { onUpdateCita } from '../store/citas/CitasSlice';
+import { onCreateCita, onUpdateCita } from '../store/citas/CitasSlice';
 
 export const useSocket = ( serverPath: string ) => {
 
@@ -35,6 +35,20 @@ export const useSocket = ( serverPath: string ) => {
             socket?.disconnect()
         }, [socket]
     )
+
+    useEffect(() => {
+        socket?.on('created-cita', ( resp ) => {
+            if ( !resp ) return
+
+            dispatch( onCreateCita(resp) )
+        });
+
+        socket?.on('updated-cita', ( resp ) => {
+            if ( !resp ) return
+
+            dispatch( onUpdateCita(resp) )
+        });
+    }, [ socket ])
 
     useEffect(() => {
         socket?.on('started-service', ( resp ) => {
@@ -77,6 +91,17 @@ export const useSocket = ( serverPath: string ) => {
 
             resp.forEach((element: any) => {
                 dispatch( onUpdateNegocio(element) )    
+            });
+            
+        });
+    }, [ socket ])
+
+    useEffect(() => {
+        socket?.on('canceled-cita', ( resp ) => {
+            if ( !resp ) return
+
+            resp.forEach((element: any) => {
+                dispatch( onUpdateCita(element) )    
             });
             
         });

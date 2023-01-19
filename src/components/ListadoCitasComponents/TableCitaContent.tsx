@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { VisibilityOutlined } from "@mui/icons-material"
+import { VisibilityOutlined, Cancel } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { IconButton, TableCell, TableRow, IconButtonProps, Table, TableHead, TableBody, Collapse, Box } from '@mui/material';
@@ -14,6 +14,7 @@ import { CitasInterfaceCita } from '../../interfaces/citasInterface';
 import { IconCondicionBarber } from '../DashboardComponents';
 import { useAppDispatch } from '../../store/hooks';
 import { isOpenCita, onGetCitaActiva } from '../../store/citas/CitasSlice';
+import { cancelCitaComplete, removeServiceCita, updateCitaState } from '../../store/socket/thunk';
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -51,6 +52,10 @@ export const TableCitaContent = ( props: CitasInterfaceCita ) => {
         dispatch( isOpenCita(true))
     }
 
+    const handleCancelCita = () => {
+        dispatch( cancelCitaComplete(_id, cita) )
+    }
+
   return (
     <>
         <TableRow
@@ -71,11 +76,12 @@ export const TableCitaContent = ( props: CitasInterfaceCita ) => {
                 { 
                     ( ninos )
                         ?
-                    cita[0].hora.hora + ', ...'
+                    cita[0].servicio[0].servicio + ', ...'
                         :
-                    cita[0].hora.hora
+                    cita[0].servicio[0].servicio
                 }
             </TableCell>
+           
 
             {
                 ( respWidth > 991 )
@@ -85,9 +91,9 @@ export const TableCitaContent = ( props: CitasInterfaceCita ) => {
                         { 
                             ( ninos )
                                 ?
-                            cita[0].servicio[0].servicio + ', ...'
+                            cita[0].hora.hora + ', ...'
                                 :
-                            cita[0].servicio[0].servicio
+                            cita[0].hora.hora
                         }
                     </TableCell>
 
@@ -111,7 +117,16 @@ export const TableCitaContent = ( props: CitasInterfaceCita ) => {
             <TableCell size='small' sx={{ display: 'flex', justifyContent: 'center' }}>
                 <IconButton onClick={ () => handleOpenCita( props ) } color = 'info'>
                     <VisibilityOutlined />
-                </IconButton> 
+                </IconButton>
+
+                {
+                    ( cita.some( e => e.estado === 'En-espera' ) )
+                        &&
+                    <IconButton onClick={ handleCancelCita }>
+                        <Cancel color='error' />
+                    </IconButton> 
+                }
+
             </TableCell>
 
         </TableRow>

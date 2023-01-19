@@ -20,7 +20,7 @@ export const CitasSlice = createSlice({
         },
 
        onCreateCita: (state, action: PayloadAction<CitasInterfaceCita> ) => {
-           state.cita.push(action.payload)
+           state.cita.unshift(action.payload)
         },
 
         onUpdateCita: (state, action: PayloadAction<CitasInterfaceCita> ) => {
