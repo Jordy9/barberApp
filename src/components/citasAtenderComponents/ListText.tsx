@@ -3,6 +3,7 @@ import { ListItemText, Grid, Typography, Button } from '@mui/material';
 import { Servicio, EstadoType, citaHoraType } from '../../interfaces/citasInterface';
 import { useAppDispatch } from '../../store/hooks';
 import { removeServiceCita, updateCitaState } from '../../store/socket/thunk';
+import moment from 'moment';
 
 interface ListTextProps {
     usuarioId: string;
@@ -28,6 +29,8 @@ export const ListText = ({ _id, usuarioId, barberId, nombre, hora, servicio, est
     const handleUpdatelCita = () => {
         dispatch( updateCitaState(_id, usuarioId, 'Finalizada') )
     }
+
+    const hourToFinish = moment(hora.fecha).diff(moment(), 'minutes') <= 0
     
   return (
     <ListItemText
@@ -36,7 +39,7 @@ export const ListText = ({ _id, usuarioId, barberId, nombre, hora, servicio, est
                 <Grid my = { 1.5 }>
                     <Button onClick={ handleCancelCita } sx={{ mr: 2 }} size = 'small' variant='contained' color='inherit' endIcon = { <Cancel color='error' /> }>Cancelar</Button>
                     {
-                        ( estado === 'Atendiendo' )
+                        ( estado === 'Atendiendo' || hourToFinish )
                             &&
                         <Button onClick={ handleUpdatelCita } sx={{ ml: 2 }} size = 'small' variant='contained' color='inherit' endIcon = { <CheckCircle color='success' /> }>Finalizada</Button>
                     }

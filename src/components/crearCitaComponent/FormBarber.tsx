@@ -13,6 +13,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Checkbox from '@mui/material/Checkbox';
 import { citaHoraType, EstadoType } from '../../interfaces/citasInterface';
 import { onClearCitaActiva, onGetCitaActiva } from '../../store/citas/CitasSlice';
+import { motion, useIsPresent } from 'framer-motion';
 
 type service = {
     servicio: string;
@@ -92,7 +93,7 @@ export const FormBarber = ({
 
     const validState = formValues[count].estado !== 'En-espera'
 
-    const validFormState = ( citaActiva?.cita.length === 1 ) ? citaActiva?.cita[0].estado !== 'En-espera' : citaActiva?.cita.some( (e, index) => ( index > 0 ) && e.estado !== 'En-espera')
+    const validCheckAndButton = formValues.some( e => e.estado === 'En-espera' || e.estado === 'Atendiendo' )
 
     const serviceMin = negocioFilt?.servicios.reduce(function(prev, curr) {
         return prev.tiempo < curr.tiempo ? prev : curr;
@@ -105,20 +106,25 @@ export const FormBarber = ({
         if ( citaTo ) {
             dispatch( onGetCitaActiva(citaTo) )
         } else {
-            dispatch( onClearCitaActiva() )
-            setFormValues([
-                {
-                  hora: { hora: '', fecha: 0 },
-                  barberId: barberId,
-                  servicio: [],
-                  estado: 'En-espera'
-                }
-              ])
-            setNinos(false)
-            setCont(0)
-        }
 
+            if ( citaActiva && !validCheckAndButton ) {
+                dispatch( onClearCitaActiva() )
+                setFormValues([
+                    {
+                      hora: { hora: '', fecha: 0 },
+                      barberId: barberId,
+                      servicio: [],
+                      estado: 'En-espera'
+                    }
+                  ])
+                setNinos(false)
+                setCont(0)
+            }
+        }
+        
     }, [barberId])
+
+    const isPresent = useIsPresent();
     
   return (
     <>
@@ -132,7 +138,7 @@ export const FormBarber = ({
 
         <Grid item container p={ 2 }>
 
-            <Grid px={ 1 } item xs = { 6 }>
+            <Grid px={ 1 } item xs = { ( !barberId ) ? 12 : 6 }>
                 {
                     ( validState )
                         ?
@@ -169,96 +175,118 @@ export const FormBarber = ({
                 }
             </Grid>
 
-            <Grid px={ 1 } item xs = { 6 }>
-                {
-                    ( validState )
-                        ?
-                    <TextField
-                        value={ hora.hora }
-                        fullWidth
-                        inputProps={{
-                            readOnly: true
-                        }}
-                        label="Hora"
-                    />
-                        :
-                    <TextField
-                        error={ ( barberId && touchedHora && errors?.hora?.hora ) }
-                        helperText = { ( barberId && touchedHora && errors?.hora?.hora ) && errors?.hora?.hora }
-                        name='hora'
-                        value={ hora.hora }
-                        // onChange = { ( e ) => handleChange(count, { e, fecha }) }
-                        fullWidth
-                        id="outlined-select-currency"
-                        select
-                        label="Hora"
-                        // helperText="Barbero que te atenderá"
-                    >
-                    {negocioFilt?.horarioDia?.map((option) => (
-                        ( option.selected === false || option.selected === uid )
-                            &&
-                        <MenuItem disabled = { ( formValues.some( values => values.hora.hora === option.hora && option.selected === uid || option.selected !== false ) ) } onClick={ () => handleUpdateServiceCita( negocioFilt._id, option.hora, option.fecha ) } key={option.hora} value={option.hora}>
-                            {option.hora}
-                        </MenuItem>
-                    ))}
-                    </TextField>
-                }
-            </Grid>
-            
-            <Grid px={ 1 } mt={ 3 } item xs = { 12 }>
-                {
-                    ( validState )
-                        ?
-                    <TextField
-                        value={ servicio.map( e => e.servicio ) }
-                        fullWidth
-                        inputProps={{
-                            readOnly: true
-                        }}
-                        label="Servicios"
-                    />
-                        :
-                    <FormControl sx={{ width: '100%' }}>
-                        <InputLabel id="demo-multiple-checkbox-label">Servicios</InputLabel>
-                        <Select
-                            error={ ( barberId && touchedServicio && errors?.servicio ) }
-                            // helperText = { ( barberId && touchedHora && errors?.hora?.hora ) && errors?.hora?.hora }
-                            fullWidth
-                            labelId="demo-multiple-checkbox-label"
-                            id="demo-multiple-checkbox"
-                            multiple
-                            sx={{ borderRadius: '12px', }}
-                            value={servicio.map( e => e.servicio )}
-                            input={<OutlinedInput label="Servicios" />}
-                            renderValue={(selected) => selected.join(', ')}
-                            // MenuProps={MenuProps}
+            {
+                ( barberId )
+                    &&
+                <>
+
+                    <Grid px={ 1 } item xs = { 6 }>
+                        <motion.div
+                            initial={{ width: '100%', opacity: 0, scaleX: 0 }}
+                            animate={{ width: '100%', scaleX: 1, opacity: 1, transition: { duration: 0.5, ease: "linear" } }}
+                            exit={{ scaleX: 0.5, transition: { duration: 0.3, ease: "linear" } }}
+                            style={{ originX: isPresent ? 0 : 2 }}
                         >
-                        {negocioFilt?.servicios.map((options, index) => (
-                            ( hora.hora.length > 8 )
-                                ?
-                            ( index === 0 )
-                                &&
-                            <MenuItem key={options.servicio} onClick = { () => handleChangeAutoComplete(count, [ serviceMin || options ], index) }>
-                                <Checkbox checked={ servicio.findIndex( e => e.servicio === serviceMin?.servicio ) > -1 } />
-                                <ListItemText primary={serviceMin?.servicio} />
-                            </MenuItem>
-                                :
-                            <MenuItem key={options.servicio} onClick = { () => handleChangeAutoComplete(count, [ options ], index) }>
-                                <Checkbox checked={ servicio.findIndex( e => e.servicio === options.servicio ) > -1 } />
-                                <ListItemText primary={options.servicio} />
-                            </MenuItem>
-                        ))}
-                        </Select>
+                            {
+                                ( validState )
+                                    ?
+                                <TextField
+                                    value={ hora.hora }
+                                    fullWidth
+                                    inputProps={{
+                                        readOnly: true
+                                    }}
+                                    label="Hora"
+                                />
+                                    :
+                                <TextField
+                                    error={ ( barberId && touchedHora && errors?.hora?.hora ) }
+                                    helperText = { ( barberId && touchedHora && errors?.hora?.hora ) && errors?.hora?.hora }
+                                    name='hora'
+                                    value={ hora.hora }
+                                    // onChange = { ( e ) => handleChange(count, { e, fecha }) }
+                                    fullWidth
+                                    id="outlined-select-currency"
+                                    select
+                                    label="Hora"
+                                    // helperText="Barbero que te atenderá"
+                                >
+                                {negocioFilt?.horarioDia?.map((option) => (
+                                    ( option.selected === false || option.selected === uid )
+                                        &&
+                                    <MenuItem disabled = { ( formValues.some( values => values.hora.hora === option.hora && option.selected === uid || option.selected !== false ) ) } onClick={ () => handleUpdateServiceCita( negocioFilt._id, option.hora, option.fecha ) } key={option.hora} value={option.hora}>
+                                        {option.hora}
+                                    </MenuItem>
+                                ))}
+                                </TextField>
+                            }
+                        </motion.div>
+                    </Grid>
 
-                        {
-                            ( barberId && touchedServicio && errors?.servicio )
-                                &&
-                            <FormHelperText sx={{ color: '#f44336' }}>{ errors?.servicio }</FormHelperText>
-                        }
+                    <Grid px={ 1 } mt={ 3 } item xs = { 12 }>
+                        <motion.div
+                            initial={{ width: '100%', opacity: 0, scaleX: 0 }}
+                            animate={{ width: '100%', scaleX: 1, opacity: 1, transition: { duration: 0.5, ease: "linear" } }}
+                            exit={{ scaleX: 0.5, transition: { duration: 0.3, ease: "linear" } }}
+                            style={{ originX: isPresent ? 0 : 2 }}
+                        >
+                            {
+                                ( validState )
+                                    ?
+                                <TextField
+                                    value={ servicio.map( e => e.servicio ) }
+                                    fullWidth
+                                    inputProps={{
+                                        readOnly: true
+                                    }}
+                                    label="Servicios"
+                                />
+                                    :
+                                <FormControl sx={{ width: '100%' }}>
+                                    <InputLabel id="demo-multiple-checkbox-label">Servicios</InputLabel>
+                                    <Select
+                                        error={ ( barberId && touchedServicio && errors?.servicio ) }
+                                        // helperText = { ( barberId && touchedHora && errors?.hora?.hora ) && errors?.hora?.hora }
+                                        fullWidth
+                                        labelId="demo-multiple-checkbox-label"
+                                        id="demo-multiple-checkbox"
+                                        multiple
+                                        sx={{ borderRadius: '12px', }}
+                                        value={servicio.map( e => e.servicio )}
+                                        input={<OutlinedInput label="Servicios" />}
+                                        renderValue={(selected) => selected.join(', ')}
+                                        // MenuProps={MenuProps}
+                                    >
+                                    {negocioFilt?.servicios.map((options, index) => (
+                                        ( hora.hora.length > 8 )
+                                            ?
+                                        ( index === 0 )
+                                            &&
+                                        <MenuItem key={options.servicio} onClick = { () => handleChangeAutoComplete(count, [ serviceMin || options ], index) }>
+                                            <Checkbox checked={ servicio.findIndex( e => e.servicio === serviceMin?.servicio ) > -1 } />
+                                            <ListItemText primary={serviceMin?.servicio} />
+                                        </MenuItem>
+                                            :
+                                        <MenuItem key={options.servicio} onClick = { () => handleChangeAutoComplete(count, [ options ], index) }>
+                                            <Checkbox checked={ servicio.findIndex( e => e.servicio === options.servicio ) > -1 } />
+                                            <ListItemText primary={options.servicio} />
+                                        </MenuItem>
+                                    ))}
+                                    </Select>
 
-                    </FormControl>
-                }
-            </Grid>
+                                    {
+                                        ( barberId && touchedServicio && errors?.servicio )
+                                            &&
+                                        <FormHelperText sx={{ color: '#f44336' }}>{ errors?.servicio }</FormHelperText>
+                                    }
+
+                                </FormControl>
+                            }
+                        </motion.div>
+                    </Grid>
+
+                </>
+            }
 
             <Grid item container display={ 'flex' } justifyContent = { 'space-between' }>
                 {
@@ -266,7 +294,7 @@ export const FormBarber = ({
                         &&
                     <>
                         {
-                            ( validFormState )
+                            ( !validCheckAndButton )
                                 ?
                             <FormControlLabel
                                 sx={{ my: 2, px: 1 }}
@@ -274,10 +302,18 @@ export const FormBarber = ({
                                 label={ ( citaActiva?.ninos || ninos ) ? 'Llevaste niños a ser atendidos' : "No llevaste niños a ser atendidos?"}
                             />
                                 :
+                            ( cita.filter( ct => ct.cita.some( e => e.barberId === barberId && e.estado !== 'Cancelada' && e.estado !== 'Finalizada' ) ).length > 0 )
+                                ?
+                            <FormControlLabel
+                                sx={{ my: 2, px: 1 }}
+                                control={<Android12Switch onChange={ ( e ) => setNinos(e.target.checked) } defaultChecked = { true } value={ ninos } />}
+                                label="¿LLevas niños a ser atendidos?"
+                            />
+                                :
                             <FormControlLabel
                                 sx={{ my: 2, px: 1 }}
                                 control={<Android12Switch onChange={ ( e ) => setNinos(e.target.checked) } defaultChecked = { ( citaActiva?.ninos || ninos ) ? true : false } value={ ninos } />}
-                                label="¿LLevas niños a ser atendido?"
+                                label="¿LLevas niños a ser atendidos?"
                             />
                         }
 
@@ -293,7 +329,7 @@ export const FormBarber = ({
                 }
 
                 {
-                    ( ninos && formCount === count + 1 && !validState )
+                    ( ninos && formCount === count + 1 && validCheckAndButton )
                         &&
                     <Grid mt={ ( count > 0 ) ? 2 : 0 } display={ 'flex' } alignItems = { 'center' } >
                         <Button onClick={ addNino } variant="contained" color="inherit">Agregar niño</Button>
