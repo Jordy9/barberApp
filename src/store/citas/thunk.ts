@@ -17,7 +17,7 @@ export const obtenerCita = () => {
     }
 }
 
-export const createCita = ( cita: any, ninos: boolean, userId: string ) => {
+export const createCita = ( cita: any, ninos: boolean, userId: string, handleClose: () => void ) => {
     return async ( dispatch: AppDispatch, getState: any ) => {
 
         const { socket } = getState().sk;
@@ -35,6 +35,9 @@ export const createCita = ( cita: any, ninos: boolean, userId: string ) => {
                 id: toastId,
                 position: 'top-right'
             })
+
+            handleClose()
+
         } catch (error) {
             toast.error('Hubo un error, verifique que haya llenado los campos correctamente', {
                 id: toastId,
@@ -45,7 +48,7 @@ export const createCita = ( cita: any, ninos: boolean, userId: string ) => {
     }
 }
 
-export const actualizarCita = ( id: string, cita: any, ninos: boolean, userId: string ) => {
+export const actualizarCita = ( id: string, cita: any, ninos: boolean, userId: string, handleClose: () => void ) => {
     return async ( dispatch: AppDispatch, getState: any ) => {
 
         const { socket } = getState().sk;
@@ -63,6 +66,9 @@ export const actualizarCita = ( id: string, cita: any, ninos: boolean, userId: s
                 id: toastId,
                 position: 'top-right'
             })
+
+            handleClose()
+            
         } catch (error) {
             toast.error('Hubo un error, verifique que haya llenado los campos correctamente', {
                 id: toastId,

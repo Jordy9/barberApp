@@ -1,4 +1,4 @@
-import { forwardRef, Fragment, useState, useEffect } from 'react';
+import { forwardRef, Fragment, useState, useEffect, useRef } from 'react';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography, Box } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
@@ -130,9 +130,9 @@ export const DialogCita = () => {
       }
 
       if ( !citaActiva ) {
-        dispatch( createCita(nuevaCita, ninosValid, usuarioActivo?._id!) )
+        dispatch( createCita(nuevaCita, ninosValid, usuarioActivo?._id!, handleClose) )
       } else {
-        dispatch( actualizarCita(id, nuevaCita, ninosValid, usuarioActivo?._id!) )
+        dispatch( actualizarCita(id, nuevaCita, ninosValid, usuarioActivo?._id!, handleClose) )
       }
 
     },
@@ -258,6 +258,16 @@ export const DialogCita = () => {
   }
 
   const valueFiltrado = formValues.filter( e => e.estado !== 'En-espera' )
+
+  const [segundos, setSegundos] = useState(0)
+  const refSegundos = useRef<NodeJS.Timer>()
+
+  // useEffect(() => {
+  //   refSegundos.current && clearInterval(refSegundos.current)
+  //   refSegundos.current = setInterval(
+  //     () =>  setSegundos( s => s - 1 )
+  //   , 1000)
+  // }, [])
   
   return (
     <Dialog

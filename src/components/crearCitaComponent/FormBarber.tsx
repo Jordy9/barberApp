@@ -219,7 +219,7 @@ export const FormBarber = ({
                                 ( validState )
                                     ?
                                 <TextField
-                                    value={ servicio.map( e => e.servicio ) }
+                                    value={ servicio.map( ( e, index ) => ( servicio.length > 1 ) ? ( ( index ) ? ' ' : '' ) + e.servicio : e.servicio ) }
                                     fullWidth
                                     inputProps={{
                                         readOnly: true
