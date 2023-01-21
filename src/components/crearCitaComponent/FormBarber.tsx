@@ -12,7 +12,7 @@ import { FormikTouched } from 'formik';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Checkbox from '@mui/material/Checkbox';
 import { citaHoraType, EstadoType } from '../../interfaces/citasInterface';
-import { onClearCitaActiva, onGetCitaActiva } from '../../store/citas/CitasSlice';
+import { onGetCitaActiva } from '../../store/citas/CitasSlice';
 import { motion, useIsPresent } from 'framer-motion';
 
 type service = {
@@ -84,8 +84,8 @@ export const FormBarber = ({
     const negocioFilt = negocio.find( neg => neg.barberId === barberId )
 
     const handleUpdateServiceCita = ( id: string, hora: string, fecha: number ) => {
+        dispatch( createServiceCitaForm({ barberId: id, hora, usuarioId: ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count, estado: ( citaActiva ) ? 'Update' : 'Create', citaActId: citaActiva?._id || null }) )
         dispatch( updateServiceCita( id, hora, ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count ) )
-        dispatch( createServiceCitaForm({ barberId: id, hora, usuarioId: ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count, estado: ( citaActiva ) ? 'Update' : 'Create' }) )
         handleChange(count, { hora, fecha })
     }
 
