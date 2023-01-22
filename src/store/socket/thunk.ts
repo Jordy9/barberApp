@@ -19,22 +19,22 @@ export const startService = ({ firstValue, secondValue, id, thirdValue }: startS
     }
 }
 
-export const updateServiceCita = ( id: string, hora: string, uid: string ) => {
+export const updateServiceCita = ( id: string, hora: string, uid: string, idCita: string | null ) => {
     return ( dispatch: Dispatch, getState: any ) => {
 
         const { socket } = getState().sk;
 
-        socket?.emit('update-service-cita', { id, hora, uid })
+        socket?.emit('update-service-cita', { id, hora, uid, idCita })
 
     }
 }
 
-export const createServiceCitaForm = ( form: any ) => {
+export const createServiceCitaForm = ( form: any, idCita: any, barberId: string ) => {
     return ( dispatch: Dispatch, getState: any ) => {
 
         const { socket } = getState().sk;
 
-        socket?.emit('create-service-cita-form', form)
+        socket?.emit('create-service-cita-form', form, idCita, barberId)
 
     }
 }

@@ -180,7 +180,7 @@ export const DialogCita = () => {
     newFormValues[i] = {
       ...newFormValues[i],
       barberId: e,
-      hora: { hora: '', fecha: 0 },
+      // hora: { hora: '', fecha: 0 },
       servicio: []
     }
 

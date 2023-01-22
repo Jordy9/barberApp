@@ -84,8 +84,8 @@ export const FormBarber = ({
     const negocioFilt = negocio.find( neg => neg.barberId === barberId )
 
     const handleUpdateServiceCita = ( id: string, hora: string, fecha: number ) => {
-        dispatch( createServiceCitaForm({ barberId: id, hora, usuarioId: ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count, estado: ( citaActiva ) ? 'Update' : 'Create', citaActId: citaActiva?._id || null }) )
-        dispatch( updateServiceCita( id, hora, ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count ) )
+        dispatch( createServiceCitaForm({ barberId: id, hora, usuarioId: ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count, estado: ( citaActiva ) ? 'Update' : 'Create', citaActId: citaActiva?._id || null, fecha: fecha }, ( citaActiva ) ? citaActiva._id : null, barberId) )
+        // dispatch( updateServiceCita( id, hora, ( count === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + count, ( citaActiva ) ? citaActiva._id : null ) )
         handleChange(count, { hora, fecha })
     }
 
@@ -110,6 +110,8 @@ export const FormBarber = ({
     }, [])
 
     const isPresent = useIsPresent();
+    
+    const [ horaAhora ] = negocioFilt?.horarioDia?.filter( e => e.selected === uid && e.hora ) || hora.hora
     
   return (
     <>
