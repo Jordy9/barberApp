@@ -1,52 +1,63 @@
-import { Fragment } from 'react';
+import Grid from '@mui/material/Grid';
+
+import { AnimatePresence, motion, useIsPresent } from 'framer-motion';
 
 import { useAppSelector } from "../../store/hooks"
+
 import { CitaContent } from './';
-import { AnimatePresence, motion, useIsPresent } from 'framer-motion';
+
+import { useResponsive } from '../../hooks/useResponsive';
 
 export const SpreedCitas = () => {
 
     const { cita } = useAppSelector( state => state.ct );
 
+    const { usuarioActivo } = useAppSelector( state => state.auth );
+
     const isPresent = useIsPresent();
 
+    const [ respWidth ] = useResponsive()
+
   return (
-    <>
+    <Grid mb={ 10 }>
         {
             cita.map( cita => {
 
                 const citaOrder = [...cita.cita].sort( (a, b) => a.hora.fecha - b.hora.fecha )
                 return (
 
-                    <Fragment key={ cita._id }>
+                    <Grid container columnSpacing={ 4 } key={ cita._id }>
                         {
                             citaOrder.map(({ barberId, hora, nombre, servicio, usuarioId, estado }, index) => {
                                 const nuevaCita = { ...cita, barberId, hora, nombre, servicio, usuarioId, estado }
                                 return (
-                                    <AnimatePresence key={ hora.hora + index}>
+                                    <AnimatePresence key={ hora.hora + index } mode = { 'popLayout' }>
                                         {
-                                            ( estado === 'En-espera' || estado === 'Atendiendo' )
+                                            ( usuarioActivo?._id === barberId && ( estado === 'En-espera' || estado === 'Atendiendo' ) )
                                                 &&
-                                            <motion.div
-                                                initial={{ width: '100%', opacity: 0, scaleX: 0 }}
-                                                animate={{ width: '100%', scaleX: 1, opacity: 1, transition: { duration: 0.5, ease: "linear" } }}
-                                                exit={{ scaleX: 0, transition: { duration: 0.5, ease: "linear" }, opacity: 0 }}
-                                                style={{ originX: isPresent ? 0 : 2 }}
-                                                layoutId = { `${hora?.fecha}` }
-                                            >
+                                            <Grid item xs = { 12 } sm = { ( respWidth <= 700 ) ? 12 : 6 }>
+                                                <motion.div
+                                                    initial={{ width: '100%', opacity: 0, scaleX: 0 }}
+                                                    animate={{ width: '100%', scaleX: 1, opacity: 1 }}
+                                                    exit={{ scaleX: 0, opacity: 0 }}
+                                                    style={{ originX: isPresent ? 0 : 2 }}
+                                                    layoutId = { `${hora?.fecha}` }
+                                                    layout
+                                                    transition = {{ duration: 0.3, delay: 0.2 }}
+                                                >
+                                                    <CitaContent { ...nuevaCita } />
 
-                                                <CitaContent key={ hora.hora } { ...nuevaCita } />
-                                            </motion.div>
+                                                </motion.div>
+                                            </Grid>
                                         }
                                     </AnimatePresence>
                                 )
-                            }
-                            )
+                            })
                         }
-                    </Fragment>
+                    </Grid>
                 )
             })
         }
-    </>
+    </Grid>
   )
 }

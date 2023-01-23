@@ -285,7 +285,7 @@ export const FormBarber = ({
                                 ?
                             <FormControlLabel
                                 sx={{ my: 2, px: 1 }}
-                                control={<Android12Switch disabled defaultChecked = { ( citaActiva?.ninos || ninos ) ? true : false } />}
+                                control={<Android12Switch disabled checked = { ( citaActiva?.ninos || ninos ) ? true : false } />}
                                 label={ ( citaActiva?.ninos || ninos ) ? 'Llevaste niños a ser atendidos' : "No llevaste niños a ser atendidos?"}
                             />
                                 :
@@ -293,13 +293,13 @@ export const FormBarber = ({
                                 ?
                             <FormControlLabel
                                 sx={{ my: 2, px: 1 }}
-                                control={<Android12Switch onChange={ ( e ) => setNinos(e.target.checked) } defaultChecked = { true } value={ ninos } />}
+                                control={<Android12Switch onChange={ ( e ) => setNinos(e.target.checked) } checked = { true } value={ ninos } />}
                                 label="¿LLevas niños a ser atendidos?"
                             />
                                 :
                             <FormControlLabel
                                 sx={{ my: 2, px: 1 }}
-                                control={<Android12Switch onChange={ ( e ) => setNinos(e.target.checked) } defaultChecked = { ( citaActiva?.ninos || ninos ) ? true : false } value={ ninos } />}
+                                control={<Android12Switch onChange={ ( e ) => setNinos(e.target.checked) } checked = { ( citaActiva?.ninos || ninos ) ? true : false } value={ ninos } />}
                                 label="¿LLevas niños a ser atendidos?"
                             />
                         }

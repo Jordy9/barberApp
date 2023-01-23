@@ -51,11 +51,15 @@ export const useSocket = ( serverPath: string ) => {
     }, [ socket ])
 
     useEffect(() => {
-        socket?.on('started-service', ( resp ) => {
-            toast.success('Horario de servicio creado', {
-                position: 'top-right'
-            })
+        socket?.on('started-service', ( resp, uid ) => {
             if ( !resp ) return
+            
+            if ( usuarioActivo?._id === uid ) {
+
+                toast.success('Horario de servicio creado', {
+                    position: 'top-right'
+                })
+            }
 
             dispatch( onUpdateNegocio(resp) )
         });

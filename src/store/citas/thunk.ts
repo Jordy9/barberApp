@@ -1,7 +1,7 @@
 import { Dispatch } from "@reduxjs/toolkit"
 import { toast } from "react-hot-toast";
 import barberApi from '../../Api/barberApi';
-import { onCreateCita, onGetCita, onUpdateCita } from "./CitasSlice";
+import { onGetCita } from "./CitasSlice";
 import { AppDispatch } from '../store';
 
 export const obtenerCita = () => {

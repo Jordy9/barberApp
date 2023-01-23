@@ -298,7 +298,9 @@ export const DialogCita = () => {
           'Actualizar cita'
         }
         
-        <Typography variant='h6'>{ count + 1 } / { formValues.length }</Typography>
+        <div>
+          <Typography variant='h6'>{ count + 1 } / { formValues.length }</Typography>
+        </div>
       </DialogTitle>
 
       <DialogContent>
