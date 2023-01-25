@@ -5,6 +5,7 @@ import { IconButton, Button, Box } from '@mui/material';
 import { PersonPin } from '@mui/icons-material';
 import { useAppSelector } from '../../store/hooks';
 import Avatar from '@mui/material/Avatar';
+import { useNavigate } from 'react-router-dom';
 
 interface NavbarSesionProps {
     setShowDialog: Dispatch<SetStateAction<boolean>>;
@@ -15,12 +16,14 @@ export const NavbarSesion = ({ setShowDialog, respWidth }: NavbarSesionProps ) =
 
     const { usuarioActivo } = useAppSelector( state => state.auth );
 
+    const navigate = useNavigate()
+
   return (
     <>
         {
             ( usuarioActivo )
                 ?
-            <Avatar component={ 'span' } />
+            <Avatar sx={{ cursor: 'pointer' }} onClick={ () => navigate('/Perfil') } component={ 'span' } />
                 :
             <Condicion respWidth={ respWidth } setShowDialog = { setShowDialog } />
             

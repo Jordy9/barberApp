@@ -43,7 +43,7 @@ export const SpreedCitas = () => {
                                                     style={{ originX: isPresent ? 0 : 2 }}
                                                     layoutId = { `${hora?.fecha}` }
                                                     layout
-                                                    transition = {{ duration: 0.3, delay: 0.2 }}
+                                                    transition = {{ duration: 0.3, delay: 0.1 }}
                                                 >
                                                     <CitaContent { ...nuevaCita } />
 

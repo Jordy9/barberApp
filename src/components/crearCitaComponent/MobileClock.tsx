@@ -6,19 +6,22 @@ import TextField from '@mui/material/TextField';
 
 import { Dispatch, SetStateAction } from 'react';
 
+type label = 'Desde' | 'Hasta'
+
 interface mobileClockProps {
     value: Moment | null;
-    setValue: Dispatch<SetStateAction<Moment>>
+    setValue: Dispatch<SetStateAction<Moment>>;
     minTime: Moment | null;
-    error: boolean
+    error: boolean;
+    label?: label;
 }
 
-export const MobileClock = ({ value, setValue, minTime, error }: mobileClockProps) => {
+export const MobileClock = ({ value, setValue, minTime, error, label = 'Desde' }: mobileClockProps) => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
         <MobileTimePicker
-            label="Desde"
+            label={ label }
             minTime={ minTime }
             value={ value }
             ampmInClock

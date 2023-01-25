@@ -66,6 +66,21 @@ export const useSocket = ( serverPath: string ) => {
     }, [ socket ])
 
     useEffect(() => {
+        socket?.on('paused-service', ( resp, uid ) => {
+            if ( !resp ) return
+            
+            if ( usuarioActivo?._id === uid ) {
+
+                toast.success('Servicio pausado', {
+                    position: 'top-right'
+                })
+            }
+
+            dispatch( onUpdateNegocio(resp) )
+        });
+    }, [ socket ])
+
+    useEffect(() => {
         socket?.on('updated-service-cita', ( resp ) => {
             if ( !resp ) return
 

@@ -5,10 +5,12 @@ import { onGetCita } from "./CitasSlice";
 import { AppDispatch } from '../store';
 
 export const obtenerCita = () => {
-    return async ( dispatch: Dispatch ) => {
+    return async ( dispatch: Dispatch, getState: any ) => {
+
+        const { usuarioActivo } = getState().auth;
 
         try {
-            const { data } =  await barberApi.get<any>('cita')
+            const { data } =  await barberApi.get<any>(`cita?id=${usuarioActivo?._id}`)
 
             dispatch( onGetCita(data.cita) )
         } catch (error) {

@@ -31,8 +31,10 @@ export const DialogConfirm = () => {
   const handleClick = () => {
     if ( !argu ) {
       funciones!()
+      handleClose()
     } else {
       funciones!(argu)
+      handleClose()
     }
   }
 

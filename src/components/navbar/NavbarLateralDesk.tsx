@@ -7,6 +7,7 @@ import { Button } from "@mui/material";
 import { Search, SearchIconWrapper, StyledInputBase } from '../../utils/Search';
 import { useAppSelector } from "../../store/hooks";
 import Avatar from '@mui/material/Avatar';
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   setShowDialog: Dispatch<SetStateAction<boolean>>
@@ -15,6 +16,8 @@ interface Props {
 export const NavbarLateralDesk = ({ setShowDialog }: Props) => {
 
   const { usuarioActivo } = useAppSelector( state => state.auth );
+
+  const navigate = useNavigate()
 
   return (
     <Box display={ 'flex' } justifyContent = { 'space-between' }>
@@ -30,7 +33,7 @@ export const NavbarLateralDesk = ({ setShowDialog }: Props) => {
       {
         ( usuarioActivo )
           ?
-        <Avatar sx={{ ml: 2 }} />
+        <Avatar onClick = { () => navigate('/Perfil') } sx={{ ml: 2, cursor: 'pointer' }} />
           :
         <Button onClick={ () => setShowDialog(true) } sx={{ ml: 2 }} color="inherit" variant='contained'>Iniciar sesión</Button>
       }

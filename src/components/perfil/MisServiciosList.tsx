@@ -25,9 +25,9 @@ export const MisServiciosList = ({ setShowList }: ServiciosProps) => {
           arreglo.map(e => (
             <Grid my={ 2 }>
               <Chip 
-                label={ 'Recortada 300' } 
-                variant="outlined" 
-                onClick={handleClick} 
+                label={ 'Recortada 300' }
+                variant="outlined"
+                onClick={handleClick}
                 icon = { 
                   <div onClick={ () => setShowList('') }>
                     <Edit />

@@ -11,7 +11,7 @@ import { isOpenDialogConfirm } from '../../store/dialogConfirm/dialogConfirmSlic
 import { useResponsive } from '../../hooks/useResponsive';
 import moment from 'moment';
 import { MobileClock } from '../crearCitaComponent/MobileClock';
-import { startService } from '../../store/socket/thunk';
+import { pauseService, startService } from '../../store/socket/thunk';
 
 interface loginProps {
     showDialog2: boolean;
@@ -33,17 +33,21 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
 
   const { usuarioActivo } = useAppSelector( state => state.auth );
 
+  const { negocio } = useAppSelector( state => state.ng );
+
+  const negocioFilt = negocio.find( e => e.barberId === usuarioActivo?._id )
+
   const handleClose = () => {
     setShowDialog2(false)
   }
 
-  const handleConfirm = () => {
+  const handleConfirm = ( pauseButton: any ) => {
     dispatch( isOpenDialogConfirm(
       {
         isOpen: true,
-        content: '¿Está seguro que desea detener sus servicios por el día de hoy?',
-        notice: 'Se cancelarán todas sus citas',
-        function: setShowDialog2,
+        content: '¿Está seguro que desea pausar el servicio?',
+        notice: `Todas las citas pendientes se moveran ${pauseButton.cantidad} ${pauseButton.tiempo}`,
+        function: handlePauseService,
         argu: false
       }
     ) )
@@ -64,6 +68,8 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
   const [thirdValue, setThirdValue] = useState({ cantidad: 30, tiempo: 'Minutos' })
 
   const [error, setError] = useState({ errorDesde: false, errorHasta: false })
+
+  const [pauseButton, setPauseButton] = useState({ cantidad: 30, tiempo: 'Minutos' })
 
   useEffect(() => {
 
@@ -92,6 +98,10 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
 
     dispatch( startService({ firstValue, secondValue, id: usuarioActivo?._id, thirdValue}) )
 
+  }
+
+  const handlePauseService = () => {
+    dispatch( pauseService(pauseButton) )
   }
 
   return (
@@ -124,7 +134,7 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
           </Grid>
 
           <Grid px={ 1 } item xs = { 6 }>
-            <MobileClock value={ secondValue } setValue = { setSecondValue } minTime = { firstValue.clone().add(1, 'minutes') } error = { error.errorHasta } />
+            <MobileClock label='Hasta' value={ secondValue } setValue = { setSecondValue } minTime = { firstValue.clone().add(1, 'minutes') } error = { error.errorHasta } />
           </Grid>
 
           <Typography my={ 2 }>¿Cada qué tiempo atenderá clientes?</Typography>
@@ -143,24 +153,24 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
           <Button onClick={ handleStartService } fullWidth variant='contained' color='inherit'>Comenzar servicio</Button>
 
           {
-            ( false )
+            ( negocioFilt )
               &&
             <>
               <Typography my={ 2 }>Tiempo que desea pausar sus servicios</Typography>
 
               <Grid p={ 1 } item xs = { 6 }>
-                <TextField type={ 'number' } defaultValue = { 30 } variant='outlined' label = { 'Cantidad' } />
+                <TextField value={ pauseButton.cantidad } onChange = { ({ target }) => setPauseButton({ ...pauseButton, cantidad: +target.value }) } type={ 'number' } defaultValue = { 30 } variant='outlined' label = { 'Cantidad' } />
               </Grid>
 
               <Grid p={ 1 } item xs = { 6 }>
-                <TextField value={ 'Minutos' } select variant='outlined' label = { 'Tiempo' }>
+                <TextField value={ pauseButton.tiempo } onChange = { ({ target }) => setPauseButton({ ...pauseButton, tiempo: target.value }) } select variant='outlined' label = { 'Tiempo' }>
                   <MenuItem value = 'Minutos' selected>Minutos</MenuItem>
                   <MenuItem value = 'Horas'>Horas</MenuItem>
                 </TextField>
               </Grid>
 
               <Grid p={ 1 } item xs = { 12 }>
-                <Button onClick={ handleConfirm } fullWidth variant='contained' color='inherit'>Detener sus servicios por el día de hoy</Button>
+                <Button onClick={ () => handleConfirm(pauseButton) } fullWidth variant='contained' color='inherit'>Pausar el servicio</Button>
               </Grid>
             </>
 

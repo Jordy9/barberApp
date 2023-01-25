@@ -19,6 +19,16 @@ export const startService = ({ firstValue, secondValue, id, thirdValue }: startS
     }
 }
 
+export const pauseService = ( pauseButton: object ) => {
+    return ( dispatch: Dispatch, getState: any ) => {
+
+        const { socket } = getState().sk;
+
+        socket?.emit('pause-service', pauseButton)
+
+    }
+}
+
 export const updateServiceCita = ( id: string, hora: string, uid: string, idCita: string | null ) => {
     return ( dispatch: Dispatch, getState: any ) => {
 
