@@ -19,12 +19,22 @@ export const startService = ({ firstValue, secondValue, id, thirdValue }: startS
     }
 }
 
-export const pauseService = ( pauseButton: object ) => {
+export const pauseService = ( pauseButton: object, id: string ) => {
     return ( dispatch: Dispatch, getState: any ) => {
 
         const { socket } = getState().sk;
 
-        socket?.emit('pause-service', pauseButton)
+        socket?.emit('pause-service', pauseButton, id)
+
+    }
+}
+
+export const cancelStopServiceBarber = ( id: string ) => {
+    return ( dispatch: Dispatch, getState: any ) => {
+
+        const { socket } = getState().sk;
+
+        socket?.emit('cancel-stop-service', id)
 
     }
 }

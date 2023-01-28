@@ -4,7 +4,7 @@ import * as io from "socket.io-client";
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { onUpdateNegocio } from '../store/negocio/negocioSlice';
 import { toast } from 'react-hot-toast';
-import { onCreateCita, onUpdateCita } from '../store/citas/CitasSlice';
+import { onCreateCita, onGetCita, onUpdateCita } from '../store/citas/CitasSlice';
 
 export const useSocket = ( serverPath: string ) => {
 
@@ -72,6 +72,21 @@ export const useSocket = ( serverPath: string ) => {
             if ( usuarioActivo?._id === uid ) {
 
                 toast.success('Servicio pausado', {
+                    position: 'top-right'
+                })
+            }
+
+            dispatch( onUpdateNegocio(resp) )
+        });
+    }, [ socket ])
+
+    useEffect(() => {
+        socket?.on('canceled-service', ( resp, uid ) => {
+            if ( !resp ) return
+            
+            if ( usuarioActivo?._id === uid ) {
+
+                toast.success('Servicio detenido', {
                     position: 'top-right'
                 })
             }

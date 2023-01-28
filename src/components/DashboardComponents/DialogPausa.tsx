@@ -1,6 +1,6 @@
 import { forwardRef, Dispatch, SetStateAction, useState, useEffect } from 'react';
 
-import { Button, Dialog, DialogContent, DialogTitle, Slide, Grid, MenuItem, Typography } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, Slide, Grid, MenuItem, Typography, DialogActions } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 
 import IconButton from '@mui/material/IconButton';
@@ -11,7 +11,7 @@ import { isOpenDialogConfirm } from '../../store/dialogConfirm/dialogConfirmSlic
 import { useResponsive } from '../../hooks/useResponsive';
 import moment from 'moment';
 import { MobileClock } from '../crearCitaComponent/MobileClock';
-import { pauseService, startService } from '../../store/socket/thunk';
+import { pauseService, startService, cancelStopServiceBarber } from '../../store/socket/thunk';
 
 interface loginProps {
     showDialog2: boolean;
@@ -101,8 +101,14 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
   }
 
   const handlePauseService = () => {
-    dispatch( pauseService(pauseButton) )
+    dispatch( pauseService(pauseButton, negocioFilt?._id!) )
   }
+
+  const handleCancelStopService = () => {
+    dispatch( cancelStopServiceBarber(negocioFilt?._id!) )
+  }
+
+  // TODO: hacer el apartado para aumentar las horas de servicio
 
   return (
     <Dialog
@@ -177,6 +183,9 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
           }
         </Grid>
       </DialogContent>
+      <DialogActions>
+        <Button onClick={ handleCancelStopService } fullWidth variant='contained' color='inherit'>Detener servicio por el día de hoy</Button>
+      </DialogActions>
     </Dialog>
   )
 }
