@@ -39,6 +39,16 @@ export const cancelStopServiceBarber = ( id: string ) => {
     }
 }
 
+export const addTimepServiceBarber = ( id: string, fouthValue: Moment ) => {
+    return ( dispatch: Dispatch, getState: any ) => {
+
+        const { socket } = getState().sk;
+
+        socket?.emit('add-time-service', id, fouthValue)
+
+    }
+}
+
 export const updateServiceCita = ( id: string, hora: string, uid: string, idCita: string | null ) => {
     return ( dispatch: Dispatch, getState: any ) => {
 
