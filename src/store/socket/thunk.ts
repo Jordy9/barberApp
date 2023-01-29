@@ -39,7 +39,7 @@ export const cancelStopServiceBarber = ( id: string ) => {
     }
 }
 
-export const addTimepServiceBarber = ( id: string, fouthValue: Moment ) => {
+export const addTimepServiceBarber = ( id: string, fouthValue: any ) => {
     return ( dispatch: Dispatch, getState: any ) => {
 
         const { socket } = getState().sk;

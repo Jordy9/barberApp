@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Grid } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 
 import IconButton from '@mui/material/IconButton';
@@ -8,6 +8,8 @@ import { ArrowBackIos } from '@mui/icons-material';
 
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { isOpenDialogConfirm } from '../../store/dialogConfirm/dialogConfirmSlice';
+import warning from '../../assets/warning.png';
+import Avatar from '@mui/material/Avatar';
   
   const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -22,7 +24,7 @@ export const DialogConfirm = () => {
 
   const dispatch = useAppDispatch();
 
-  const { isOpen, function: funciones, content, notice, argu } = useAppSelector( state => state.dc );
+  const { isOpen, function: funciones, content, notice, argu, button1, button2 } = useAppSelector( state => state.dc );
 
   const handleClose = () => {
     dispatch( isOpenDialogConfirm({isOpen: false}) )
@@ -56,8 +58,12 @@ export const DialogConfirm = () => {
         <IconButton onClick={ handleClose } sx={{ position: 'absolute', left: 24, top: 12.10 }}>
           <ArrowBackIos />
         </IconButton>
-        Información de la cita
+        Información del servicio
       </DialogTitle>
+
+      <Grid display={ 'flex' } justifyContent = { 'center' }>
+        <Avatar src={ warning } variant = { 'rounded' } sx = {{ width: 'auto', height: '100px' }} />
+      </Grid>
 
       <DialogContent sx={{ display: 'flex', textAlign: 'center' }}>
 
@@ -71,8 +77,8 @@ export const DialogConfirm = () => {
       </DialogContent>
       
       <DialogActions sx={{ p: 2 }}>
-        <Button fullWidth onClick={ handleClick } color = { 'inherit' } variant='contained'>No</Button>
-        <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>Si</Button>
+        <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>{ button1 }</Button>
+        <Button fullWidth onClick={ handleClick } color = { 'inherit' } variant='contained'>{ button2 }</Button>
       </DialogActions>
     </Dialog>
   )

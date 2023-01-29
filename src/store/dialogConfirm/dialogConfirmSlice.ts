@@ -6,6 +6,8 @@ interface citasState {
     argu?: boolean | number | string | object
     content?: string
     notice?: string
+    button1?: string
+    button2?: string
 }
 
 const initialState: citasState = {
@@ -13,7 +15,9 @@ const initialState: citasState = {
     function: () => {},
     content: '',
     notice: '',
-    argu: ''
+    argu: '',
+    button1: 'No',
+    button2: 'Si'
 }
 
 export const dialogConfirmSlice = createSlice({
@@ -26,6 +30,8 @@ export const dialogConfirmSlice = createSlice({
             state.function = action.payload.function;
             state.argu = action.payload.argu;
             state.isOpen = action.payload.isOpen;
+            state.button1 = action.payload.button1
+            state.button2 = action.payload.button2
         },
    }
 });

@@ -12,6 +12,7 @@ import { useResponsive } from '../../hooks/useResponsive';
 import moment from 'moment';
 import { MobileClock } from '../crearCitaComponent/MobileClock';
 import { pauseService, startService, cancelStopServiceBarber, addTimepServiceBarber } from '../../store/socket/thunk';
+import { Moment } from 'moment';
 
 interface loginProps {
     showDialog2: boolean;
@@ -41,39 +42,90 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
     setShowDialog2(false)
   }
 
-  const handleConfirm = ( pauseButton: any ) => {
+  const servicioMayor = negocioFilt?.servicios.reduce((prev, curr) => {
+    return prev < curr ? curr : prev
+  })
+
+  const handleConfirmStartService = ( hora1: Moment, hora2: Moment, tiempo: any ) => {
+    dispatch( isOpenDialogConfirm(
+      {
+        isOpen: true,
+        content: '¿Está seguro que desea iniciar el servicio?',
+        notice: `Se le creará un horario de servicio desde las ${hora1.clone().format('hh:mm a')} hasta las ${hora2.clone().format('hh:mm a')}, teniendo ${tiempo.cantidad} ${tiempo.tiempo} para terminar cada cita`,
+        function: handleStartService,
+        argu: false,
+        button1: 'No',
+        button2: 'Si, iniciar servicio'
+      }
+    ) )
+  }
+
+  const handleConfirmPause = ( pauseButton: any ) => {
     dispatch( isOpenDialogConfirm(
       {
         isOpen: true,
         content: '¿Está seguro que desea pausar el servicio?',
         notice: `Todas las citas pendientes se moveran ${pauseButton.cantidad} ${pauseButton.tiempo}`,
         function: handlePauseService,
-        argu: false
+        argu: false,
+        button1: 'No',
+        button2: 'Si, pausar servicio'
+      }
+    ) )
+  }
+
+  const handleConfirmAddTime = ( addTime: Moment ) => {
+    dispatch( isOpenDialogConfirm(
+      {
+        isOpen: true,
+        content: '¿Está seguro que desea aumentar el tiempo de servicio?',
+        notice: `Se aumentará hasta las ${addTime.clone().format('hh:mm a')}`,
+        function: handleAddTimeService,
+        argu: false,
+        button1: 'No',
+        button2: 'Si, aumentar'
+      }
+    ) )
+  }
+
+  const handleStopService = () => {
+    dispatch( isOpenDialogConfirm(
+      {
+        isOpen: true,
+        content: '¿Está seguro que desea detener el tiempo de servicio por el día de hoy?',
+        notice: `Se cancelarán todas las citas, excepto la que esté atendiendo`,
+        function: handleCancelStopService,
+        argu: false,
+        button1: 'No',
+        button2: 'Si, detener'
       }
     ) )
   }
 
   const [ respWidth ] = useResponsive()
 
-  const handleButtonSubmit = () => {
-    document.getElementById('buttonIdPausa')?.click()
-  }
-
   const minTime = moment()
-
-  const lastTime = moment(negocioFilt?.horarioDia![negocioFilt?.horarioDia?.length! - 1]?.fecha).clone().add(1, 'minutes') || moment()
 
   const [firstValue, setFirstValue] = useState(minTime.clone().add(1, 'minutes'))
 
   const [secondValue, setSecondValue] = useState(firstValue.clone().add(1, 'minutes'))
 
-  const [thirdValue, setThirdValue] = useState({ cantidad: 30, tiempo: 'Minutos' })
+  const [thirdValue, setThirdValue] = useState({ cantidad: Number(servicioMayor?.tiempo), tiempo: servicioMayor?.minHor })
 
-  const [fouthValue, setFouthValue] = useState(lastTime)
+  const [fouthValue, setFouthValue] = useState(moment())
 
   const [error, setError] = useState({ errorDesde: false, errorHasta: false })
 
   const [pauseButton, setPauseButton] = useState({ cantidad: 30, tiempo: 'Minutos' })
+
+  useEffect(() => {
+
+    setFouthValue(moment(negocioFilt?.horas?.hasta))
+
+    setThirdValue({ cantidad: Number(servicioMayor?.tiempo), tiempo: servicioMayor?.minHor })
+    
+  }, [negocioFilt])
+  
 
   useEffect(() => {
 
@@ -93,7 +145,7 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
       setError({ errorDesde: false, errorHasta: false })
     }
 
-    if ( fouthValue.isAfter(lastTime) ) {
+    if ( fouthValue.isAfter(fouthValue.clone()) ) {
       setError({ errorDesde: false, errorHasta: true })
     }
     
@@ -119,8 +171,6 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
   const handleAddTimeService = () => {
     dispatch( addTimepServiceBarber(negocioFilt?._id!, fouthValue) )
   }
-
-  // TODO: hacer el apartado para aumentar las horas de servicio
 
   return (
     <Dialog
@@ -168,13 +218,13 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
               </Grid>
 
               <Grid mb={ 1 } p={ 1 } item xs = { 6 }>
-                <TextField onChange={ ({ target }) => setThirdValue({ ...thirdValue, tiempo: target.value }) } value={ thirdValue.tiempo } type={ 'text' } select variant='outlined' label = { 'Tiempo' }>
+                <TextField fullWidth onChange={ ({ target }) => setThirdValue({ ...thirdValue, tiempo: target.value }) } value={ thirdValue.tiempo } type={ 'text' } select variant='outlined' label = { 'Tiempo' }>
                   <MenuItem value = 'Minutos' selected>Minutos</MenuItem>
                   <MenuItem value = 'Horas'>Horas</MenuItem>
                 </TextField>
               </Grid>
 
-              <Button onClick={ handleStartService } fullWidth variant='contained' color='inherit'>Comenzar servicio</Button>
+              <Button onClick={ () => handleConfirmStartService( firstValue, secondValue, thirdValue ) } fullWidth variant='contained' color='inherit'>Comenzar servicio</Button>
             </>
               :
             <>
@@ -182,11 +232,11 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
               <Typography mb={ 2 }>Agregar más tiempo al servicio</Typography>
 
               <Grid mb={ 1 } px={ 1 } item xs = { 12 }>
-                <MobileClock label='Hasta' value={ fouthValue } setValue = { setFouthValue } minTime = { lastTime } error = { error.errorHasta } />
+                <MobileClock label='Hasta' value={ fouthValue } setValue = { setFouthValue } error = { error.errorHasta } />
               </Grid>
 
               <Grid p={ 1 } item xs = { 12 }>
-                <Button onClick={ handleAddTimeService } fullWidth variant='contained' color='inherit'>Agregar más tiempo</Button>
+                <Button onClick={ () => handleConfirmAddTime(fouthValue) } fullWidth variant='contained' color='inherit'>Agregar más tiempo</Button>
               </Grid>
             </>
           }
@@ -202,14 +252,14 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
               </Grid>
 
               <Grid p={ 1 } item xs = { 6 }>
-                <TextField value={ pauseButton.tiempo } onChange = { ({ target }) => setPauseButton({ ...pauseButton, tiempo: target.value }) } select variant='outlined' label = { 'Tiempo' }>
+                <TextField fullWidth value={ pauseButton.tiempo } onChange = { ({ target }) => setPauseButton({ ...pauseButton, tiempo: target.value }) } select variant='outlined' label = { 'Tiempo' }>
                   <MenuItem value = 'Minutos' selected>Minutos</MenuItem>
                   <MenuItem value = 'Horas'>Horas</MenuItem>
                 </TextField>
               </Grid>
 
               <Grid p={ 1 } item xs = { 12 }>
-                <Button onClick={ () => handleConfirm(pauseButton) } fullWidth variant='contained' color='inherit'>Pausar el servicio</Button>
+                <Button onClick={ () => handleConfirmPause(pauseButton) } fullWidth variant='contained' color='inherit'>Pausar el servicio</Button>
               </Grid>
             </>
 
@@ -220,7 +270,7 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
         {
           ( negocioFilt?.horarioDia?.length !== 0 )
             &&
-          <Button onClick={ handleCancelStopService } fullWidth variant='contained' color='inherit'>Detener servicio por el día de hoy</Button>
+          <Button onClick={ handleStopService } fullWidth variant='contained' color='inherit'>Detener servicio por el día de hoy</Button>
         }
       </DialogActions>
     </Dialog>

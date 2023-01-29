@@ -11,7 +11,7 @@ type label = 'Desde' | 'Hasta'
 interface mobileClockProps {
     value: Moment | null;
     setValue: Dispatch<SetStateAction<Moment>>;
-    minTime: Moment | null;
+    minTime?: Moment | null;
     error: boolean;
     label?: label;
 }
@@ -30,6 +30,7 @@ export const MobileClock = ({ value, setValue, minTime, error, label = 'Desde' }
             }}
             renderInput={(params) => 
                 <TextField
+                    fullWidth
                     error = { error }
                     name='hora'
                     defaultValue={ minTime }
