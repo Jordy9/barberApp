@@ -384,7 +384,7 @@ export const DialogCita = () => {
         {
           ( valueFiltrado.length !== formValues.length )
             &&
-          <Button onClick={ handleSubmitCita } type = 'submit' fullWidth color = { 'inherit' } variant='contained'>
+          <Button disabled = { ( formValues[count].estado !== 'En-espera' ) } onClick={ handleSubmitCita } type = 'submit' fullWidth color = { 'inherit' } variant='contained'>
             {
               ( !citaActiva )
                 ?
