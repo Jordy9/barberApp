@@ -1,11 +1,11 @@
 import { forwardRef, Fragment, useState, useEffect, useRef } from 'react';
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography, Box } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography, Box, Tooltip } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 
 import { FormBarber } from "./";
 
-import { ArrowBackIos, Search } from '@mui/icons-material';
+import { ArrowBackIos, Search, Timer } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton/IconButton';
 
 import { useNavigate } from 'react-router-dom';
@@ -66,6 +66,8 @@ export const DialogCita = () => {
 
   const [count, setCont] = useState(0)
 
+  const [segundos, setSegundos] = useState(150)
+
   const [formValues, setFormValues] = useState<formValuesProps[]>([
     {
       hora: { hora: '', fecha: 0 },
@@ -97,6 +99,8 @@ export const DialogCita = () => {
     setNinos(false)
     setCont(0)
     dispatch( isOpenCita(false) )
+    localStorage.removeItem('showTooltip')
+    setSegundos(150)
   }
 
   const {handleSubmit, touched, errors} = useFormik({
@@ -260,15 +264,47 @@ export const DialogCita = () => {
 
   const valueFiltrado = formValues.filter( e => e.estado !== 'En-espera' )
 
-  const [segundos, setSegundos] = useState(0)
   const refSegundos = useRef<NodeJS.Timer>()
 
-  // useEffect(() => {
-  //   refSegundos.current && clearInterval(refSegundos.current)
-  //   refSegundos.current = setInterval(
-  //     () =>  setSegundos( s => s - 1 )
-  //   , 1000)
-  // }, [])
+  useEffect(() => {
+    refSegundos.current && clearInterval(refSegundos.current)
+    refSegundos.current = setInterval(
+      () => ( !!localStorage.getItem('showTooltip') && segundos > 0 && !citaActiva ) && setSegundos( s => s - 1 )
+    , 1000)
+  }, [])
+
+  useEffect(() => {
+    if ( segundos <= 0 ) {
+      handleClose()
+    }
+  }, [segundos])
+  
+  const minutos = Math.floor(segundos / 60).toString().padStart(2, '0')
+
+  const minutosSec = ( segundos % 60 ).toFixed().toString().padStart(2, '0')
+
+  const [openTooltip, setOpenTooltip] = useState(false)
+
+  const handleCloseTooltip = ( timeoutId: NodeJS.Timeout ) => {
+    clearTimeout(timeoutId)
+    setOpenTooltip(false)
+  }
+
+  useEffect(() => {
+
+    const show = !!localStorage.getItem('showTooltip')
+
+    if ( formValues.some( e => e.hora.hora !== '' ) && !show ) {
+      localStorage.setItem('showTooltip', 'noShow')
+      setOpenTooltip(true)
+
+      let timeoutId = setTimeout(() => {
+        handleCloseTooltip(timeoutId)
+      }, 5000);
+
+    }
+
+  }, [ formValues ])
   
   return (
     <Dialog
@@ -319,6 +355,15 @@ export const DialogCita = () => {
                 }
                 <IconCondicionBarber estado = { citaActiva!.cita[count].estado } />
               </Typography>
+                :
+              ( formValues.some( e => e.hora.hora !== '' ) )
+                ?
+              <Tooltip title={ <Typography variant='subtitle1'>Debe de crear su cita en menos 2 minutos y medio, de lo contrario el formulario se cerrará</Typography> } arrow enterDelay={ 500 } open = { openTooltip } onClose = { () => setOpenTooltip(false) } disableTouchListener disableHoverListener disableFocusListener>
+                <Grid display={ 'flex' } alignItems = { 'center' }>
+                  <Timer color='warning' />
+                  <Typography ml={ 2 } fontSize={ '20px' } variant='button'>{ minutos } : { minutosSec }</Typography>
+                </Grid>
+              </Tooltip>
                 :
               <Typography variant='h5' p={ 2 }>Mis barberos</Typography>
             }

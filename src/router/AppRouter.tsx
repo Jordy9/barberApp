@@ -29,6 +29,10 @@ export const AppRouter = () => {
   const { socket, conectarSocket, desconectarSocket } = useSocket(`${VITE_API_URL.split('/api')[0]}`)
 
   useEffect(() => {
+    localStorage.removeItem('showTooltip')
+  }, [])
+  
+  useEffect(() => {
     dispatch( checkAuthToken() )
     dispatch( obtenerUsuarios() )
   }, [])

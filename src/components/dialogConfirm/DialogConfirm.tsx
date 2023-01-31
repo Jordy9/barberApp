@@ -77,7 +77,11 @@ export const DialogConfirm = () => {
       </DialogContent>
       
       <DialogActions sx={{ p: 2 }}>
-        <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>{ button1 }</Button>
+        {
+          ( button1 !== 'null' )
+            &&
+          <Button fullWidth onClick={ handleClose } color = { 'inherit' } variant='contained'>{ button1 }</Button>
+        }
         <Button fullWidth onClick={ handleClick } color = { 'inherit' } variant='contained'>{ button2 }</Button>
       </DialogActions>
     </Dialog>

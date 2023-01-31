@@ -172,6 +172,8 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
     dispatch( addTimepServiceBarber(negocioFilt?._id!, fouthValue) )
   }
 
+  const noAddMoreTime = ( negocioFilt && negocioFilt?.horarioDia?.length !== 0 ) ? !moment(negocioFilt?.horarioDia![negocioFilt?.horarioDia!.length - 1]?.fecha).clone().add( 10, 'minutes' ).isSameOrAfter(moment().hour(24)) : false
+
   return (
     <Dialog
       open={ showDialog2 }
@@ -227,6 +229,8 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
               <Button onClick={ () => handleConfirmStartService( firstValue, secondValue, thirdValue ) } fullWidth variant='contained' color='inherit'>Comenzar servicio</Button>
             </>
               :
+            ( !noAddMoreTime )
+              &&
             <>
 
               <Typography mb={ 2 }>Agregar más tiempo al servicio</Typography>
@@ -245,7 +249,7 @@ export const DialogPausa = ({ showDialog2, setShowDialog2 }: loginProps) => {
             ( negocioFilt?.horarioDia?.length !== 0 )
               &&
             <>
-              <Typography my={ 2 }>Tiempo que desea pausar sus servicios</Typography>
+              <Typography mt={ ( !noAddMoreTime ) ? 1 : 0 } mb = { ( !noAddMoreTime ) ? 1 : 1 }>Tiempo que desea pausar sus servicios</Typography>
 
               <Grid p={ 1 } item xs = { 6 }>
                 <TextField value={ pauseButton.cantidad } onChange = { ({ target }) => setPauseButton({ ...pauseButton, cantidad: +target.value }) } type={ 'number' } defaultValue = { 30 } variant='outlined' label = { 'Cantidad' } />
