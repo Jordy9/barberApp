@@ -1,7 +1,7 @@
 import { Dispatch } from "@reduxjs/toolkit"
 import { toast } from "react-hot-toast"
 import barberApi from "../../Api/barberApi"
-import { onCreateNegocio, onGetNegocio } from "./negocioSlice"
+import { onCreateNegocio, onGetNegocio, onUpdateNegocio } from "./negocioSlice"
 
 export const getHorarioNegocio = () => {
     return async( dispatch: Dispatch ) => {
@@ -37,6 +37,34 @@ export const createNegocio = ( negocio: object ) => {
             })
             
         } catch (error) {
+            toast.error('Hubo un problema, intentelo de nuevo', {
+                id: toastId,
+                position: 'top-right'
+            })
+        }
+    }
+}
+
+export const updateNegocio = ( negocio: object, id: string ) => {
+    return async( dispatch: Dispatch ) => {
+
+        const toastId = toast.loading('Guardando', {
+            position: 'top-right'
+        })
+
+        try {
+
+            const { data } = await barberApi.put(`negocio/${id}`, { ...negocio })
+
+            dispatch( onUpdateNegocio( data.negocio ) )
+
+            toast.success('Información guardada', {
+                id: toastId,
+                position: 'top-right'
+            })
+            
+        } catch (error) {
+            console.log(error)
             toast.error('Hubo un problema, intentelo de nuevo', {
                 id: toastId,
                 position: 'top-right'

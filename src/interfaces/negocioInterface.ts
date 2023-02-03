@@ -11,12 +11,17 @@ export interface Negocio {
     servicios:     Servicio[];
     ubicacion:     Ubicacion[];
     horas?:         Horas;
-    horasClientes: Hora[];
+    horasClientes: horasClientes[];
     createdAt:     string;
     updatedAt:     string;
     __v:           number;
     xTiempo?:       XTiempo;
     horarioDia?:    Hora[];
+}
+
+export interface horasClientes {
+    horario: string;
+    index?:  number
 }
 
 export interface Hora {
@@ -32,13 +37,15 @@ export interface Horas {
 
 export interface Servicio {
     servicio: string;
-    tiempo:   string;
-    minHor:   string;
+    tiempo  : string;
+    minHor  : string;
+    index?  : number;
 }
 
 export interface Ubicacion {
     ubicacion: string;
     link:      string;
+    index?:    number;
 }
 
 export interface XTiempo {

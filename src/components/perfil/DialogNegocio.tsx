@@ -1,4 +1,4 @@
-import { forwardRef, Dispatch, SetStateAction, useState, ChangeEvent } from 'react';
+import { forwardRef, Dispatch, SetStateAction, useState, ChangeEvent, useEffect } from 'react';
 
 import { styled } from '@mui/material/styles';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Typography, Grid, IconButtonProps, Box } from '@mui/material';
@@ -15,7 +15,8 @@ import { Horario, HorarioList, MisServicios, MisServiciosList, Ubicacion, Ubicac
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { createNegocio } from '../../store/negocio/thunk';
+import { createNegocio, updateNegocio } from '../../store/negocio/thunk';
+import { Hora, horasClientes, Servicio, Ubicacion as Ubication } from '../../interfaces/negocioInterface';
 
 interface loginProps {
     showDialog2: boolean;
@@ -45,10 +46,6 @@ interface loginProps {
       duration: theme.transitions.duration.shortest,
     }),
   }));
-
-  let serviciosList: object[] = []
-  let ubicacionesList: object[] = []
-  let horariosList: object[] = []
 
 export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
 
@@ -86,6 +83,21 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
 
   const { usuarioActivo } = useAppSelector( state => state.auth );
 
+  const { activeServicio, activeUbicacion, activeHorario, negocio } = useAppSelector( state => state.ng );
+
+  const negocioFilt = negocio.find( e => e.barberId === usuarioActivo?._id )
+
+  const [service, setService] = useState<Servicio[]>([])
+  const [ubic, setUbic] = useState<Ubication[]>([])
+  const [hor, setHor] = useState<horasClientes[]>([])
+
+  useEffect(() => {
+    setService(negocioFilt?.servicios!)
+    setUbic(negocioFilt?.ubicacion!)
+    setHor(negocioFilt?.horasClientes!)
+  }, [negocioFilt])
+  
+
   const [servicios, setServicios] = useState(
     {
       servicio: '',
@@ -95,15 +107,33 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
   )
 
   const addServicio = () => {
-    serviciosList.push(servicios)
 
-    setServicios(
-      {
-        servicio: '',
-        tiempo: '',
-        minHor: 'Minutos',
+    if ( Object.keys(activeServicio).length !== 0 ) {
+      let newFormValue = structuredClone(service)
+
+      const i = activeServicio.index!
+
+      newFormValue![i] = {
+        ...newFormValue![i],
+        minHor: servicios.minHor,
+        servicio: servicios.servicio,
+        tiempo: servicios.tiempo
       }
-    )
+
+      setService(newFormValue)
+
+    } else {
+
+      setService( prev => [ ...prev, servicios ] )
+  
+      setServicios(
+        {
+          servicio: '',
+          tiempo: '',
+          minHor: 'Minutos',
+        }
+      )
+    }
   }
 
   const [ubicaciones, setUbicaciones] = useState(
@@ -114,13 +144,31 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
   )
 
   const addUbicaciones = () => {
-    ubicacionesList.push(ubicaciones)
-    setUbicaciones(
-      {
-        ubicacion: '',
-        link: ''
+
+    if ( Object.keys(activeUbicacion).length !== 0 ) {
+      let newFormValue = structuredClone(ubic)
+
+      const i = activeUbicacion.index!
+
+      newFormValue![i] = {
+        ...newFormValue![i],
+        ubicacion: ubicaciones.ubicacion,
+        link: ubicaciones.link,
       }
-    )
+
+      setUbic(newFormValue)
+
+    } else {
+
+      setUbic( prev => [ ...prev, ubicaciones ] )
+  
+      setUbicaciones(
+        {
+          ubicacion: '',
+          link: ''
+        }
+      )
+    }
   }
 
   const [horarios, setHorarios] = useState(
@@ -130,25 +178,46 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
   )
 
   const addHorarios = () => {
-    horariosList.push(horarios)
-    setHorarios(
-      {
-        horario: '',
+
+    if ( Object.keys(activeHorario).length !== 0 ) {
+      let newFormValue = structuredClone(hor)
+
+      const i = activeHorario.index!
+
+      newFormValue![i] = {
+        ...newFormValue![i],
+        horario: horarios.horario,
       }
-    )
+
+      setHor(newFormValue)
+
+    } else {
+
+      setHor( prev => [ ...prev, horarios ] )
+  
+      setHorarios(
+        {
+          horario: '',
+        }
+      )
+    }
   }
 
   const {handleSubmit, getFieldProps, touched, errors} = useFormik({
     initialValues: {
-      servicios: serviciosList,
-      ubicacion: ubicacionesList,
-      horasClientes: horariosList
+      servicios: service,
+      ubicacion: ubic,
+      horasClientes: hor
     },
     enableReinitialize: true,
     onSubmit: ({ servicios, ubicacion, horasClientes }) => {
       const negocio = { barberId: usuarioActivo?._id, servicios, ubicacion, horasClientes }
 
-      dispatch( createNegocio(negocio) )
+      if ( negocioFilt?.servicios.length === 0 ) {
+        dispatch( createNegocio(negocio) )
+      } else {
+        dispatch( updateNegocio(negocio, negocioFilt?._id!) )
+      }
 
     },
     validationSchema: Yup.object({
@@ -159,6 +228,18 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
     document.getElementById('buttonNegocioSubmit')?.click()
   }
 
+  useEffect(() => {
+    setServicios( activeServicio )
+  }, [activeServicio])
+
+  useEffect(() => {
+    setUbicaciones( activeUbicacion )
+  }, [activeUbicacion])
+
+  useEffect(() => {
+    setHorarios( activeHorario )
+  }, [activeHorario])
+  
   return (
     <Dialog
       open={ showDialog2 }
@@ -200,7 +281,7 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <Grid py={ 1 }>
                         <MisServicios
-                          servicio = { servicios } 
+                          servicio = { servicios }
                           setServicios = { setServicios }
                           addServicio = { addServicio }
                         />
@@ -223,10 +304,11 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
                 </Grid>
                 <Collapse in={expanded2} timeout="auto" unmountOnExit>
                     <Grid py={ 1 }>
-                        <Ubicacion 
+                        <Ubicacion
                           ubicaciones = { ubicaciones }
                           setUbicaciones = { setUbicaciones }
                           addUbicaciones = { addUbicaciones }
+                          activeUbicacion = { activeUbicacion }
                         />
                         <Button onClick={ () => setShowList('Ubicacion') } sx={{ my: 2 }} fullWidth variant='contained' color='inherit'>Ver listado de ubicaciones</Button>
                     </Grid>
@@ -251,6 +333,7 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
                           horarios = { horarios }
                           setHorarios = { setHorarios }
                           addHorarios = { addHorarios }
+                          activeHorario = { activeHorario }
                         />
                         <Button onClick={ () => setShowList('Horario') } sx={{ my: 2 }} fullWidth variant='contained' color='inherit'>Ver listado de horarios</Button>
                     </Grid>
@@ -265,19 +348,19 @@ export const DialogNegocio = ({ showDialog2, setShowDialog2 }: loginProps) => {
         {
             ( showList === 'Servicios' )
                 &&
-            <MisServiciosList setShowList = { setShowList } />
+            <MisServiciosList setShowList = { setShowList } service = { service } />
         }
 
         {
             ( showList === 'Ubicacion' )
                 &&
-            <UbicacionList setShowList = { setShowList } />
+            <UbicacionList setShowList = { setShowList } ubic = { ubic } />
         }
 
         {
             ( showList === 'Horario' )
                 &&
-            <HorarioList setShowList = { setShowList } />
+            <HorarioList setShowList = { setShowList } hor = { hor } />
         }
 
       </DialogContent>
