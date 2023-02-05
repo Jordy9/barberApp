@@ -34,17 +34,39 @@ export const negocioSlice = createSlice({
         onActiveServicio: (state, action: PayloadAction<Servicio> ) => {
             state.activeServicio = { ...action.payload }
         },
+        
+        onClearActiveServicio: (state) => {
+            state.activeServicio = {} as Servicio
+        },
 
         onActiveUbicacion: (state, action: PayloadAction<Ubicacion> ) => {
             state.activeUbicacion = action.payload
         },
 
+        onClearActiveUbicacion: (state) => {
+            state.activeUbicacion = {} as Ubicacion
+        },
+
         onActiveHorario: (state, action: PayloadAction<horasClientes> ) => {
             state.activeHorario = action.payload
+        },
+
+        onClearActiveHorario: (state) => {
+            state.activeHorario = {} as horasClientes
         },
    }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { onGetNegocio, onCreateNegocio, onUpdateNegocio, onActiveServicio, onActiveUbicacion, onActiveHorario } = negocioSlice.actions;
+export const { 
+    onGetNegocio, 
+    onCreateNegocio, 
+    onUpdateNegocio, 
+    onActiveServicio, 
+    onActiveUbicacion, 
+    onActiveHorario, 
+    onClearActiveHorario, 
+    onClearActiveServicio, 
+    onClearActiveUbicacion 
+} = negocioSlice.actions;

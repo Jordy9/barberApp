@@ -1,7 +1,7 @@
-import { Add } from '@mui/icons-material';
+import { Add, Delete } from '@mui/icons-material';
 import { TextField, Button, Grid, MenuItem } from '@mui/material';
-import { Dispatch, SetStateAction } from 'react';
-import { useAppSelector } from '../../store/hooks';
+import { Dispatch, Fragment, SetStateAction } from 'react';
+import { addNew, deleteOld, handleChange } from '../../utils/utilsDynamicForm';
 
 type servicioProps = {
   servicio: string,
@@ -11,38 +11,66 @@ type servicioProps = {
 }
 
 interface misServiciossProps {
-  servicio: servicioProps;
-  addServicio: ( i: number ) => void;
-  setServicios: Dispatch<SetStateAction<servicioProps>>
+  servicios: servicioProps[];
+  setServicios: Dispatch<SetStateAction<servicioProps[]>>
 }
 
-export const MisServicios = ({ servicio, addServicio, setServicios }: misServiciossProps) => {
-
-  const { activeServicio } = useAppSelector( state => state.ng );
+export const MisServicios = ({ servicios, setServicios }: misServiciossProps) => {
 
   return (
     <>
-      <Grid px={ 1 } container>
-        <TextField sx={{ mb: 2 }} fullWidth value={ servicio.servicio || activeServicio.servicio } onChange = { ({ target }) => setServicios({ ...servicio, servicio: target.value }) } size='small' label = { 'Servicio' } placeholder = { 'Recortada' } />
-        
-        <Grid sx={{ mb: 2 }} item xs = { 6 }>
+    <Button hidden = { true } onClick={ () => addNew( servicios, setServicios ) } sx={{ my: 2 }} fullWidth endIcon = { <Add /> } variant='contained' color='inherit'>
+      Agregar servicio
+    </Button>
+    {
+      servicios.map( ( e, index ) => (
+        <Fragment key={ e.servicio + index }>
+          <Grid px={ 1 } container>
+            <TextField 
+              sx={{ mb: 2 }} 
+              name = 'servicio'
+              type={ 'email' }
+              fullWidth 
+              value={ e.servicio } 
+              onChange = { ({ target }) => handleChange(index, target, servicios, setServicios) }
+              size='small' 
+              label = { 'Servicio' } 
+            />
+            
+            <Grid sx={{ mb: 2 }} item xs = { 6 }>
 
-          <TextField sx={{ mr: 1 }} value={ servicio.tiempo || activeServicio.tiempo }  type = { 'number' } onChange = { ({ target }) => setServicios({ ...servicio, tiempo: target.value }) } size='small' label = { 'tiempo estimado' } />
+              <TextField 
+                sx={{ mr: 1 }} 
+                name = 'tiempo' 
+                value={ e.tiempo } 
+                type = { 'number' } 
+                onChange = { ({ target }) => handleChange(index, target, servicios, setServicios) } 
+                size='small' 
+                label = { 'tiempo estimado' } 
+              />
 
-        </Grid>
+            </Grid>
 
-        <Grid sx={{ mb: 2 }} item xs = { 6 }>
+            <Grid sx={{ mb: 2 }} item xs = { 6 }>
 
-          <TextField sx={{ ml: 1 }} fullWidth value={ servicio.minHor || activeServicio.minHor } onChange = { ({ target }) => setServicios({ ...servicio, minHor: target.value }) } size='small' type={ 'number' } select variant='outlined' label = { 'Tiempo' }>
-            <MenuItem value = 'Minutos' selected>Minutos</MenuItem>
-            <MenuItem value = 'Horas'>Horas</MenuItem>
-          </TextField>
+              <TextField sx={{ ml: 1 }} name = 'minHor' fullWidth value={ e.minHor } onChange = { ({ target }) => handleChange(index, target, servicios, setServicios) } size='small' type={ 'number' } select variant='outlined' label = { 'Tiempo' }>
+                <MenuItem value = 'Minutos' selected>Minutos</MenuItem>
+                <MenuItem value = 'Horas'>Horas</MenuItem>
+              </TextField>
 
-        </Grid>
+            </Grid>
 
-      </Grid>
-      
-      <Button onClick={() => addServicio(activeServicio?.index || 0) } fullWidth endIcon = { <Add /> } variant='contained' color='inherit'>Agregar servicio</Button>
+          </Grid>
+
+          {
+            ( servicios.length > 1 )
+              &&
+            <Button onClick={ () => deleteOld(index, servicios, setServicios) } sx={{ mb: 2 }} fullWidth endIcon = { <Delete /> } variant='contained' color='inherit'>Borrar servicio</Button>
+          }
+
+        </Fragment>
+      ))
+    }
     </>
   )
 }
