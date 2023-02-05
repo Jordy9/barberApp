@@ -55,19 +55,19 @@ export const CardIcons = ({ expanded, handleExpandClick }: ExpandProps) => {
   return (
     <CardActions disableSpacing>
 
-      <Tooltip title="Agregar a favoritos" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
+      <Tooltip arrow title="Agregar a favoritos" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
         <IconButton onClick={ () => setIsFavorite(!isFavorite) } aria-label="add to favorites">
           <FavoriteIcon color={ ( isFavorite ) ? 'error' : 'inherit' } />
         </IconButton>
       </Tooltip>
 
-      <Tooltip title="Compartir" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
+      <Tooltip arrow title="Compartir" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
         <IconButton onClick={ handleShare } aria-label="share">
           <ShareIcon />
         </IconButton>
       </Tooltip>
 
-      <Tooltip title="Crear cita" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
+      <Tooltip arrow title="Crear cita" enterDelay={ 500 } enterNextDelay = { 200 } enterTouchDelay = { 500 } leaveDelay = { 200 }>
         <IconButton onClick={ () => dispatch( isOpenCita(true) ) } aria-label="library add">
           <LibraryAdd />
         </IconButton>

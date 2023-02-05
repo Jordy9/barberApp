@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -7,42 +7,41 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-
-function refreshMessages(): MessageExample[] {
-  const getRandomInt = (max: number) => Math.floor(Math.random() * Math.floor(max));
-
-  return Array.from(new Array(50)).map(
-    () => messageExamples[getRandomInt(messageExamples.length)],
-  );
-}
+import { NegocioResponsiveServicio, NegocioResponsiveUbicacion, NegocioResponsiveHorario } from './';
+import { useAppSelector } from '../../store/hooks';
 
 export const NegocioResponsive = () => {
+
   const [value, setValue] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState(() => refreshMessages());
 
-  const NegocioElement = useRef<HTMLLIElement>(null)
+  const NegocioElement = useRef<HTMLDivElement>(null);
+  
+  const { negocio } = useAppSelector( state => state.ng );
 
-  useEffect(() => {
-    (ref.current as HTMLDivElement).ownerDocument.body.scrollTop = 0;
-    setMessages(refreshMessages());
-  }, [value, setMessages]);
+  const { usuarioActivo } = useAppSelector( state => state.auth );
+
+  const negocioFilt = negocio.find( e => e.barberId === usuarioActivo?._id )
 
   return (
-    <Box sx={{ pb: 7 }} ref={ref}>
+    <Box sx={{ pb: 7 }} ref = { NegocioElement }>
       <List>
-        {messages.map(({ primary, secondary, person }, index) => (
-          <ListItem ref={ NegocioElement } key={index + person}>
-            <ListItemAvatar>
-              <Avatar alt="Profile Picture" src={person} />
-            </ListItemAvatar>
-            <ListItemText primary={primary} secondary={secondary} />
-          </ListItem>
-        ))}
+        {
+          ( value === 0 )
+            &&
+          <NegocioResponsiveServicio servicio = { negocioFilt?.servicios } />
+        }
+
+        {
+          ( value === 1 )
+            &&
+          <NegocioResponsiveUbicacion ubicacion = { negocioFilt?.ubicacion } />
+        }
+
+        {
+          ( value === 2 )
+            &&
+          <NegocioResponsiveHorario horario = { negocioFilt?.horasClientes } />
+        }
       </List>
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation
@@ -52,59 +51,11 @@ export const NegocioResponsive = () => {
             setValue(newValue);
           }}
         >
-          <BottomNavigationAction onClick={ () => NegocioElement?.current?.scrollIntoView({ block: 'center', behavior: 'smooth' }) } label="Recents" icon={<RestoreIcon />} />
-          <BottomNavigationAction onClick={ () => NegocioElement?.current?.scrollIntoView({ block: 'center', behavior: 'smooth' }) } label="Favorites" icon={<FavoriteIcon />} />
-          <BottomNavigationAction onClick={ () => NegocioElement?.current?.scrollIntoView({ block: 'center', behavior: 'smooth' }) } label="Archive" icon={<ArchiveIcon />} />
+          <BottomNavigationAction onClick={ () => NegocioElement?.current?.scrollIntoView({ block: 'center', behavior: 'smooth' }) } label="Servicios" icon={<RestoreIcon />} />
+          <BottomNavigationAction onClick={ () => NegocioElement?.current?.scrollIntoView({ block: 'center', behavior: 'smooth' }) } label="Ubicación" icon={<FavoriteIcon />} />
+          <BottomNavigationAction onClick={ () => NegocioElement?.current?.scrollIntoView({ block: 'center', behavior: 'smooth' }) } label="Horario" icon={<ArchiveIcon />} />
         </BottomNavigation>
       </Paper>
     </Box>
   );
 }
-
-interface MessageExample {
-  primary: string;
-  secondary: string;
-  person: string;
-}
-
-const messageExamples: readonly MessageExample[] = [
-  {
-    primary: 'Brunch this week?',
-    secondary: "I'll be in the neighbourhood this week. Let's grab a bite to eat",
-    person: '/static/images/avatar/5.jpg',
-  },
-  {
-    primary: 'Birthday Gift',
-    secondary: `Do you have a suggestion for a good present for John on his work
-      anniversary. I am really confused & would love your thoughts on it.`,
-    person: '/static/images/avatar/1.jpg',
-  },
-  {
-    primary: 'Recipe to try',
-    secondary: 'I am try out this new BBQ recipe, I think this might be amazing',
-    person: '/static/images/avatar/2.jpg',
-  },
-  {
-    primary: 'Yes!',
-    secondary: 'I have the tickets to the ReactConf for this year.',
-    person: '/static/images/avatar/3.jpg',
-  },
-  {
-    primary: "Doctor's Appointment",
-    secondary: 'My appointment for the doctor was rescheduled for next Saturday.',
-    person: '/static/images/avatar/4.jpg',
-  },
-  {
-    primary: 'Discussion',
-    secondary: `Menus that are generated by the bottom app bar (such as a bottom
-      navigation drawer or overflow menu) open as bottom sheets at a higher elevation
-      than the bar.`,
-    person: '/static/images/avatar/5.jpg',
-  },
-  {
-    primary: 'Summer BBQ',
-    secondary: `Who wants to have a cookout this weekend? I just got some furniture
-      for my backyard and would love to fire up the grill.`,
-    person: '/static/images/avatar/1.jpg',
-  },
-];

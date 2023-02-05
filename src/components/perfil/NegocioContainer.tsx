@@ -1,8 +1,15 @@
 import { Box, Grid } from "@mui/material"
-import { Negocio, NegocioResponsive } from './';
+import { NegocioResponsive, NegocioServicio, NegocioUbicacion, NegocioHorario } from './';
 import { useResponsive } from '../../hooks/useResponsive';
+import { useAppSelector } from "../../store/hooks";
 
 export const NegocioContainer = () => {
+
+  const { usuarioActivo } = useAppSelector( state => state.auth );
+
+  const { negocio } = useAppSelector( state => state.ng );
+
+  const negocioFilt = negocio.find( e => e.barberId === usuarioActivo?._id )
 
   const [ respWidth ] = useResponsive()
 
@@ -12,18 +19,18 @@ export const NegocioContainer = () => {
       {
         ( respWidth > 991 )
           ?
-        <Grid px={ 10 } py = { 2 } display={ 'center' } justifyContent = { 'space-between' }>
+        <Grid px={ ( respWidth > 1205 ) ? 10 : 2 } py = { 2 } display={ 'center' } justifyContent = { 'space-between' }>
 
           <Grid>
-            <Negocio title="Mis servicios" descripcion="Recortada 300" />
+            <NegocioServicio title="Mis servicios" servicio = { negocioFilt?.servicios } />
+          </Grid>
+
+          <Grid mx={ 2 }>
+            <NegocioUbicacion title="Ubicación" ubicacion = { negocioFilt?.ubicacion } />
           </Grid>
 
           <Grid>
-            <Negocio title="Ubicación" descripcion="Estoy ubicado en tal lugar de tal barberia" />
-          </Grid>
-
-          <Grid>
-            <Negocio title="Horario" descripcion="Lunes a viernes de 8 am a 5 pm" />
+            <NegocioHorario title="Horario" horario = { negocioFilt?.horasClientes } />
           </Grid>
 
         </Grid>
