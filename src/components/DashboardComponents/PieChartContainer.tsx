@@ -11,7 +11,7 @@ export const PieChartContainer = () => {
     const [ respWidth ] = useResponsive()
 
   return (
-    <Paper elevation={ 10 } sx = {{ width: '100%', height: 'auto', borderRadius: '12px', p: 4 }}>
+    <Paper elevation={ 10 } sx = {{ width: '100%', height: '100%', borderRadius: '12px', p: 4 }}>
         <PieChartt COLORS = { COLORS } respWidth = { respWidth } />
         {
         ( respWidth <= 600 )

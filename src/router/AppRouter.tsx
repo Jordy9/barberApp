@@ -13,6 +13,7 @@ import { getEnvVariables } from '../helpers/getEnvVariables';
 import { startSocket } from '../store/socket/socketSlice';
 import { getHorarioNegocio } from '../store/negocio/thunk';
 import { obtenerCita } from '../store/citas/thunk';
+import { RatingDialog } from '../components/ratingDialog';
 
 export const AppRouter = () => {
 
@@ -80,6 +81,8 @@ export const AppRouter = () => {
       </Routes>
 
       <Toaster />
+      
+      <RatingDialog />
       <DialogConfirm />
     </AnimatePresence>
   )

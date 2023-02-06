@@ -22,11 +22,11 @@ export const ChartComponent = () => {
         <BarChartContainer />
       </Grid>
 
-      {/* <Grid p = { 1 } xs = { 12 } sm = { 6 }>
-        <PieChartContainer />
-      </Grid> */}
-
       <Grid p = { 1 } xs = { 12 } sm = { 6 }>
+        <PieChartContainer />
+      </Grid>
+
+      <Grid p = { 1 } xs = { 12 } sm = { 12 }>
         <TableUsers />
       </Grid>
       
