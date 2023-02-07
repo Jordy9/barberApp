@@ -14,6 +14,7 @@ import { startSocket } from '../store/socket/socketSlice';
 import { getHorarioNegocio } from '../store/negocio/thunk';
 import { obtenerCita } from '../store/citas/thunk';
 import { RatingDialog } from '../components/ratingDialog';
+import { getRating } from '../store/rating/thunk';
 
 export const AppRouter = () => {
 
@@ -47,6 +48,7 @@ export const AppRouter = () => {
       conectarSocket()
       dispatch( getHorarioNegocio() )
       dispatch( obtenerCita() )
+      dispatch( getRating() )
     }
   }, [usuarioActivo?._id, conectarSocket])
 
@@ -81,8 +83,13 @@ export const AppRouter = () => {
       </Routes>
 
       <Toaster />
+
+      {
+        ( usuarioActivo )
+          &&
+        <RatingDialog ratingForm = { usuarioActivo?.ratingForm } />
+      }
       
-      <RatingDialog />
       <DialogConfirm />
     </AnimatePresence>
   )

@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { onUpdateNegocio } from '../store/negocio/negocioSlice';
 import { toast } from 'react-hot-toast';
 import { onCreateCita, onGetCita, onUpdateCita } from '../store/citas/CitasSlice';
+import { onCreateRating } from '../store/rating/ratingSlice';
+import { updateUsuario } from '../store/auth/authSlice';
 
 export const useSocket = ( serverPath: string ) => {
 
@@ -176,6 +178,26 @@ export const useSocket = ( serverPath: string ) => {
             if ( !usuarioActivo?._id && !resp ) return
 
             dispatch( onUpdateCita(resp) )    
+            
+        });
+    }, [ socket ])
+
+    useEffect(() => {
+        socket?.on('created-rating', ( resp ) => {
+
+            if ( !usuarioActivo?._id && !resp ) return
+
+            dispatch( onCreateRating(resp) )    
+            
+        });
+    }, [ socket ])
+
+    useEffect(() => {
+        socket?.on('updated-usuario', ( resp ) => {
+
+            if ( !usuarioActivo?._id && !resp ) return
+
+            dispatch( updateUsuario(resp) )    
             
         });
     }, [ socket ])

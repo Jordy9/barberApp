@@ -12,6 +12,17 @@ export const handleChange = ( i: number, target: EventTarget & (HTMLTextAreaElem
     setArray(newFormValues);
 }
 
+export const handleChangeWithoutTarget = ( i: number, nameValue: string, value: any, array: any[], setArray: Dispatch<SetStateAction<any[]>> ) => {
+    let newFormValues = [ ...array ]
+
+    newFormValues[i] = {
+      ...newFormValues[i],
+      [nameValue]: value
+    }
+
+    setArray(newFormValues);
+}
+
 export const addNew = ( array: any[], setArray: Dispatch<SetStateAction<any[]>> ) => {
     const newService: Servicio = { servicio: '', tiempo: '10', minHor: 'Minutos' }
 

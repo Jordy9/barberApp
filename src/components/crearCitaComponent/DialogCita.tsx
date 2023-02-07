@@ -41,6 +41,7 @@ type service = {
 interface formValuesProps {
   hora: citaHoraType;
   barberId: string;
+  barberName?: string;
   servicio: service[];
   estado: EstadoType;
   nombre?: string;
@@ -62,7 +63,7 @@ export const DialogCita = () => {
   
   const { isOpen, citaActiva } = useAppSelector( state => state.ct );
 
-  const { usuarioActivo } = useAppSelector( state => state.auth );
+  const { usuarioActivo, usuarios } = useAppSelector( state => state.auth );
 
   const [count, setCont] = useState(0)
 
@@ -72,6 +73,7 @@ export const DialogCita = () => {
     {
       hora: { hora: '', fecha: 0 },
       barberId: '',
+      barberName: '',
       servicio: [],
       estado: 'En-espera'
     }
@@ -92,6 +94,7 @@ export const DialogCita = () => {
       {
         hora: { hora: '', fecha: 0 },
         barberId: '',
+        barberName: '',
         servicio: [],
         estado: 'En-espera'
       }
@@ -129,7 +132,9 @@ export const DialogCita = () => {
       for ( let index = 0; index < citaCortada.length; index++ ) {
         const element = citaCortada[index];
 
-        nuevaCita.push({ barberId: element.barberId, usuarioId: ( index === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + index , hora: element.hora, servicio: element.servicio, nombre: ( index > 0 ) ? usuarioActivo?.name + ' niño ' + index : usuarioActivo?.name, estado: element.estado })
+        const barber = usuarios.find( e => e._id === element.barberId)
+
+        nuevaCita.push({ barberId: element.barberId, usuarioId: ( index === 0 ) ? usuarioActivo!._id : usuarioActivo?._id + ' nino ' + index, barberName: barber?.name, hora: element.hora, servicio: element.servicio, nombre: ( index > 0 ) ? usuarioActivo?.name + ' niño ' + index : usuarioActivo?.name, estado: element.estado })
         
       }
 
@@ -161,6 +166,7 @@ export const DialogCita = () => {
       {
         hora: { hora: '', fecha: 0 },
         barberId: '',
+        barberName: '',
         servicio: [],
         estado: 'En-espera'
       }
@@ -395,7 +401,7 @@ export const DialogCita = () => {
                     exit={{ scaleX: 0.5, transition: { duration: 0.3, ease: "linear" } }}
                     style={{ originX: isPresent ? 0 : 2 }}
                   >
-                    <FormBarber 
+                    <FormBarber
                       count = { count }
                       setCont = { setCont }
                       formCount = { formValues.length }

@@ -13,9 +13,16 @@ export interface Usuario {
     email:     string;
     password:  string;
     _id:       string;
+    ratingForm: RatingFormType[];
     createdAt: string;
     updatedAt: string;
     __v:       number;
+}
+
+export interface RatingFormType {
+    usuarioId: string;
+    barberId: string;
+    calificacion: number;
 }
 
 export interface UsuarioPost {

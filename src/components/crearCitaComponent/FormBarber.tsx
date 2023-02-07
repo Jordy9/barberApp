@@ -24,6 +24,7 @@ type service = {
 interface formValuesProps {
     hora: citaHoraType;
     barberId: string;
+    barberName?: string;
     servicio: service[]
     estado: EstadoType
 }
@@ -34,6 +35,7 @@ interface FormBarberProps {
     formCount: number
     hora: citaHoraType;
     barberId: string;
+    barberName?: string
     servicio: service[];
     ninos: boolean;
     setNinos: Dispatch<SetStateAction<boolean>>;
@@ -56,7 +58,8 @@ export const FormBarber = ({
     setCont, 
     formCount, 
     hora, 
-    barberId, 
+    barberId,
+    barberName,
     servicio, 
     ninos, 
     setNinos, 
@@ -103,7 +106,9 @@ export const FormBarber = ({
 
         const [ citaTo ] = cita.filter( ct => ct.cita.some( e => e.estado !== 'Cancelada' && e.estado !== 'Finalizada' ) )
 
-        if ( citaTo ) {
+        const citaCondition = citaActiva?.cita.some( e => e.estado !== 'Atendiendo' && e.estado !== 'En-espera' )
+
+        if ( citaTo && !citaCondition ) {
             dispatch( onGetCitaActiva(citaTo) )
         }
         
@@ -130,7 +135,7 @@ export const FormBarber = ({
                     ( validState )
                         ?
                     <TextField
-                        value={ barberId }
+                        value={ barberName }
                         fullWidth
                         inputProps={{
                             readOnly: true

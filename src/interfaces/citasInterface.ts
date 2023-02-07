@@ -41,6 +41,7 @@ export interface nuevaCitasInterfaceCita {
 export interface CitaCita {
     barberId:  string;
     usuarioId: string;
+    barberName: string;
     hora:      citaHoraType;
     servicio:  Servicio[];
     nombre:    string;
