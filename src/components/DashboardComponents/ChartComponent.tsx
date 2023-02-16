@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import { useState } from 'react';
 
-import { BarChartContainer, CardInfoContainer, DialogDateRange, DialogFilter, PieChartContainer, SelectComponents, TableUsers } from "."
+import { BarChartContainer, CardInfoContainer, ClientStatus, DialogDateRange, DialogFilter, PieChartContainer, SelectComponents, ServiceStar, StartsInfo, TableUsers, TimeStar } from "."
 
 export const ChartComponent = () => {
 
@@ -19,6 +19,30 @@ export const ChartComponent = () => {
       <CardInfoContainer />
 
       <Grid p = { 1 } xs = { 12 } sm = { 6 }>
+        <StartsInfo />
+      </Grid>
+
+      <Grid p = { 1 } xs = { 12 } sm = { 6 }>
+        <ClientStatus />
+      </Grid>
+
+      <Grid p = { 1 } xs = { 12 } sm = { 12 } lg = { 6 }>
+        <ServiceStar />
+      </Grid>
+
+      <Grid p = { 1 } xs = { 12 } sm = { 6 } lg = { 3 }>
+        <TimeStar time='04:50 pm' title='Esta es la hora más temprana a la que tus clientes hacen citas' />
+      </Grid>
+
+      <Grid p = { 1 } xs = { 12 } sm = { 6 } lg = { 3 }>
+        <TimeStar time='04:50 pm' title='Esta es la hora preferida preferida por tus clientes para ser atendidos' />
+      </Grid>
+      
+      {/* <Grid p = { 1 } xs = { 6 } sm = { 6 } md = { 6 } lg = { 3 }>
+        <StartsInfo />
+      </Grid> */}
+
+      {/* <Grid p = { 1 } xs = { 12 } sm = { 6 }>
         <BarChartContainer />
       </Grid>
 
@@ -28,7 +52,7 @@ export const ChartComponent = () => {
 
       <Grid p = { 1 } xs = { 12 } sm = { 12 }>
         <TableUsers />
-      </Grid>
+      </Grid> */}
       
       <DialogDateRange showDialog = { showDialog } setShowDialog = { setShowDialog } />
 
