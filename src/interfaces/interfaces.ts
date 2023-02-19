@@ -9,15 +9,16 @@ export interface CardInterface {
 
 export interface CardInfoProps {
   title: CardInfoTitle;
-  actual: number;
-  total: number;
+  actual?: number;
+  total?: number;
   backgroundImage: string
+  titleService?: string;
   Icon: OverridableComponent<SvgIconTypeMap<{}, "svg">>
   image?: string;
   name?: string;
 }
 
-type CardInfoTitle = 'Citas completas' | 'Citas en espera' | 'Citas canceladas' | 'Servicio del día'
+type CardInfoTitle = 'Citas completas' | 'Citas en espera' | 'Citas canceladas' | 'Servicio del mes'
 
 export interface TextFieldProps {
   mb?: number;

@@ -1,23 +1,17 @@
 import { Box, Paper, Typography } from '@mui/material'
+import { Negocio } from '../../interfaces/negocioInterface'
 
-export const ServiceStar = () => {
+interface sumServiceProps {
+    title: string;
+    count: number 
+ }
 
-    const servicios = [
-        {
-            label: 'Recortada',
-            num: 10
-        },
+interface serviceStarProps {
+    sumService: sumServiceProps[]
+    negocioFilt: Negocio | undefined
+}
 
-        {
-            label: 'Cerquillo',
-            num: 5
-        },
-
-        {
-            label: 'Sacar cejas',
-            num: 1
-        },
-     ]
+export const ServiceStar = ({ sumService, negocioFilt }: serviceStarProps) => {
   return (
     <Box p={ 2 } component={ Paper } sx={{ borderRadius: '20px',  height: '295px', overflow: 'auto' }}>
         <Typography variant='h5' textAlign={ 'center' }>
@@ -25,9 +19,9 @@ export const ServiceStar = () => {
         </Typography>
 
         {
-            servicios.map(( e, index ) => (
+            negocioFilt?.servicios.map(( e, index ) => (
                 <Box py={ 2 } textAlign = { 'center' } >
-                    { index + 1 }). Un total de <Typography component={ 'span' } color={ 'gold' }>{ e.num }</Typography> clientes han seleccionado este servicio: <Typography component={ 'span' } color={ 'gold' }>{ e.label }</Typography>
+                    { index + 1 }). Un total de <Typography component={ 'span' } color={ 'gold' }>{ sumService[index]?.count || 0 }</Typography> clientes han seleccionado este servicio: <Typography component={ 'span' } color={ 'gold' }>{ sumService[index]?.title }</Typography>
                 </Box>
             ) )
         }

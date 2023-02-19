@@ -1,23 +1,18 @@
 import { Box, Paper, Grid, Typography } from '@mui/material';
 
-import { styled } from '@mui/material/styles';
-
-import Rating from '@mui/material/Rating';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 
-export const ClientStatus = () => {
+interface starsProps {
+  ratingSum: number
+}
 
-    const StyledRating = styled(Rating)(({ theme }) => ({
-        '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
-          color: theme.palette.action.disabled,
-        },
-    }));
+export const ClientStatus = ({ ratingSum }: starsProps) => {
 
-    const value = 4
+    const value = Math.ceil(ratingSum) - 1
       
     const customIcons = [
         {
@@ -43,15 +38,15 @@ export const ClientStatus = () => {
     ];
 
   return (
-    <Box p={ 2 } display={ 'flex' } justifyContent = { 'center' } alignItems = { 'center' } component={ Paper } sx={{ borderRadius: '20px', height: '180px', overflow: 'auto' }}>
+    <Box p={ 2 } display={ 'flex' } justifyContent = { 'center' } alignItems = { 'center' } component={ Paper } sx={{ borderRadius: '20px', height: '180px', overflowY: 'auto' }}>
       <Box>
         <Grid display={ 'flex' } justifyContent = { 'center' } alignItems = { 'center' }>
           {
-            customIcons[value].icon
+            customIcons[value]?.icon
           }
         </Grid>
         <Typography variant='body1' textAlign={ 'center' }>
-          Tus clientes { customIcons[value].label }
+          Tus clientes { customIcons[value]?.label }
         </Typography>
       </Box>
     </Box>
