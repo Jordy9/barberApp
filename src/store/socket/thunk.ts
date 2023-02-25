@@ -9,6 +9,16 @@ interface startServiceProps {
 }
 
 
+export const getdashboardinfo = () => {
+    return ( dispatch: Dispatch, getState: any ) => {
+
+        const { socket } = getState().sk;
+
+        socket?.emit('get-dashboard-info')
+
+    }
+}
+
 export const startService = ({ firstValue, secondValue, id, thirdValue }: startServiceProps) => {
     return ( dispatch: Dispatch, getState: any ) => {
 

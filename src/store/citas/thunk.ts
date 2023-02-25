@@ -1,18 +1,82 @@
 import { Dispatch } from "@reduxjs/toolkit"
 import { toast } from "react-hot-toast";
 import barberApi from '../../Api/barberApi';
-import { onGetCita } from "./CitasSlice";
+import { onGetCita, onGetCitaInit, onGetPagination } from "./CitasSlice";
 import { AppDispatch } from '../store';
 
-export const obtenerCita = () => {
+export const obtenerCita = (page?: number, size?: number, setIsLoading?: ( arg: boolean ) => void, isLoading?: boolean) => {
+    return async ( dispatch: Dispatch, getState: any ) => {
+
+        const { pagination } = getState().ct;
+
+        const { usuarioActivo } = getState().auth;
+
+        const condition = ( window.location.pathname === 'CitasAtender' )
+
+        try {
+            const { data } =  await barberApi.get<any>(`cita?id=${usuarioActivo?._id}&page=${page}&size=${size}&condition=${condition}&start=${pagination?.start}&end=${pagination?.end}`)
+
+            dispatch( onGetCita(data.cita) )
+            dispatch( onGetPagination({
+                page: data.page,
+                total: data.total,
+                start: pagination?.start,
+                end: pagination?.end
+            }) )
+
+            if ( isLoading ) {
+                setIsLoading!(false)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+export const obtenerCitaNewDate = (page?: number, size?: number, setIsLoading?: ( arg: boolean ) => void, isLoading?: boolean, startEnd?: any) => {
+    return async ( dispatch: Dispatch, getState: any ) => {
+
+        const { usuarioActivo } = getState().auth;
+
+        const condition = ( window.location.pathname === 'CitasAtender' )
+
+        try {
+            const { data } =  await barberApi.get<any>(`cita?id=${usuarioActivo?._id}&page=${page}&size=${size}&condition=${condition}&start=${startEnd?.start}&end=${startEnd?.end}`)
+
+            dispatch( onGetCitaInit(data.cita) )
+            dispatch( onGetPagination({
+                page: data.page,
+                total: data.total,
+                start: startEnd.start,
+                end: startEnd.end
+            }) )
+
+            if ( isLoading ) {
+                setIsLoading!(false)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+export const obtenerCitaList = (page?: number, size?: number, setIsLoading?: ( arg: boolean ) => void, isLoading?: boolean) => {
     return async ( dispatch: Dispatch, getState: any ) => {
 
         const { usuarioActivo } = getState().auth;
 
         try {
-            const { data } =  await barberApi.get<any>(`cita?id=${usuarioActivo?._id}`)
+            const { data } =  await barberApi.get<any>(`cita/list?id=${usuarioActivo?._id}&page=${page}&size=${size}`)
 
             dispatch( onGetCita(data.cita) )
+            dispatch( onGetPagination({
+                page: data.page,
+                total: data.total
+            }) )
+
+            if ( isLoading ) {
+                setIsLoading!(false)
+            }
         } catch (error) {
             console.log(error)
         }

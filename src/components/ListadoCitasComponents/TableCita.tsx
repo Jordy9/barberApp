@@ -1,9 +1,11 @@
 import { ChangeEvent, useState } from 'react';
 
-import { Box, Table, TableBody, TableContainer, TableHead, TablePagination, TableRow, Paper } from '@mui/material';
+import { Box, Table, TableBody, TableContainer, TableHead, TablePagination, TableRow, Paper, CircularProgress } from '@mui/material';
 
 import { useResponsive } from '../../hooks/useResponsive';
 import { TableCells, TableCitaSpreed } from './';
+import { obtenerCitaList } from '../../store/citas/thunk';
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 
 export const TableCita = () => {
 
@@ -22,10 +24,12 @@ export const TableCita = () => {
       setPage(newPage);
     };
 
+    const { refElement, isLoading } = useInfiniteScroll( obtenerCitaList )
+
   return (
-    <Box>
-        <TableContainer elevation = { 10 } component={ Paper } sx={{ width: 'auto', height: ( respWidth < 991 ) ? '60vh' : '400px', borderTopLeftRadius: '20px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
-          <Table aria-label="collapsible table" stickyHeader = {true}>
+    <Box ref={refElement}>
+        <TableContainer elevation = { 10 } component={ Paper } sx={{ width: 'auto', height: ( respWidth < 991 ) ? '60vh' : 'auto', borderTopLeftRadius: '20px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
+          <Table  component={'div'} aria-label="collapsible table" stickyHeader = {true}>
             <TableHead>
               <TableRow>
                 <TableCells respWidth={ respWidth } />
@@ -49,6 +53,13 @@ export const TableCita = () => {
           onPageChange={handleChangePage }
           onRowsPerPageChange={ handleChangeRowsPerPage }
         />
+        {
+          ( isLoading )
+            &&
+          <Box display={ 'flex' } justifyContent = { 'center' }>
+            <CircularProgress color="inherit" />
+          </Box>
+        }
     </Box>
   )
 }

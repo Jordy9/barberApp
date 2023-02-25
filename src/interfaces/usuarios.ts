@@ -14,6 +14,7 @@ export interface Usuario {
     password:  string;
     _id:       string;
     ratingForm: RatingFormType[];
+    role: string;
     createdAt: string;
     updatedAt: string;
     __v:       number;

@@ -33,8 +33,6 @@ export const createUsuario = ( usuario: UsuarioPost ) => {
 
             const { data } = await barberApi.post<Usuarios>('auth', { ...usuario })
 
-            console.log(data)
-
             dispatch( getUsuarioActivo(data.usuario) )
 
             toast.success('Bienvenido', {

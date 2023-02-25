@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CitasInterface, CitasInterfaceCita } from '../../interfaces/citasInterface';
+import { CitasInterface, CitasInterfaceCita, paginationType } from '../../interfaces/citasInterface';
 
 const initialState: CitasInterface = {
     isOpen: false,
     cita: [],
-    citaActiva: null
+    citaActiva: null,
+    pagination: null
 }
 
 export const CitasSlice = createSlice({
@@ -16,7 +17,20 @@ export const CitasSlice = createSlice({
         },
 
        onGetCita: (state, action: PayloadAction<CitasInterfaceCita[]> ) => {
+           state.cita.push( ...action.payload )
+        },
+
+       onGetCitaInit: (state, action: PayloadAction<CitasInterfaceCita[]> ) => {
            state.cita = action.payload
+        },
+
+       onGetPagination: (state, action: PayloadAction<paginationType> ) => {
+           state.pagination = action.payload
+        },
+
+       onGetDatePagination: (state, action: PayloadAction<paginationType> ) => {
+           state.pagination!.start = action.payload.start
+           state.pagination!.end = action.payload.end
         },
 
        onCreateCita: (state, action: PayloadAction<CitasInterfaceCita> ) => {
@@ -36,9 +50,15 @@ export const CitasSlice = createSlice({
         onClearCitaActiva: ( state ) => {
             state.citaActiva = null
         },
+
+        onClearCita: ( state ) => {
+            state.cita = []
+            state.citaActiva = null
+            state.pagination = null
+        },
    }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { isOpenCita, onGetCita, onCreateCita, onUpdateCita, onGetCitaActiva, onClearCitaActiva } = CitasSlice.actions;
+export const { isOpenCita, onGetCita, onGetCitaInit, onCreateCita, onUpdateCita, onGetCitaActiva, onClearCitaActiva, onClearCita, onGetPagination, onGetDatePagination } = CitasSlice.actions;

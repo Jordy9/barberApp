@@ -12,9 +12,10 @@ import { useSocket } from '../hooks/useSocket';
 import { getEnvVariables } from '../helpers/getEnvVariables';
 import { startSocket } from '../store/socket/socketSlice';
 import { getHorarioNegocio } from '../store/negocio/thunk';
-import { obtenerCita } from '../store/citas/thunk';
+import { obtenerCita, obtenerCitaList } from '../store/citas/thunk';
 import { RatingDialog } from '../components/ratingDialog';
 import { getRating } from '../store/rating/thunk';
+import { onClearCita } from '../store/citas/CitasSlice';
 
 export const AppRouter = () => {
 
@@ -33,6 +34,14 @@ export const AppRouter = () => {
   useEffect(() => {
     localStorage.removeItem('showTooltip')
   }, [])
+
+  useEffect(() => {
+    if ( location.pathname !== '/CitasAtender' ) return
+
+    dispatch( onClearCita() )
+    dispatch( obtenerCita() )
+
+  }, [location.pathname])
   
   useEffect(() => {
     dispatch( checkAuthToken() )
@@ -47,8 +56,12 @@ export const AppRouter = () => {
     if ( usuarioActivo?._id ) {
       conectarSocket()
       dispatch( getHorarioNegocio() )
-      dispatch( obtenerCita() )
-      dispatch( getRating() )
+      if ( usuarioActivo.role === 'Barbero' ) {
+        dispatch( obtenerCita() )
+      } else {
+        dispatch( obtenerCitaList() )
+      }
+      dispatch( getRating(usuarioActivo?._id) )
     }
   }, [usuarioActivo?._id, conectarSocket])
 

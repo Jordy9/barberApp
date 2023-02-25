@@ -1,8 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Rating } from '../../interfaces/ratingForm';
+
+interface sumService {
+    title: string;
+    count: number 
+}
+
+export interface ratingPropsIt {
+    cardInfo: number[];
+    minTime: string;
+    preferTime: string;
+    ratingSum: number;
+    sumService: sumService[]
+}
 
 interface ratingProps {
-    rating: Rating[] | null
+    rating: ratingPropsIt | null
 }
 
 const initialState: ratingProps = {
@@ -13,15 +25,12 @@ export const ratingSlice = createSlice({
    name: 'rating',
    initialState,
    reducers: {
-       onGetRating: (state, action: PayloadAction<Rating[]> ) => {
+       onGetRating: (state, action: PayloadAction<ratingPropsIt> ) => {
            state.rating = action.payload;
-        },
-       onCreateRating: (state, action: PayloadAction<Rating> ) => {
-           state.rating?.unshift(action.payload);
-        },
+        }
    }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { onGetRating, onCreateRating } = ratingSlice.actions;
+export const { onGetRating } = ratingSlice.actions;

@@ -7,7 +7,7 @@ import { ContentCut } from '@mui/icons-material';
 
 export const CardInfo = ({ title, actual, total, backgroundImage, Icon, image, name, titleService }: CardInfoProps) => {
 
-  const props = { value: actual }
+  const props = { value: ( actual ) && Math.floor(( actual * 100 ) / total!) }
 
   const [ respWidth ] = useResponsive()
 
@@ -23,11 +23,18 @@ export const CardInfo = ({ title, actual, total, backgroundImage, Icon, image, n
             ?
           <Grid display={ 'flex' } justifyContent = { 'space-between' } alignItems = { 'center' }>
             <Typography variant="h5" component="div">
-              { actual } / { total }
+
+              {
+                ( total )
+                  ?
+                actual + ' / ' + total
+                  :
+                ''
+              }
             </Typography>
 
               <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-                  <CircularProgress variant="determinate" { ...props } />
+                  <CircularProgress variant="determinate" { ...props }  />
                   <Box
                       sx={{
                       top: 0,

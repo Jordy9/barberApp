@@ -4,8 +4,7 @@ import * as io from "socket.io-client";
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { onUpdateNegocio } from '../store/negocio/negocioSlice';
 import { toast } from 'react-hot-toast';
-import { onCreateCita, onGetCita, onUpdateCita } from '../store/citas/CitasSlice';
-import { onCreateRating } from '../store/rating/ratingSlice';
+import { onCreateCita, onUpdateCita } from '../store/citas/CitasSlice';
 import { updateUsuario } from '../store/auth/authSlice';
 
 export const useSocket = ( serverPath: string ) => {
@@ -178,16 +177,6 @@ export const useSocket = ( serverPath: string ) => {
             if ( !usuarioActivo?._id && !resp ) return
 
             dispatch( onUpdateCita(resp) )    
-            
-        });
-    }, [ socket ])
-
-    useEffect(() => {
-        socket?.on('created-rating', ( resp ) => {
-
-            if ( !usuarioActivo?._id && !resp ) return
-
-            dispatch( onCreateRating(resp) )    
             
         });
     }, [ socket ])

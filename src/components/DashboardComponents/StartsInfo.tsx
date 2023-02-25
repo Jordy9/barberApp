@@ -2,28 +2,31 @@ import { Box, Paper, Rating, Grid, Typography } from '@mui/material';
 import { useResponsive } from '../../hooks/useResponsive';
 
 interface starsProps {
-  ratingSum: number
+  ratingSum?: number
 }
 
 export const StartsInfo = ({ ratingSum }: starsProps) => {
 
   const [ respWidth ] = useResponsive()
 
+  const ratingSuma = Number(ratingSum?.toFixed(1))
+
   return (
     <Box p={ 2 } display={ 'flex' } justifyContent = { 'center' } alignItems = { 'center' } component={ Paper } sx={{ borderRadius: '20px', height: '180px', overflowY: 'auto', overflowX: 'hidden' }}>
       <Box>
         <Grid display={ 'flex' } justifyContent = { 'center' } alignItems = { 'center' }>
           <Rating
+            precision = { 0.5 }
             readOnly
             max={ 5 }
             sx = {{ fontSize: ( respWidth <= 1080 ) ? '50px' : '100px' }}
             name="simple-controlled"
-            value={ Math.ceil(ratingSum) }
+            value={ ratingSuma || 0 }
           />
         </Grid>
         <Typography variant='body1' textAlign={ 'center' }>
 
-          Estas son las estrellas según como te han calificado tus clientes, { <Typography color={ 'gold' }>{ Math.ceil(ratingSum) } estrellas</Typography> }
+          Estas son las estrellas según como te han calificado tus clientes, { <Typography color={ 'gold' }>{ ratingSuma || 0 } estrellas</Typography> }
         </Typography>
       </Box>
     </Box>

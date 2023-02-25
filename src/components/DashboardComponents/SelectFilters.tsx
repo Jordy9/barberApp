@@ -1,24 +1,32 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
-import { useState } from "react";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { useState } from 'react';
+import { onGetDatePagination } from '../../store/citas/CitasSlice';
+import { obtenerCitaNewDate } from '../../store/citas/thunk';
+import { useAppDispatch } from '../../store/hooks';
+import { timeFilters } from '../../utils/timeFilters';
 
 interface SelectProps {
   title: string;
   Filtro?: string[] | number [];
-  width: number
+  width: number;
 }
 
 export const SelectFilters = ({ title, Filtro, width }: SelectProps) => {
+
+  const dispatch = useAppDispatch();
 
   const arregloFiltro = Filtro
 
   const [filter, setFilter] = useState( '' );
 
   const handleChange = (event: SelectChangeEvent) => {
+    dispatch( onGetDatePagination(timeFilters[event.target.value]) )
     setFilter(event.target.value);
+    dispatch( obtenerCitaNewDate(1, 15, undefined, false, timeFilters[event.target.value]) )
   };
 
   return (
-    <FormControl sx={{ m: 1, width: width }} size="small">
+    <FormControl sx={{ mx: 1, mt: 1, width: width }} size="small">
       <InputLabel id="demo-select-small">{ title }</InputLabel>
       <Select
         sx={{ borderRadius: '12px' }}

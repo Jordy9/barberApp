@@ -28,7 +28,7 @@ export const SelectComponents = ( { setShowDialogFilter, setShowDialog }: Dialog
         ( respWidth > 991 )
           ?
         <>
-          <Grid display={ 'flex' } alignItems={ 'center' }>
+          {/* <Grid display={ 'flex' } alignItems={ 'center' }>
             <Button onClick={ () => setShowDialog(true) } variant="contained" color={ 'inherit' }>Filtrar por rango de fecha</Button>
           </Grid>
 
@@ -46,7 +46,7 @@ export const SelectComponents = ( { setShowDialogFilter, setShowDialog }: Dialog
 
           <Grid display={ 'flex' } alignItems={ 'center' }>
             <Button variant="contained" color={ 'inherit' }>Filtrar</Button>
-          </Grid>
+          </Grid> */}
           
           <Grid display={ 'flex' } alignItems={ 'center' } sx = {{ ml: 'auto' }}>
             <Button onClick={ () => setShowDialog2(true) } variant="contained" color={ 'inherit' }>Tiempo de servicio</Button>

@@ -3,11 +3,11 @@ import { toast } from 'react-hot-toast';
 import barberApi from '../../Api/barberApi';
 import { onGetRating } from './ratingSlice';
 
-export const getRating = () => {
+export const getRating = (id: string) => {
     return async( dispatch: Dispatch ) => {
 
         try {
-            const { data } = await barberApi.get('rating')
+            const { data } = await barberApi.get(`rating?id=${id}`)
             
             dispatch( onGetRating(data.rating) )
         } catch (error) {

@@ -37,8 +37,7 @@ const arregloCardInfo: CardInfoProps[] = [
   },
   {
     title: 'Servicio del mes',
-    actual: 70,
-    total: 100,
+    titleService: 'Aún no hay un servicio del mes',
     backgroundImage: Image4,
     Icon: () => <ContentCut />
   },
@@ -50,8 +49,8 @@ interface sumServiceProps {
 }
 
 interface props {
-  info: number[]
-  sumService: sumServiceProps
+  info?: number[]
+  sumService?: sumServiceProps
   cita: CitasInterfaceCita[]
 }
 
@@ -59,13 +58,15 @@ export const CardInfoContainer = ({ info, sumService, cita }: props) => {
 
   let citaEspera: any[] = []
 
+  if ( !info || info?.length === 0 )  [0, 0, 0, 0]
+
   cita.map( e => {
     const citaOrder = [...e.cita].sort( (a, b) => a.hora.fecha - b.hora.fecha )
 
     return citaOrder.find( ct => ct.estado === 'En-espera' ? citaEspera.push(ct) : ct )
   })
 
-  const nuevoCardInfo = arregloCardInfo.map(( e, index ) => ( index < 3 ) ? ( index === 1 ) ? { ...e, actual: info[index], total: info[3], name: citaEspera[0]?.nombre } : { ...e, actual: info[index], total: info[3] } : { ...e, titleService: sumService?.title }  )
+  const nuevoCardInfo = arregloCardInfo.map(( e, index ) => ( index < 3 ) ? ( index === 1 ) ? { ...e, actual: info![index], total: info![3], name: citaEspera[0]?.nombre } : { ...e, actual: info![index], total: info![3] } : { ...e, titleService: sumService?.title }  )
   
   return (
     <>

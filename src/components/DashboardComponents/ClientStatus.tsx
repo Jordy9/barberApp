@@ -7,12 +7,12 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 
 interface starsProps {
-  ratingSum: number
+  ratingSum?: number
 }
 
 export const ClientStatus = ({ ratingSum }: starsProps) => {
 
-    const value = Math.ceil(ratingSum) - 1
+    const value = Math.ceil(ratingSum || 1) - 1
       
     const customIcons = [
         {

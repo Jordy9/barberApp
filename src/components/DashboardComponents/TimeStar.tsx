@@ -2,7 +2,7 @@ import { Box, Paper, Typography } from '@mui/material'
 
 interface timeStarProps {
     title: string;
-    time: string;
+    time?: string;
 }
 
 export const TimeStar = ({ time, title }: timeStarProps) => {
