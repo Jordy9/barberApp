@@ -1,11 +1,11 @@
 import { ListItem, List } from '@mui/material';
 import { useResponsive } from '../../hooks/useResponsive';
-import { nuevaCitasInterfaceCita } from '../../interfaces/citasInterface';
+import { citasAtenderIt } from '../../interfaces/citasInterface';
 
 import { ListAvatar, ListText } from './';
 import { motion } from 'framer-motion';
 
-export const CitaContent = ({ _id, barberId, estado, hora, nombre, servicio, usuarioId }: nuevaCitasInterfaceCita) => {
+export const CitaContent = ({ _id, barberId, estado, hora, nombre, servicio, usuarioId }: citasAtenderIt) => {
 
     const [ respWidth ] = useResponsive()
 
