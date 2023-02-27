@@ -57,6 +57,17 @@ export interface CitaCita {
     estado:    EstadoType;
 }
 
+export interface citasAtenderIt {
+    _id: string;
+    barberId: string;
+    usuarioId: string;
+    barberName: string;
+    hora: citaHoraType;
+    servicio: Servicio[];
+    nombre: string;
+    estado: EstadoType;
+}
+
 export interface Servicio {
     servicio: string;
     tiempo:   string;

@@ -26,7 +26,7 @@ export const ListText = ({ cita }: ListTextProps) => {
 
     const [ respWidth ] = useResponsive()
 
-    const isFinish = cita.cita.every( e => e.estado === 'Finalizada' || e.estado === 'Cancelada' )
+    const isFinish = cita.cita.every( e => e.estado === 'Finalizada' )
 
     const isAllCanceled = cita.cita.every( e => e.estado === 'Cancelada' )
     
@@ -39,7 +39,7 @@ export const ListText = ({ cita }: ListTextProps) => {
                     {
                         ( cita.cita.some( e => e.estado === 'En-espera' ) )
                             &&
-                        <Button onClick={ () => handleCancelCita() } sx={{ mr: 2 }} size = 'small' variant='contained' color='inherit' endIcon = { <Cancel color='error' /> }>Cancelar</Button>
+                        <Button onClick={ handleCancelCita } sx={{ mr: 2 }} size = 'small' variant='contained' color='inherit' endIcon = { <Cancel color='error' /> }>Cancelar</Button>
                     }
                     <Button onClick={ () => handleOpenCita(cita) } sx={{ ml: 2 }} size = 'small' variant='contained' color='inherit' endIcon = { <RemoveRedEye color='info' /> }>Ver cita</Button>
                 </Grid>
