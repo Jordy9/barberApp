@@ -1,4 +1,4 @@
-import { FactCheck, Timer, Cancel, ContentCut  } from '@mui/icons-material';
+import { FactCheck, Cancel, ContentCut  } from '@mui/icons-material';
 import { Grid } from '@mui/material';
 
 import Image1 from '../../assets/Image1.jpg'
@@ -10,6 +10,7 @@ import { CardInfoProps } from '../../interfaces/interfaces';
 
 import { CardInfo } from '.';
 import { CitasInterfaceCita } from '../../interfaces/citasInterface';
+import { Fragment } from 'react';
 
 const arregloCardInfo: CardInfoProps[] = [
   {
@@ -58,8 +59,6 @@ export const CardInfoContainer = ({ info, sumService, cita }: props) => {
 
   let citaEspera: any[] = []
 
-  if ( !info || info?.length === 0 )  [0, 0, 0, 0]
-
   cita.map( e => {
     const citaOrder = [...e.cita].sort( (a, b) => a.hora.fecha - b.hora.fecha )
 
@@ -69,7 +68,7 @@ export const CardInfoContainer = ({ info, sumService, cita }: props) => {
   const nuevoCardInfo = arregloCardInfo.map(( e, index ) => ( index < 3 ) ? ( index === 1 ) ? { ...e, actual: info![index], total: info![3], name: citaEspera[0]?.nombre } : { ...e, actual: info![index], total: info![3] } : { ...e, titleService: sumService?.title }  )
   
   return (
-    <>
+    <Fragment>
       {
         nuevoCardInfo.map(({ title, actual, total, backgroundImage, Icon, image, name, titleService }) => (
         <Grid p={ 1 } xs = { 6 } sm = { 6 } md = { 6 } lg = { 3 } >
@@ -86,6 +85,6 @@ export const CardInfoContainer = ({ info, sumService, cita }: props) => {
         </Grid>
         ))
       }
-    </>
+    </Fragment>
   )
 }

@@ -19,6 +19,7 @@ export const NuevaContrasenaNew = () => {
           <Typography my = { 3 } variant='h5' textAlign={ 'center' }>Nueva contraseña</Typography>
 
           <FormComponent
+            name = ''
             mb={ 3 }
             label='Contraseña' 
             Adornment = { true }
@@ -29,6 +30,7 @@ export const NuevaContrasenaNew = () => {
           />
 
           <FormComponent
+            name = ''
             mb={ 3 }
             label='Confirmar contraseña' 
             Adornment = { true }

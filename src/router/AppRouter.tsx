@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { checkAuthToken, obtenerUsuarios } from '../store/auth/thunk';
 import { CircularProgressIndicator } from '../circularProgress/CircularProgressIndicator';
 import { useSocket } from '../hooks/useSocket';
-import { getEnvVariables } from '../helpers/getEnvVariables';
 import { startSocket } from '../store/socket/socketSlice';
 import { getHorarioNegocio } from '../store/negocio/thunk';
 import { obtenerCita, obtenerCitaList } from '../store/citas/thunk';
@@ -27,9 +26,9 @@ export const AppRouter = () => {
 
   const token = localStorage.getItem('token')
 
-  const { VITE_API_URL } = getEnvVariables()
+  const API_URL = process.env.REACT_APP_API_URL!
 
-  const { socket, conectarSocket, desconectarSocket } = useSocket(`${VITE_API_URL.split('/api')[0]}`)
+  const { socket, conectarSocket, desconectarSocket } = useSocket(`${API_URL.split('/api')[0]}`)
 
   useEffect(() => {
     localStorage.removeItem('showTooltip')

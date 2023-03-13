@@ -11,7 +11,10 @@ import { store } from './store/store'
 
 import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={ store }>
@@ -19,4 +22,4 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       </Provider>
     </BrowserRouter>
   </React.StrictMode>,
-)
+);

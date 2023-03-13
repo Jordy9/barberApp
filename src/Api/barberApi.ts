@@ -1,20 +1,19 @@
 import axios from 'axios'
-import { getEnvVariables } from '../helpers/getEnvVariables';
-
-const { VITE_API_URL } = getEnvVariables()
 
 const barberApi = axios.create({
-    baseURL: VITE_API_URL
+    baseURL: process.env.REACT_APP_API_URL,
+    headers: { 'x-token': localStorage.getItem('token') }
 })
 
 // Interceptores
 
-barberApi.interceptors.request.use(config => {
-    config.headers = {
-        'x-token': localStorage.getItem('token')
-    }
+// barberApi.interceptors.request.use(config => {
+//     config.headers = {
+//         ...config.headers,
+//         'x-token': localStorage.getItem('token')
+//     }
 
-    return config
-})
+//     return config
+// })
 
 export default barberApi;

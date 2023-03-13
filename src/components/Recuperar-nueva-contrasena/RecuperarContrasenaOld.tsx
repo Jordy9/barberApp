@@ -19,7 +19,8 @@ export const RecuperarContrasenaOld = () => {
           <Typography variant='h5' textAlign={ 'center' }>Recuperar contraseña</Typography>
           <Typography my = { 3 } variant='subtitle2' textAlign={ 'center' }>Se enviara un link a tu correo para recuperar tu contraseña</Typography>
 
-          <FormComponent 
+          <FormComponent
+            name = ''
             mb={ 3 }
             label='Correo electrónico' 
             Adornment = { true }
